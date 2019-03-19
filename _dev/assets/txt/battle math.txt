@@ -1,0 +1,63 @@
+Roll dice: get scale of battle 1/4 0%, 1/4 <10%, 1/4 <25%, 1/4 <50%
+- weight matrix based on UCM, xp, LOC
+
+----------------------------------------------------------------------
+- UCM + LOC paired matrix (both sides)
+	
+	* LOC matrix is symmetric, so use 1 only
+	* LOC matrix serves as the basis
+
+- BEFORE: remove passive regiments
+- BEFORE or AFTER?: remove involvement
+
+- from LOC pairs:
+	create sub-groups (groups of regiments paired)
+		* UCM matrixes (two, back and forth wishes)
+		> TODO: ITT: how to come to an agreement?
+
+Loc és ucm normalizal
+Osszead, koltsegmatrix, ket db van csak
+Majd zigzag megyunk regimentek kozott a ket oldalon amig involvement tart
+Legnagyobb erobol a legkisebb fele
+Eroviszonyok alapjan uj fajta casuality fuggveny
+
+----------------------------------------------------------------------
+
+batt aspects:
+
+- unit xp: 
+	== damage szorzo (max: 2.5xp)
+	training: 30d (min) - 90d (max)
+			  0.3 - 0.9
+	csatankent +0 - 0.15 xp (idotartalomtol fuggoen)
+				0 - 8hours  (+0.001 / minute)
+
+- unit compo: 
+	matrix * population vector
+	0 < 1 < 2
+	 balanced
+- general: 
+	@later
+- stamina: 
+	@later
+- terrain: 
+	angle difference: -60   - 0 - 60 degrees
+					   1.6 - 1 - 0.625 (MUL) 
+			   hyperbolic/exponential scaling!
+	(MUL for better angle party)
+
+- weather: 
+	@later
+	(MUL for both parties) sky clearness x rain x snow: 1.0 -> 0.3 of dmg
+									 : 1.0 -> 0.4 of move
+///////////////////////
+Appear weak when you are strong, and strong when you are weak.
+
+lehessen bloffolni
+
+when in doubt, defend
+
+If your enemy is secure at all points, be prepared for him. If he is in superior strength, evade him. If your opponent is temperamental, seek to irritate him.
+
+Strategy without tactics is the slowest route to victory. Tactics without strategy is the noise before defeat.
+

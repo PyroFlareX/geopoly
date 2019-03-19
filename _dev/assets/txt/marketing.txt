@@ -1,0 +1,15 @@
+sound design:
+- esport: only important events shall get sound
+- high freq, not low, must be unique and serve a purpose
+
+
+- fb hirdetes
+
+Marketing targets:
+- Deus klan
+- Amator jatekfejlesztok
+- Jatekfejlesztok
+- ludum dare
+- pewdiepie
+- the viper
+- lindibeige

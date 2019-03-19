@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Parl example</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="parliament.js"></script>
+  </head>
+  <body>
+    <div id="svg"></div>
+    <script type="text/javascript">
+
+    parliament2svg("svg", [
+      {seats: 36, color: "green", name: "green"},
+      {seats: 53, color: "red", name: "RHK"},
+      {seats: 134, color: "#BADA55", name: "Juhi04"}
+    ]);
+    </script>
+  </body>
+</html>

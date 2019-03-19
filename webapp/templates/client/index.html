@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+
+  <link rel="stylesheet" type="text/css" href="css/ol.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <script defer type="text/javascript" src="js/ol.js"></script>
+  <script defer type="text/javascript" src="js/ra.min.js"></script>
+
+</head>
+<body>
+
+  <div id="app-map" class="map" tabindex="0"></div>
+
+  <script type="module">
+    import {init_app} from '/js/main.js';
+
+    // declare variables from backend
+
+    // start app
+    init_app({= debug =});
+  </script>
+
+</body>
+</html>

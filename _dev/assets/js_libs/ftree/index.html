@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Simple Map</title>
+    <link rel="stylesheet" href="ftree.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="ejs.min.js"></script>
+    <script type="text/javascript" src="gen.js"></script>
+    <style>
+      #dynasty{
+position: absolute;
+height: 100%;
+overflow:scroll;
+overflow-y: hidden;
+white-space:nowrap;
+          width: 3000px;
+
+       }
+    </style>
+  </head>
+  <body>
+  <div id="dynasty" class="tree"></div>
+  <script type="text/x-template" id="temp">
+    <h2>The <%= family %> dynasty</h2>
+    <ul>
+    <% for(var grandparent of c) { %>
+      <li>
+        <div>
+          <h3><%= grandparent.n+" "+family %> : <%= grandparent.p %></h3>
+        </div>
+        <ul>
+        <% for(var parent of grandparent.c) { %>
+          <li>
+            <div>
+              <h3><%= parent.n+" "+family %> : <%= parent.p %></h3>
+            </div>
+            <% if (parent.c && parent.c.length > 0) { %>
+            <ul>
+            <% for(var sibling of parent.c) { %>
+              <li>
+                <div <% if (!sibling.p) { %>class="single"<% } %>>
+                  <h3>
+                    <% if (sibling.me) { %> (icon) <% } %>
+                    <%= sibling.n +" "+family %>
+                    <% if (sibling.p) { %><% if (sibling.p) { %> : <%= sibling.p %> <% } } %>
+                  </h3>
+                </div>
+                <% if (sibling.c && sibling.c.length > 0) { %>
+                <ul>
+                <% for(var child of sibling.c) { %>
+                  <li>
+                    <div <% if (!child.p) { %>class="single"<% } %>>
+                      <h3><%= child.n %> <% if (child.p) { %> : <%= child.p %> <% } %></h3>
+                    </div>
+                    <% if (child.c && child.c.length > 0) { %>
+                      <ul>
+                      <% for(var grandchild of child.c) { %>
+                        <li>
+                          <div <% if (!grandchild.p) { %>class="single"<% } %>>
+                            <h3><%= grandchild.n  %> <% if (grandchild.p) { %> : <%= grandchild.p %> <% } %></h3>
+                          </div>
+                        </li>
+                      <% } %>
+                      </ul>
+                    <% } %>
+                  </li>
+                <% } %>
+                </ul>
+                <% } %>
+              </li>
+            <% } %>
+            </ul>
+            <% } %>
+          </li>
+        <% } %>
+        </ul>
+      </li>
+    <% } %>
+    </ul>    
+  </script>
+  <script type="text/javascript">
+    $("#dynasty").html(ejs.render($("#temp").html(), nodes));
+
+  </script>
+  </body>
+</html>

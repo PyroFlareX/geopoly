@@ -1,0 +1,47 @@
+
+CIV
+value		1st degree		2nd degree
+
+NON-SETTLEMENT:
+	besides settlement factors everything else costs money just to set
+
+	- economy
+		export / import
+		grow market
+		stocks
+	- military
+		set army size, recruitment
+
+
+
+
+SETTLEMENT
+					value		1st degree		2nd degree		3rd degree
+0	tax am.			OUT
+1	taxation 					tax am.
+2	reputation 					taxation 		tax am.
+
+3	technology 					reputation 		taxation
+4	infrastructure 	IN				 			reputation 		taxation
+5	education 		IN							technology 		reputation
+
+0	population 		OUT
+1	birth_rate 					population
+2	health 						birth_rate 		population
+3	healthcare 		IN			health 			birth_rate		population
+
+
+
+ARMY
+value		1st degree		2nd degree
+
+
+
+
+Reputation: how satisfied are the people from this nation with your empire. Changes based on Health, Technology, Infrastructure
+Taxation: Changes based on reputation
+Technology: idk yet l0l
+Healthcare: 2nd degree force for health and birth_rate.
+Infrastructure: major 2nd degree driving force for reputation.
+Education: 2nd degree for technology
+Disease: 

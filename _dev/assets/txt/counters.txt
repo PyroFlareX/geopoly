@@ -1,0 +1,80 @@
+LINE
+	ATT counters: 
+
+	DEF counters: 
+	- hussar
+	- dragoon
+	- skirmisher
+	- home
+	- line inf
+GREN
+	ATT counters: 
+	- line
+	- gren
+	- home
+	- skirmisher
+
+	DEF counters: 
+
+HOM
+	ATT counters: 
+	DEF counters: 
+	- home
+	- hussar
+
+SKR
+	ATT counters: 
+	- home
+	- 
+
+	DEF counters: 
+
+HUSS
+	counters: 
+	- skirmisher
+	- 
+
+ULAN
+	counters: 
+	- line
+	- gren
+	- home
+	- 
+
+DRAG
+	counters: 
+	- gren
+	- home
+	- line
+	- hussar
+
+CUIR
+	counters: 
+	- line
+	- gren
+	- home 
+	- skirm
+	- hussar
+	- uhlan
+	- dragoon
+
+4 PND
+	ATT counters: 
+
+	DEF counters: 
+
+8 PND
+	ATT counters: 
+
+	DEF counters: 
+
+HOW
+	ATT counters: 
+
+	DEF counters: 
+
+MOR
+	ATT counters: 
+
+	DEF counters: 
+
