@@ -6,9 +6,9 @@ import {osmLayer} from '/js/ol/base/osm.js';
 import {areaLayer} from '/js/ol/layers/areas.js';
 //import {unitLayer} from '/js/ol/layers/units.js';
 //import {eventLayer} from '/js/ol/layers/events.js';
-//import {arrowLayer} from '/js/ol/layers/arrows.js';
+import {arrowLayer} from '/js/ol/layers/arrows.js';
 
-const view = new ol.View({
+export const view = new ol.View({
   center: [0, 0],
   // minZoom: 3,
   // maxZoom: 6,
@@ -21,7 +21,7 @@ export const map = new ol.Map({
     // watercolorLayer,
     // outlineLayer,
     areaLayer,
-    // arrowLayer,
+    arrowLayer,
     // eventLayer,
     // unitLayer,
   ],
@@ -65,12 +65,10 @@ map.on('pointermove', (event) => {
     keys.mouse_pixel = event.pixel;
   }
 
-  // todo: uncomment if needed
-  // map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
-  //   if (layer.onmousemove)
-  //     layer.onmousemove(feature);
-  // });
-
+  map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+    if (layer.hover)
+      layer.hover(feature);
+  });
 });
 
 map.on('click', (event) => {

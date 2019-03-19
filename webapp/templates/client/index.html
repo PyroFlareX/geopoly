@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>Geopoly</title>
 
+  <!-- OpenLayers 5 -->
   <link rel="stylesheet" type="text/css" href="css/ol.css">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
-
   <script defer type="text/javascript" src="js/ol.js"></script>
+
+  <!-- Bootstrap & vue.js & bootstrap-vue -->
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+  <script src="//unpkg.com/vue@2.5.16/dist/vue.js" defer></script>
+  <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js" defer></script>
+  <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js" defer></script>
+
+  <!-- raj's -->
   <script defer type="text/javascript" src="js/ra.min.js"></script>
 
+  <!-- custom styles & icons -->
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  {% block styles %}{% endblock %}
+
+  <!-- custom javascript -->
+  {% block scripts %}{% endblock %}
 </head>
 <body>
 
   <div id="app-map" class="map" tabindex="0"></div>
+
+  <div id="app-gui"></div>
 
   <script type="module">
     import {init_app} from '/js/main.js';

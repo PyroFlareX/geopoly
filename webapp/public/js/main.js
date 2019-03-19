@@ -1,17 +1,27 @@
 import {store} from '/js/game/store.js';
+import {onload} from '/js/game/loader.js';
+import {client} from '/js/game/client_offline.js';
 import {map} from '/js/ol/map.js';
+import {gui} from '/js/vue/gui.js';
+
+import {init_test} from '/js/test.js';
 
 
-// debug: set global variables
 
 export function init_app(debug) {
+  window.gui = gui;
 
-
-
-  //window.gui = gui;
   if (debug) {
+    // debug: set global variables
+
     window.store = store;
     window.map = map;
-    //window.client = client;
+    window.client = client;
+
+    onload(() => {
+      console.info("Game loaded");
+      
+      init_test();
+    });
   }
 }

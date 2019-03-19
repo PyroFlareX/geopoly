@@ -1,0 +1,15 @@
+export const template = `
+  <div v-if="show" class="infobar">
+    <div class="infobar-header" :style="area_background(area)">
+      {{area.name}} f
+
+      <button type="button" class="close" aria-label="Close" v-on:click="show=false">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="infobar-content p-2" :area-id="area.id">
+      {{ area.iso }}
+      
+    </div>
+  </div>
+`;
