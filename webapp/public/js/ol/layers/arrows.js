@@ -21,12 +21,12 @@ export const arrowLayer = new ol.layer.Vector({
     let rotation = Math.PI / 2 - angle;
 
     let mils = feature.get('mils') || 0;
-    let color = getColor(feature);
+    let color = getColor(feature.get('iso'));
 
     let styles = [
       new ol.style.Style({
         stroke: new ol.style.Stroke({
-          color: color.rgba(),
+          color: color.rgb(),
           width: 8
         }),
         text: new ol.style.Text({
@@ -49,3 +49,5 @@ export const arrowLayer = new ol.layer.Vector({
     return styles;
   }
 });
+
+arrowLayer.name = 'arrows';

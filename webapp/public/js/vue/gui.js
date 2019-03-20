@@ -6,7 +6,7 @@ $("#app-gui").innerHTML = template;
 export const gui = new Vue({
   el: '#app-gui',
   data: {
-
+    opened: null
   },
   methods: {
     child: function(name) {
@@ -14,26 +14,41 @@ export const gui = new Vue({
     },
 
     infobar: function(name, ...params) {
+      if (this.opened)
+        this.opened.show = false;
+
       let child = this.$refs['infobar-'+name];
 
       child.open(...params);
       child.show = true;
+      this.opened = child;
+
       return child;
     },
 
     dialog: function(name, ...params) {
+      if (this.opened)
+        this.opened.show = false;
+
       let child = this.$refs['dialog-'+name].open(params);
 
       child.open(...params);
       child.show = true;
+      this.opened = child;
+
       return child;
     },
 
     overlay: function(name, ...params) {
+      if (this.opened)
+        this.opened.show = false;
+
       let child = this.$refs['overlay-'+name];
 
       child.open(...params);
       child.show = true;
+      this.opened = child;
+
       return child;
     },
 

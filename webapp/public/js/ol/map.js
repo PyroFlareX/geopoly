@@ -4,7 +4,9 @@
 import {osmLayer} from '/js/ol/base/osm.js';
 
 import {areaLayer} from '/js/ol/layers/areas.js';
-//import {unitLayer} from '/js/ol/layers/units.js';
+import {borderLayer} from '/js/ol/layers/borders.js';
+import {countryLayer} from '/js/ol/layers/countries.js';
+import {unitLayer} from '/js/ol/layers/units.js';
 //import {eventLayer} from '/js/ol/layers/events.js';
 import {arrowLayer} from '/js/ol/layers/arrows.js';
 
@@ -20,10 +22,14 @@ export const map = new ol.Map({
     osmLayer,
     // watercolorLayer,
     // outlineLayer,
+
+    countryLayer,
     areaLayer,
+    borderLayer,
+
     arrowLayer,
     // eventLayer,
-    // unitLayer,
+    unitLayer,
   ],
   target: 'app-map',
   controls: ol.control.defaults({

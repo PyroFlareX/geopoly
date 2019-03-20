@@ -1,0 +1,250 @@
+@font-face {
+  font-family: 'geo';
+  src:
+    url('/fonts/geo.ttf?mhhtbu') format('truetype'),
+    url('/fonts/geo.woff?mhhtbu') format('woff'),
+    url('/fonts/geo.svg?mhhtbu#geo') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ra-"], [class*=" ra-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'geo' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.ra-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+
+.ra-2x {
+  font-size: 2em;
+}
+
+.ra-3x {
+  font-size: 3em;
+}
+
+.ra-4x {
+  font-size: 4em;
+}
+
+.ra-5x {
+  font-size: 5em;
+}
+
+.ra-fw {
+  text-align: center;
+  width: 1.28571em;
+}
+
+.ra-ul {
+  list-style-type: none;
+  margin-left: 2.14286em;
+  padding-left: 0;
+}
+.ra-ul > li {
+  position: relative;
+}
+
+.ra-li {
+  left: -2.14286em;
+  position: absolute;
+  text-align: center;
+  top: 0.14286em;
+  width: 2.14286em;
+}
+.ra-li.ra-lg {
+  left: -1.85714em;
+}
+
+.ra-border {
+  border: solid 0.08em #eee;
+  border-radius: .1em;
+  padding: .2em .25em .15em;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+.ra.pull-left {
+  margin-right: .3em;
+}
+.ra.pull-right {
+  margin-left: .3em;
+}
+
+.ra-spin {
+  -webkit-animation: ra-spin 2s infinite linear;
+  animation: ra-spin 2s infinite linear;
+}
+
+@-webkit-keyframes ra-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes ra-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+.ra-rotate-90 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.ra-rotate-180 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.ra-rotate-270 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -webkit-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+
+.ra-flip-horizontal {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+  -webkit-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+
+.ra-flip-vertical {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  -webkit-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+
+:root .ra-rotate-90,
+:root .ra-rotate-180,
+:root .ra-rotate-270,
+:root .ra-flip-horizontal,
+:root .ra-flip-vertical {
+  filter: none;
+}
+
+.ra-stack {
+  display: inline-block;
+  height: 2em;
+  line-height: 2em;
+  position: relative;
+  vertical-align: middle;
+  width: 2em;
+}
+
+.ra-stack-1x, .ra-stack-2x {
+  left: 0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.ra-stack-1x {
+  line-height: inherit;
+}
+
+.ra-stack-2x {
+  font-size: 2em;
+}
+
+.ra-inverse {
+  color: #fff;
+}
+
+
+
+
+/**
+ * Generated content below - do not modify
+ **/
+ 
+.ra-class-infantry:before {
+  content: "\e90f";
+}
+.ra-class-artillery:before {
+  content: "\e900";
+}
+.ra-class-cavalry:before {
+  content: "\e901";
+}
+.ra-helm-cavalry:before {
+  content: "\e902";
+}
+.ra-helm-pickelhaube:before {
+  content: "\e903";
+}
+.ra-unit-art_heavy:before {
+  content: "\e904";
+}
+.ra-unit-art_light:before {
+  content: "\e905";
+}
+.ra-unit-art_mortar:before {
+  content: "\e906";
+}
+.ra-unit-cav_dragoon:before {
+  content: "\e907";
+  color: #4a4a4a;
+}
+.ra-unit-cav_heavy:before {
+  content: "\e908";
+  color: #4a4a4a;
+}
+.ra-unit-cav_hussar:before {
+  content: "\e909";
+  color: #4e2a0b;
+}
+.ra-unit-cav_lancer:before {
+  content: "\e90a";
+}
+.ra-unit-inf_heavy:before {
+  content: "\e90b";
+  color: #3c6312;
+}
+.ra-unit-inf_home:before {
+  content: "\e90c";
+}
+.ra-unit-inf_light:before {
+  content: "\e90d";
+  color: #4e2a0b;
+}
+.ra-unit-inf_skirmish:before {
+  content: "\e90e";
+}

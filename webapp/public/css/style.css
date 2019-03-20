@@ -16,6 +16,16 @@
     min-width: 300px;
     min-height: 180px;
 }
+.infobar.infobar-lg {
+    max-width: 60%;
+    min-width: 600px;
+    min-height: 230px;    
+}
+.infobar.infobar-xl {
+    max-width: 80%;
+    min-width: 850px;
+    min-height: 300px;    
+}
 .infobar .infobar-header, .modal .modal-header {
     border: 1.5px solid #000;
     border-bottom: none;
@@ -62,4 +72,26 @@
     -webkit-user-select: none;
     -o-user-select: none;
     user-select: none;
+}
+
+
+/* BOOTSTRAP MODIFICATIONS */
+.input-2x {
+  height: 50px;
+}
+
+.col-nopad {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+.row-nopad {
+  padding-left: 11px;
+  padding-right: 11px;
+}
+.modal-header .flag {
+    display: inline-block;
+    margin-top:5px;
+}
+.flag-inline {
+    display: inline-block;
 }

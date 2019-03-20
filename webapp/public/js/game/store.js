@@ -2,16 +2,21 @@
 /**
  * Store
  *
- * Provides a full cache for backend's data model
  */
 
-export const store = new (class {
-
-  constructor() {
-    fetch('/js/game/rules.json').then((resp) => {
-      return resp.json();
-    }).then((resp) => {
-      this.rules = resp;
-    });
-  }
+export let rules = {};
+fetch('/js/game/rules.json').then((resp) => {
+  return resp.json();
+}).then((resp) => {
+  rules = resp;
 });
+
+export const turn = {
+  me: null,
+  players: [],
+
+  current: null,
+
+  turn: 0,
+  round: 0,
+};

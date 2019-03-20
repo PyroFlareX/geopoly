@@ -7,7 +7,11 @@ export let component = Vue.component('infobar-move', {
     return {
       show: false,
       from: {},
-      to: {}
+      to: {},
+
+      // move patch
+      t: 0,
+      patch: {}
     }
   },
 
@@ -18,12 +22,34 @@ export let component = Vue.component('infobar-move', {
 
       this.from = from;
       this.to = to;
-    },
-  },
 
-  computed: {
-    rnd: function() {
-      return time();
+      // set v-model
+      for (let u of this.UNITS) {
+        this.patch[u] = this.from[u]||0;
+      }
+    },
+
+    onSubmit: function() {
+      // quick check
+      for (let u of this.UNITS) {
+        if (this.patch[u] > this.from[u]||0) {
+          return;
+        }
+      }
+
+      client.groups.areas.request_move(this.from.id, this.to.id, this.patch);
+      this.show = false;
+    },
+
+    toggle: function(u) {
+      // toggles 0 to MAX for unit type in input
+
+      if (this.patch[u] > 0)
+        this.patch[u] = 0;
+      else
+        this.patch[u] = this.from[u]||0;
+
+      this.t = Math.random();
     }
-  }
+  },
 });

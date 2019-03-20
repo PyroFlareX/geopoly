@@ -1,8 +1,8 @@
 
 let to_load = 0;
 let n_loaded = 0;
-let _load = function() {
-  console.error("No onload function is set.")
+let _preload = [], _postload = [], _load = function() {
+  console.error("Please set onload function")
 };
 
 let loader_obj = {
@@ -10,8 +10,25 @@ let loader_obj = {
     n_loaded++;
 
     if (n_loaded >= to_load) {
+      // pre onload
+      for (let l of _preload)
+        l();
+
+      // main onload
       _load();
+
+      // post onload
+      for (let l of _postload)
+        l();
     }
+  },
+
+  before_loadend: function(fun) {
+    _preload.push(fun);
+  },
+
+  after_loadend: function(fun) {
+    _postload.push(fun);
   }
 }
 
@@ -22,5 +39,5 @@ export function load(fun) {
 };
 
 export function onload(fun) {
-  _load = fun;
+  _load = fun ;
 };

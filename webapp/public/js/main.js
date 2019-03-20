@@ -1,4 +1,4 @@
-import {store} from '/js/game/store.js';
+import {rules, turn} from '/js/game/store.js';
 import {onload} from '/js/game/loader.js';
 import {client} from '/js/game/client_offline.js';
 import {map} from '/js/ol/map.js';
@@ -14,13 +14,14 @@ export function init_app(debug) {
   if (debug) {
     // debug: set global variables
 
-    window.store = store;
+    window.rules = rules;
+    window.turn = turn;
     window.map = map;
     window.client = client;
 
     onload(() => {
       console.info("Game loaded");
-      
+
       init_test();
     });
   }

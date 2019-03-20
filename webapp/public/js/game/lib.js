@@ -1,9 +1,10 @@
 
 export const UNITS = [
-  'inf_light','inf_home','inf_gren','inf_skirmish',
+  'inf_light','inf_home','inf_heavy','inf_skirmish',
   'cav_lancer','cav_hussar','cav_dragoon','cav_heavy',
   'art_light','art_heavy','art_mortar'
 ];
+
 
 const UTYPE_DISPLAY_THRESH = 0.62;
 

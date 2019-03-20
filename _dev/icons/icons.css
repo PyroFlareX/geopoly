@@ -1,0 +1,75 @@
+@font-face {
+  font-family: 'geo';
+  src:
+    url('fonts/geo.ttf?cd0ld0') format('truetype'),
+    url('fonts/geo.woff?cd0ld0') format('woff'),
+    url('fonts/geo.svg?cd0ld0#geo') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ra-"], [class*=" ra-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'geo' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ra-class-artillery:before {
+  content: "\e900";
+}
+.ra-class-cavalry:before {
+  content: "\e901";
+}
+.ra-helm-cavalry:before {
+  content: "\e902";
+}
+.ra-helm-pickelhaube:before {
+  content: "\e903";
+}
+.ra-unit-art_heavy:before {
+  content: "\e904";
+}
+.ra-unit-art_light:before {
+  content: "\e905";
+}
+.ra-unit-art_mortar:before {
+  content: "\e906";
+}
+.ra-unit-cav_dragoon:before {
+  content: "\e907";
+  color: #4a4a4a;
+}
+.ra-unit-cav_heavy:before {
+  content: "\e908";
+  color: #4a4a4a;
+}
+.ra-unit-cav_hussar:before {
+  content: "\e909";
+  color: #4e2a0b;
+}
+.ra-unit-cav_lancer:before {
+  content: "\e90a";
+}
+.ra-unit-inf_heavy:before {
+  content: "\e90b";
+  color: #3c6312;
+}
+.ra-unit-inf_home:before {
+  content: "\e90c";
+}
+.ra-unit-inf_light:before {
+  content: "\e90d";
+  color: #4e2a0b;
+}
+.ra-unit-inf_skirmish:before {
+  content: "\e90e";
+}
