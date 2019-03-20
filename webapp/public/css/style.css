@@ -75,6 +75,33 @@
 }
 
 
+/* GUI FLASH */
+
+.gui-flash-wrapper {
+    position: fixed;
+    left: 50%;
+    top: 60px;
+    margin-left: -250px;
+}
+
+.gui-flash-wrapper .gui-flash {
+    width: 400px;
+    min-height: 32px;
+    max-height: 80px;
+}
+
+.gui-text-bordeaux {
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    text-shadow:
+     -1px -1px 0 #a00a0e,
+      1px -1px 0 #a00a0e,
+      -1px 1px 0 #a00a0e,
+       1px 1px 0 #a00a0e;
+    font-weight: bold;
+}
+
 /* BOOTSTRAP MODIFICATIONS */
 .input-2x {
   height: 50px;
@@ -94,4 +121,212 @@
 }
 .flag-inline {
     display: inline-block;
+}
+
+/* GUI game frame Corners */
+.gui-corner-left {
+    cursor: pointer;
+}
+.gui-corner-left .flag-wrap {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+    font-size: 14px;
+    border-bottom-right-radius: 75%;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+}
+.gui-corner-left .flag {
+    position: relative;
+    left: -0px;
+    zoom: 0.6;
+    -webkit-transition: left 2s; /* Safari */
+    transition: left 2s;
+    background-repeat: repeat-x;
+}
+.gui-corner-left:hover .flag {
+    left: -60px;
+}
+
+.gui-corner-left.active .flag-wrap{
+    border-color: #FF4F00;
+}
+.gui-corner-left:hover .flag-wrap{
+    border-color: #FFBF00;
+}
+.gui-corner-left .glass {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border-bottom-right-radius: 75%;
+    background-image: linear-gradient(to bottom, rgba(120, 120, 120, 0.04), rgba(80, 80, 80, 0.22));
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+}
+
+
+.gui-corner-left-wrapper .gui-corner-icon.tilt-0 {
+    top: 8px;    /* 116 * sin 0 + 8 */
+    left: 124px; /* 116 * cos 0 + 8 */
+}
+
+.gui-corner-left-wrapper .gui-corner-icon.tilt-22_5 {
+    top: 52px;   /* 116 * sin 22.5 + 8 */
+    left: 115px; /* 116 * cos 22.5 + 8 */
+}
+
+.gui-corner-left-wrapper .gui-corner-icon.tilt-45 {
+    top: 90px;  /* 116 * sin 45 + 8 */
+    left: 90px; /* 116 * cos 45 + 8 */
+}
+
+.gui-corner-left-wrapper .gui-corner-icon.tilt-67_5 {
+    top: 115px; /* 116 * sin 67.5 + 8 */
+    left: 52px; /* 116 * cos 67.5 + 8 */
+}
+
+.gui-corner-left-wrapper .gui-corner-icon.tilt-90 {
+    top: 124px;
+    left: 8px;
+}
+
+.gui-corner-icon {
+    width: 22px;
+    height: 22px;
+
+    background: lemonchiffon;
+    position: fixed;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 50%;
+}
+
+.gui-corner-icon .icon-ra {
+    color: #3a3101;
+    position: relative;
+    top: -2px;
+    left: 1px;
+}
+
+.gui-corner-icon:hover {
+    border-color: #FFBF00;
+}
+
+/* RIGHT CORNER */
+.gui-corner-right {
+    cursor: pointer;
+}
+.gui-corner-right .season-wrap {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+    font-size: 14px;
+    border-bottom-left-radius: 75%;
+    top: 0px;
+    right: 0px;
+    overflow: hidden;
+}
+.gui-corner-right.active .season-wrap{
+    border-color: #FF4F00;
+}
+.gui-corner-right:hover .season-wrap{
+    border-color: #FFBF00;
+}
+.gui-corner-right .glass {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border-bottom-left-radius: 75%;
+    background-image: linear-gradient(to bottom, rgba(120, 120, 120, 0.04), rgba(80, 80, 80, 0.22));
+    top: 0px;
+    right: 0px;
+    z-index: 100;
+}
+.gui-corner-right .season {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+    font-size: 14px;
+    border-bottom-left-radius: 75%;
+    top: 0px;
+    right: 0px;
+    padding: 4px;
+}
+.gui-corner-right.active .season{
+    border-color: #FF4F00;
+}
+.gui-corner-right:hover .season{
+    border-color: #FFBF00;
+}
+.glass.phase-2 {
+    background-image: linear-gradient(to bottom, rgba(255, 93, 93, 0.25), rgba(50, 0, 0, 0.42));
+}
+.season.season-Winter {
+    background: url("/img/gui/quarter_0.png");
+    background-size: 122px 100px;
+    background-repeat: no-repeat;
+}
+.season.season-Spring {
+    background: url("/img/gui/quarter_1.png");
+    background-size: 122px 100px;
+    background-repeat: no-repeat;
+}
+.season.season-Summer {
+    background: url("/img/gui/quarter_2.png");
+    background-size: 122px 100px;
+    background-repeat: no-repeat;
+}
+.season.season-Fall {
+    background: url("/img/gui/quarter_3.png");
+    background-size: 135px 102px;
+    background-repeat: no-repeat;
+}
+.season .year-text {
+    font-size: 28px;
+    font-family: "Opera Lyrics";
+    color: white;
+    text-shadow: 2px 1px black;
+    position: absolute;
+    bottom: 14px;
+    right: 4px;
+}
+.season .day-text  {
+    font-size: 14px;
+    font-family: "Opera Lyrics";
+    color: white;
+    text-shadow: 2px 1px black;
+    position: absolute;
+    bottom: 10px;
+    right: 4px;
+}
+
+
+.gui-corner-right-wrapper .gui-corner-icon.tilt-0 {
+    top: 8px;    /* 116 * sin 0 + 8 */
+    right: 124px; /* 116 * cos 0 + 8 */
+}
+
+.gui-corner-right-wrapper .gui-corner-icon.tilt-22_5 {
+    top: 52px;   /* 116 * sin 22.5 + 8 */
+    right: 115px; /* 116 * cos 22.5 + 8 */
+}
+
+.gui-corner-right-wrapper .gui-corner-icon.tilt-45 {
+    top: 90px;  /* 116 * sin 45 + 8 */
+    right: 90px; /* 116 * cos 45 + 8 */
+}
+
+.gui-corner-right-wrapper .gui-corner-icon.tilt-67_5 {
+    top: 115px; /* 116 * sin 67.5 + 8 */
+    right: 52px; /* 116 * cos 67.5 + 8 */
+}
+
+.gui-corner-right-wrapper .gui-corner-icon.tilt-90 {
+    top: 124px;
+    right: 8px;
 }

@@ -6,6 +6,7 @@ import {countrySource} from '/js/ol/layers/countries.js';
 import {centroid,ringCoords,multipolyCoords,vv} from '/js/ol/lib.js';
 import {map} from '/js/ol/map.js';
 import {getUnitComposition} from '/js/game/lib.js';
+import {turn} from '/js/game/store.js';
 
 /**
  * GFX - graphics callbacks
@@ -37,6 +38,14 @@ export function setArea(area) {
   if (!countryFeature)
     countryFeature = createCountryFeature(area.iso);
 }
+
+export function init_game() {
+  if (turn.me) {
+    let country = countrySource.getFeatureById(turn.me);
+
+    gui.$refs.frame.country = country.getProperties();
+  }
+};
 
 /************************\
  *        UNITS         *

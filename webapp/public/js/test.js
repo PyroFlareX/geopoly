@@ -12,6 +12,43 @@ view.setZoom(6);
 window.layers = map.getLayers();
 window.areas = window.layers.item(1).getSource();
 
+export function init_test() {
+  for (let area of areas) {
+    setArea(area);
+  }
+
+  for (let feature of areaSource.getFeatures()) {
+    // set centroid
+    if (!feature.get('cen')) {
+      let geom = feature.getGeometry();
+
+      feature.set('cen', centroid(ringCoords(geom)));
+    }
+
+    // safe check: fix wgs84 to mercator
+    let cen = feature.get('cen');
+    if (cen[0] <= 180 && cen[1] <= 180)
+      feature.set('cen', gps2merc(cen));
+
+    // add id to properties
+    feature.set('id', feature.getId());
+  }
+
+
+  //generateBorders();
+
+
+  turn.me = 'AT';
+  turn.current = 'AT';
+  turn.players = ['AT', 'RU', 'FR', 'UK'];
+
+  // TEST:
+  //gui.infobar('move', source.getFeatureById(2), source.getFeatureById(1));
+
+}
+
+
+
 // set up some match
 let areas = [
   {
@@ -95,38 +132,3 @@ let areas = [
     art_mortar: 0,
   }
 ];
-
-export function init_test() {
-  for (let area of areas) {
-    setArea(area);
-  }
-
-  for (let feature of areaSource.getFeatures()) {
-    // set centroid
-    if (!feature.get('cen')) {
-      let geom = feature.getGeometry();
-
-      feature.set('cen', centroid(ringCoords(geom)));
-    }
-
-    // safe check: fix wgs84 to mercator
-    let cen = feature.get('cen');
-    if (cen[0] <= 180 && cen[1] <= 180)
-      feature.set('cen', gps2merc(cen));
-
-    // add id to properties
-    feature.set('id', feature.getId());
-  }
-
-
-  generateBorders();
-
-
-  turn.me = 'AT';
-  turn.current = 'AT';
-  turn.players = ['AT', 'RU', 'FR', 'UK'];
-
-  // TEST:
-  //gui.infobar('move', source.getFeatureById(2), source.getFeatureById(1));
-
-}
