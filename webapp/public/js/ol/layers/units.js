@@ -1,6 +1,6 @@
 export const unitSource = new ol.source.Vector();
 import {getColor, getFlag, img_dim} from '/js/game/colors.js';
-import {turn} from '/js/game/store.js';
+import {match} from '/js/game/store.js';
 import {getUnitComposition} from '/js/game/lib.js';
 
 // todo: fixme: this doesn't prevent overlap
@@ -14,7 +14,7 @@ export const unitLayer = new ol.layer.Vector({
   style: (feature, res) => {
     let styles = [];
     let unit = feature.getProperties();
-    let diplo = turn.me == unit.iso ? '_ally' : '_enemy';
+    let diplo = match.me == unit.iso ? '_ally' : '_enemy';
 
     styles.push(new ol.style.Style({
       image: new ol.style.Icon({

@@ -4,8 +4,9 @@ import {offsetGeometry} from '/js/ol/gfx.js';
 export const borderSource = new ol.source.Vector();
 import {getColor} from '/js/game/colors.js';
 
+
 export const borderLayer = new ol.layer.Vector({
-  source: countrySource,
+  //source: countrySource,
 
   style: (feature, res) => {
     let styles = [];

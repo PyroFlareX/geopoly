@@ -11,12 +11,29 @@ fetch('/js/game/rules.json').then((resp) => {
   rules = resp;
 });
 
-export const turn = {
+export const match = {
   me: null,
-  players: [],
+
+  mid: null,
+  max_players: null,
+  max_rounds: null,
+  map: null,
 
   current: null,
-
-  turn: 0,
-  round: 0,
+  turns: 0,
+  rounds: 0,
+  isos: [],
 };
+
+export function set_turn(turn0) {
+  let new_round = turn0.rounds != match.rounds;
+
+  match.current = turn0.current;
+  match.rounds = turn0.rounds;
+  match.turns = turn0.turns;
+
+  if (turn0.isos)
+    match.isos = turn0.isos;  
+
+  return new_round;
+}

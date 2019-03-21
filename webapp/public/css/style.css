@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'Cinzel Decorative';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Cinzel Decorative Regular'), local('CinzelDecorative-Regular'), url(https://fonts.gstatic.com/s/cinzeldecorative/v6/daaCSScvJGqLYhG8nNt8KPPswUAPni7TTMw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "Opera Lyrics";
+    src: url(/fonts/opera-lyrics-smooth.ttf);
+}
+
+/* Openlayers map */
 
 .map {
   width: 100%;
@@ -7,6 +21,7 @@
 
 
 /** INFOBAR **/
+
 .infobar {
     position: fixed;
     top: 160px;
@@ -301,7 +316,7 @@
     color: white;
     text-shadow: 2px 1px black;
     position: absolute;
-    bottom: 10px;
+    bottom: 6px;
     right: 4px;
 }
 
@@ -330,3 +345,39 @@
     top: 124px;
     right: 8px;
 }
+
+
+/* BRAND & Texts */
+
+.geopoly {
+    font-size: 128px;
+    margin-bottom: 0px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: normal;
+
+    color: rgba(4,166,155,1);
+
+    background: #f9e12a; /* Old browsers */
+    background: -moz-linear-gradient(top, #f9e12a 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #f9e12a 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #f9e12a 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9e12a', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+
+    background: -o-linear-gradient(transparent, transparent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 2;
+}
+.subopoly {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 24px;
+    color: #ecde78;
+    top: -40px;
+    left: 60px;
+    position: relative;
+    z-index: 1;
+}
+.brand-wrapper {
+  text-align: center;
+}
+

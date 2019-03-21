@@ -6,7 +6,7 @@ import {countrySource} from '/js/ol/layers/countries.js';
 import {centroid,ringCoords,multipolyCoords,vv} from '/js/ol/lib.js';
 import {map} from '/js/ol/map.js';
 import {getUnitComposition} from '/js/game/lib.js';
-import {turn} from '/js/game/store.js';
+import {match} from '/js/game/store.js';
 
 /**
  * GFX - graphics callbacks
@@ -17,33 +17,40 @@ import {turn} from '/js/game/store.js';
 
 export function setArea(area) {
   /**
-   * Used for creating areas & units when loaded from server
+   * Sets properties of Area Feature from area object coming from the server
+   * this method is used for loading areas
    **/
+
+  // Set area properties
   let feature = areaSource.getFeatureById(area.id);
+  if (!feature) {
+    console.error("Area feature not found:", area.id);
+    return;
+  }
 
   feature.setProperties(area);
 
   // set centroid
-  if (!feature.get('cen')) {
-    let geom = feature.getGeometry();
+  // if (!feature.get('cen')) {
+  //   let geom = feature.getGeometry();
 
-    feature.set('cen', centroid(ringCoords(geom)));
-  }
+  //   feature.set('cen', centroid(ringCoords(geom)));
+  // }
 
+  // Check if there's a unit feature needed
   updateUnitFeature(feature);
-
-  // todo: temporal
-  // create country if doesn't exist
-  let countryFeature = countrySource.getFeatureById(area.iso);
-  if (!countryFeature)
-    countryFeature = createCountryFeature(area.iso);
 }
 
-export function init_game() {
-  if (turn.me) {
-    let country = countrySource.getFeatureById(turn.me);
+export function init_game(ctx) {
+  if (match.me) {
+    //let country = countrySource.getFeatureById(match.me);
 
-    gui.$refs.frame.country = country.getProperties();
+    gui.$refs.frame.iso = match.me;
+  }
+
+  // Set up areas
+  for (let area of ctx.areas) {
+    setArea(area);
   }
 };
 

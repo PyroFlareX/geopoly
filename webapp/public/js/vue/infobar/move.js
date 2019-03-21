@@ -37,7 +37,7 @@ export let component = Vue.component('infobar-move', {
         }
       }
 
-      client.groups.areas.request_move(this.from.id, this.to.id, this.patch);
+      client.groups.Areas.request_move(this.from.id, this.to.id, this.patch);
       this.show = false;
     },
 

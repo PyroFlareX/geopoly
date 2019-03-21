@@ -2,8 +2,12 @@ import {map, view} from '/js/ol/map.js';
 
 import {setArea, generateBorders} from '/js/ol/gfx.js';
 import {centroid, gps2merc, ringCoords} from '/js/ol/lib.js';
-import {rules, turn} from '/js/game/store.js';
+import {rules, match, set_turn} from '/js/game/store.js';
 import {areaSource} from '/js/ol/layers/areas.js';
+
+import {load, onload} from '/js/game/loader.js';
+import {client} from '/js/game/client.js';
+
 
 view.setCenter([1606523.03, 6222585.53]);
 view.setZoom(6);
@@ -12,12 +16,73 @@ view.setZoom(6);
 window.layers = map.getLayers();
 window.areas = window.layers.item(1).getSource();
 
+function special_tests() {
+
+  // TEST:
+  //gui.infobar('move', source.getFeatureById(2), source.getFeatureById(1));
+
+}
+
+export function load_test(ws_address) {
+  // debug: set global variables
+  window.rules = rules;
+  window.match = match;
+  window.map = map;
+  window.client = client;
+
+  if (!client.is_offline_test) {
+    // Load game otherwise
+
+    load(function() {
+      client.connect(ws_address, () => {
+
+        client.request("Dev:setup", {}).then(() => {
+
+          client.request("Matches:load", {}).then((resp) => {
+            if (resp.err) {
+              console.error("No match for you", resp.err);
+              return;
+            }
+
+            match.me = resp.me;
+            set_turn(resp.match);
+
+            // todo: add usernames of players too
+
+            this.loaded();
+          });
+
+        });
+
+        client.request("Areas:load", {}).then((resp) => {
+          this.ctx.areas = resp.areas;
+        });
+      });
+
+    });
+  }
+}
+
 export function init_test() {
-  for (let area of areas) {
-    setArea(area);
+
+  if (client.is_offline_test) {
+    for (let area of areas) {
+      setArea(area);
+    }
+
+    turn.me = 'AT';
+    turn.current = 'AT';
+    turn.players = ['AT', 'RU', 'FR', 'UK'];
   }
 
   for (let feature of areaSource.getFeatures()) {
+    if (client.is_offline_test) {
+      // create country if doesn't exist
+      let countryFeature = countrySource.getFeatureById(area.iso);
+      if (!countryFeature)
+        countryFeature = createCountryFeature(area.iso);      
+    }
+
     // set centroid
     if (!feature.get('cen')) {
       let geom = feature.getGeometry();
@@ -34,20 +99,10 @@ export function init_test() {
     feature.set('id', feature.getId());
   }
 
-
   //generateBorders();
 
-
-  turn.me = 'AT';
-  turn.current = 'AT';
-  turn.players = ['AT', 'RU', 'FR', 'UK'];
-
-  // TEST:
-  //gui.infobar('move', source.getFeatureById(2), source.getFeatureById(1));
-
+  special_tests();
 }
-
-
 
 // set up some match
 let areas = [

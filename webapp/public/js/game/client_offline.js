@@ -1,10 +1,9 @@
-import {AreasGroup} from '/js/game/groups/areas.js';
-
 
 export let client = new (class {
   constructor() {
+    this.is_offline_test = true;
+
     this.groups = {
-      areas: new AreasGroup(this)
     }
   }
 
@@ -21,7 +20,7 @@ export let client = new (class {
     setTimeout(() => {
     switch(route) {
       case 'Areas:move':
-        client.groups.areas.move(params);
+        client.groups.Areas.move(params);
 
       break;
     }

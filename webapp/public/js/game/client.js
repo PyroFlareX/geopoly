@@ -6,6 +6,7 @@ export let client = new (function(){
   this.subscribed = {};
   this.reoccuring = {};
   this.ws = null;
+  this.log_style = "color: purple";
   this.address = null;
   this.trying = false;
   this.request = function(route, params) {
@@ -19,7 +20,7 @@ export let client = new (function(){
     if (!params.route)
         console.error("No route defined for request: ", params);
 
-    console.log('<', route, params);
+    console.log('%c<' + route, client.log_style, params);
     var rwsString = JSON.stringify(params);
     try {
       this.ws.send(rwsString);
@@ -39,12 +40,15 @@ export let client = new (function(){
 
     this.ws = new WebSocket(serveraddress);
     this.ws.onopen = function(event) {
+      console.log("%cConnected to websocket", client.log_style);
       callback();
     };
     this.ws.onerror = function(event) {
       console.error(event);
     };
     this.ws.onclose = function(event) {
+      console.log("%cDisconnected from websocket", client.log_style);
+
       // todo: display disconnected message
       if (client.disconnected)
         client.disconnected();
@@ -52,7 +56,7 @@ export let client = new (function(){
     };
     this.ws.onmessage = function(event) {
       var rws = JSON.parse(event.data);
-      console.log('>', rws.route, rws);
+      console.log('%c>'+rws.route, "color:purple", rws);
 
       try {
         var gmarr = rws.route.split(':');
@@ -69,16 +73,20 @@ export let client = new (function(){
             params = params.params;
 
         if (client.subscribed[rws.route]) {
+            // events handled by request().then(...)
             client.subscribed[rws.route].apply(group, [params]);
             delete client.subscribed[rws.route];
         }
 
         if (client.reoccuring[rws.route]) {
+            // events handled by client.on(...)
             client.reoccuring[rws.route].apply(group, [params]);
         }
 
         var action = group[gmarr[1]];
+
         if (action) {
+            // events handled by groups
             action.apply(group, [params]);
         }
       } catch (e) {
@@ -98,10 +106,10 @@ export let client = new (function(){
     if (client.ws.readyState !== client.ws.OPEN) {
       client.trying = true;
 
-      console.log("Trying to reconnect..")
+      console.log("%cTrying to reconnect..", client.log_style)
       client.connect(client.address, function(){
         client.trying = false;
-        console.log("Reconnect successful");
+        console.log("%cReconnect successful", client.log_style);
       });
 
       setTimeout(client.tryReconnect, 4000);

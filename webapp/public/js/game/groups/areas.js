@@ -12,10 +12,13 @@ export class AreasGroup {
       to: toId,
       patch: patch
     }).then(function() {
+      
     });
   }
 
   move({from, to, patch}) {
+    console.info("%cMove: "+from.id+' > '+to.id, "color: white; background: blue");
+
     moveUnits(from, to, patch, -1);
   }
 }
