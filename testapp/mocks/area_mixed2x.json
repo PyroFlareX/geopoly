@@ -1,0 +1,17 @@
+{
+  "inf_light": 200,
+  "inf_home": 100,
+  "inf_heavy": 60,
+  "inf_skirmish": 30,
+
+  "cav_lancer": 20,
+  "cav_hussar": 10,
+  "cav_dragoon": 12,
+  "cav_heavy": 20,
+
+  "art_light": 30,
+  "art_heavy": 10,
+  "art_mortar": 4,
+
+  "id": "area-att"
+}

@@ -1,0 +1,12 @@
+name,atk_i,atk_c,atk_a,def,points,req_a
+inf_light,20,6,9,4,20,0
+inf_home,13,4,5,2,13,4
+inf_heavy,44,6,6,2,38,6
+inf_skirmish,14,9,18,1,25,3
+cav_heavy,120,60,12,5,150,8
+cav_lancer,52,36,20,9,56,4
+cav_hussar,64,24,68,2,72,6
+cav_dragoon,80,56,20,3,72,5
+art_light,240,280,48,30,520,7
+art_heavy,380,140,32,13,395,9
+art_mortar,380,140,32,13,395,9

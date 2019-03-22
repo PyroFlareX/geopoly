@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from core.dal.ctx import session
+#from core.dal.ctx import session
 
 
 class MigrateCommand():

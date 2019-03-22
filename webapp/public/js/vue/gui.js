@@ -19,6 +19,8 @@ export const gui = new Vue({
 
       let child = this.$refs['infobar-'+name];
 
+      if (!child) return;
+
       child.open(...params);
       child.show = true;
       this.opened = child;
@@ -30,7 +32,9 @@ export const gui = new Vue({
       if (this.opened)
         this.opened.show = false;
 
-      let child = this.$refs['dialog-'+name].open(params);
+      let child = this.$refs['dialog-'+name];
+
+      if (!child) return;
 
       child.open(...params);
       child.show = true;
@@ -44,6 +48,8 @@ export const gui = new Vue({
         this.opened.show = false;
 
       let child = this.$refs['overlay-'+name];
+
+      if (!child) return;
 
       child.open(...params);
       child.show = true;

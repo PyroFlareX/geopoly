@@ -3,7 +3,7 @@ export const template = `
     <div class="infobar-header" :style="area_background(to)">
       Move from {{from.name}} to {{to.name}}
 
-      <button type="button" class="close" aria-label="Close" v-on:click="show=false">
+      <button type="button" class="close" aria-label="Close" v-on:click="close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>

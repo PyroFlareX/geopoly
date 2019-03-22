@@ -162,9 +162,22 @@ document.onkeydown = function (e) {
   }
 
   if (keys.keypress.has(key)) {
-    // global keypress happened
 
-    console.log("Keypress", key);
+    if (key == 'ESCAPE') {
+      // special case, escape is not smartcast, but it always cancels selection
+
+      let prevent = areaLayer.keypress(null, key);
+
+      if (!prevent) {
+        // close infobars
+        gui.infobar('close');
+        gui.dialog('close');
+      }
+
+    } else {
+      // global keypress happened
+      console.log("Keypress", key);
+    }
   }
 };
 

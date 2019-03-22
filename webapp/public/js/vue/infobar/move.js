@@ -1,4 +1,5 @@
 import {template} from "/js/vue/infobar/move.vue.js"
+import {hideHoverArrow} from '/js/ol/gfx.js';
 
 export let component = Vue.component('infobar-move', {
   template: template,
@@ -29,6 +30,12 @@ export let component = Vue.component('infobar-move', {
       }
     },
 
+    close: function() {
+      hideHoverArrow();
+
+      this.show=false;
+    },
+
     onSubmit: function() {
       // quick check
       for (let u of this.UNITS) {
@@ -38,7 +45,8 @@ export let component = Vue.component('infobar-move', {
       }
 
       client.groups.Areas.request_move(this.from.id, this.to.id, this.patch);
-      this.show = false;
+
+      this.close();
     },
 
     toggle: function(u) {

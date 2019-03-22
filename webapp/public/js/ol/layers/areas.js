@@ -1,6 +1,7 @@
 import {load} from '/js/game/loader.js';
 import {getColor} from '/js/game/colors.js';
 import {getUnits} from '/js/game/lib.js';
+import {match} from '/js/game/store.js';
 import {showHoverArrow, initHoverArrow, hideHoverArrow, showMoveDialog} from '/js/ol/gfx.js';
 
 /**
@@ -54,6 +55,11 @@ areaLayer.click = (feature, key) => {
     // Move feature
 
     if (!move.selected) {
+      // only select my area
+      if (match.me != iso) {
+        return;
+      }
+
       let mils = getUnits(feature);
 
       // todo: check if mine
@@ -69,14 +75,21 @@ areaLayer.click = (feature, key) => {
       move.selected = null;
     }
   } else if (key == 'CTRL') {
+    // todo: later: info popover, instead of console log
+
     console.log(feature.getId(), iso, feature.getProperties());
   }
 };
 
 areaLayer.hover = (feature) => {
   if (move.selected) {
-    // draw arrow from selected to this feature
-    showHoverArrow(feature);
+
+    if (feature.getId() != move.selected.getId()) {
+      // todo: check if two areas are connected!
+
+      // draw arrow from selected to this feature
+      showHoverArrow(feature);
+    }
   }
 };
 
@@ -85,12 +98,20 @@ areaLayer.drop = () => {
 };
 
 areaLayer.keypress = (feature, key) => {
-  let iso = feature.get('iso');
 
   if (key == 'Q' || key == 'CTRL') {
     // open area infobar
 
     gui.infobar('area', feature);
+  }
+
+  else if (key == 'ESCAPE') {
+    let prevent = move.selected != null;
+
+    move.selected = null;
+    hideHoverArrow();
+
+    return prevent;
   }
 };
 
