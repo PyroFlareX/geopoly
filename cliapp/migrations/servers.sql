@@ -1,4 +1,8 @@
 CREATE TABLE IF NOT EXISTS servers (
+    "fid" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "uid" uuid,-- REFERENCES userspaces(uid),
+    "sid" smallint REFERENCES servers(sid),
+
     "sid" serial PRIMARY KEY,
     "name" character varying(20) NOT NULL,
     "type" smallint NOT NULL,

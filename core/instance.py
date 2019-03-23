@@ -1,5 +1,5 @@
 from core import settings
-from core.dal.localstores import MemoryStore
+from core.dal.localstores import MemoryStore, AreaStore
 
 storage = settings.get('server.storage')
 
@@ -7,11 +7,11 @@ if storage == 'memory':
     # Server stores entities in memory
 
     users = MemoryStore('uid')
-    players = MemoryStore('pid')
+    #players = MemoryStore('pid')
 
     matches = MemoryStore('mid')
-    countries = MemoryStore('cid')
-    areas = MemoryStore('id')
+    #countries = MemoryStore('cid')
+    areas = AreaStore('id')
 
 elif storage == 'redis':
     # Server uses redis

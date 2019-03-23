@@ -22,6 +22,23 @@ export const template = `
           </div>
         </div>
       </div>
+
+      <div title="Players" @click="dialog('players')" class="gui-corner-icon tilt-0">
+        <i class="ra icon-ra ra-icon-players"></i>
+      </div>
+
+      <div title="" @click="" class="gui-corner-icon tilt-22_5">
+      </div>
+
+      <div title="Map settings" @click="dialog('settings')" class="gui-corner-icon tilt-45">
+        <i class="ra icon-ra ra-icon-layers"></i>
+      </div>
+
+      <div title="" @click="" class="gui-corner-icon tilt-67_5">
+      </div>
+
+      <div title="" @click="" class="gui-corner-icon tilt-90">
+      </div>
     </div>
 
   </div>

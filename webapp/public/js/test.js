@@ -2,7 +2,7 @@ import {map, view} from '/js/ol/map.js';
 
 import {setArea, generateBorders} from '/js/ol/gfx.js';
 import {centroid, gps2merc, ringCoords} from '/js/ol/lib.js';
-import {rules, match, set_turn} from '/js/game/store.js';
+import {rules, match, set_turn, countries} from '/js/game/store.js';
 import {areaSource} from '/js/ol/layers/areas.js';
 
 import {load, onload} from '/js/game/loader.js';
@@ -38,25 +38,34 @@ export function load_test(ws_address) {
 
         client.request("Dev:setup", {}).then(() => {
 
-          client.request("Matches:load", {}).then((resp) => {
-            if (resp.err) {
-              console.error("No match for you", resp.err);
+          client.request("Matches:load", {}).then(({err, me, match, players}) => {
+            if (err) {
+              console.error("No match for you", err);
               return;
             }
 
-            match.me = resp.me;
-            set_turn(resp.match);
+            client.request("Areas:load", {}).then(({areas}) => {
+              this.ctx.areas = areas;
 
-            // todo: add usernames of players too
+              this.loaded();
+            });
 
-            this.loaded();
+            match.me = me;
+            set_turn(match);
+
+            // add usernames of players too
+            for (let user of players) {
+              let player = countries[user.iso].player;
+
+              player.name = user.username || (player.name + " (*)");
+              player.default = false;
+              player.uid = user.uid;
+            }
+
           });
 
         });
 
-        client.request("Areas:load", {}).then((resp) => {
-          this.ctx.areas = resp.areas;
-        });
       });
 
     });

@@ -1,5 +1,8 @@
 import uuid
 
+from core.entities import Area
+from core.rules import getMilPop
+
 
 class MemoryStore():
     def __init__(self, primary):
@@ -38,6 +41,10 @@ class MemoryStore():
 
         self.store[key] = item
 
+    def save_all(self, items):
+        for item in items:
+            self.save(item)
+
     def delete(self, keyItem=None):
         try:
             # check if it's an item
@@ -52,3 +59,72 @@ class MemoryStore():
     def delete_all(self):
         self.store = {}
 
+
+class MemoryParentStore(MemoryStore):
+    def __init__(self, primary):
+        super().__init__(primary)
+
+    def get(self, mid, key):
+        key = mid + '-' + key
+
+        return super().get(key)
+
+    def get_all(self, mid, raw=False):
+        l = []
+
+        for v in self.store.values():
+            if v.mid == mid:
+                if not raw:
+                    l.append(v)
+                else:
+                    l.append(v.toView())
+
+        return l
+
+    def create(self, item):
+        key = item.mid + '-' + getattr(item, self.primary)
+
+        self.store[key] = item
+
+    def save(self, item):
+        key = item.mid + '-' + getattr(item, self.primary)
+
+        self.store[key] = item
+
+    def delete(self, item):
+        key = item.mid + '-' + getattr(item, self.primary)
+        return super().delete(key)
+
+    def delete_all(self, mid):
+        raise Exception("NOT IMPLEMENTED")
+
+
+class AreaStore(MemoryParentStore):
+    def __init__(self, primary):
+        super().__init__(primary)
+
+    def get(self, mid, key):
+        area = super().get(mid, key)
+
+        if not area:
+            area = Area(id=key, mid=mid)
+
+        return area
+
+    def get_all_with_units(self, mid):
+        lareas = []
+
+        area: Area
+        for area in self.store.values():
+            if area.mid == mid:
+                if getMilPop(area) > 0:
+                    lareas.append(area)
+
+        return lareas
+
+    def get_all_with_units_iter(self, mid):
+        area: Area
+        for area in self.store.values():
+            if area.mid == mid:
+                if getMilPop(area) > 0:
+                    yield area

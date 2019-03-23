@@ -1,4 +1,4 @@
-import {moveUnits} from '/js/ol/gfx.js';
+import {moveUnits, conquer} from '/js/ol/gfx.js';
 
 export class AreasGroup {
   constructor(client) {
@@ -8,17 +8,24 @@ export class AreasGroup {
   request_move(fromId, toId, patch) {
 
     this.client.request('Areas:move', {
-      from: fromId, 
-      to: toId,
+      from_id: fromId, 
+      to_id: toId,
       patch: patch
     }).then(function() {
       
     });
   }
 
-  move({from, to, patch}) {
-    console.info("%cMove: "+from.id+' > '+to.id, "color: white; background: blue");
+  move({from_id, to_id, iso, move_left, patch, err}) {
+    if (err) {
+      // todo: gui flash
+      console.error("can't move", err);
+      return;
+    }
 
-    moveUnits(from, to, patch, -1);
+    console.info("%cMove: "+from_id+' > '+to_id, "color: white; background: blue");
+
+    conquer(to_id, iso);
+    moveUnits(from_id, to_id, patch, move_left);
   }
 }

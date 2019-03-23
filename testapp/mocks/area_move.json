@@ -1,0 +1,18 @@
+{
+  "inf_light": 100,
+  "inf_home": 1,
+  "inf_heavy": 20,
+  "inf_skirmish": 1,
+
+  "cav_lancer": 1,
+  "cav_hussar": 1,
+  "cav_dragoon": 50,
+  "cav_heavy": 1,
+
+  "art_light": 1,
+  "art_heavy": 1,
+  "art_mortar": 1,
+
+  "iso": "UK",
+  "id": "HU1"
+}

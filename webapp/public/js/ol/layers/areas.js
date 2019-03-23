@@ -1,8 +1,8 @@
 import {load} from '/js/game/loader.js';
-import {getColor} from '/js/game/colors.js';
 import {getUnits} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 import {showHoverArrow, initHoverArrow, hideHoverArrow, showMoveDialog} from '/js/ol/gfx.js';
+import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
 
 /**
  * Area layer
@@ -23,19 +23,29 @@ export const areaLayer = new ol.layer.Vector({
     let styles = [];
 
     let selected = feature.get('selected', false);
-    let color = getColor(feature);
 
-    // area borders (inner ones)
+    // todo: account for multiply colorscheme!
+    let color = getColor(feature);
+    let bg = getMapBlend(color);
+
+    // if (selected)
+    //   color = getHighlight(color);
+
+    // area borders & country color
     styles.push(new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: color.rgb(),
         width: 1
       }),
 
-      // hack so that area is clickable
       fill: new ol.style.Fill({
-        color: 'rgba(255,255,255,0)'
+        color: bg.rgba()
       }),
+
+      // hack so that area is clickable
+      // fill: new ol.style.Fill({
+      //   color: 'rgba(255,255,255,0)'
+      // }),
     }));
 
     return styles;
@@ -123,9 +133,15 @@ areaLayer.contextmenu = () => {
 load(function() {
   let lk = areaSource.on('change', (e) => {
     if (areaSource.getState() == 'ready') {
+
+      // something else than load happened, wait
+      if (areaSource.getFeatures().length == 0)
+        return;
+
       // and unregister the "change" listener 
       ol.Observable.unByKey(lk);
 
+      console.log("Loaded layers");
       this.loaded();
     }
   });

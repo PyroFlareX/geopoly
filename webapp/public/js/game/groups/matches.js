@@ -1,4 +1,6 @@
 import {set_turn} from '/js/game/store.js';
+import {reset_moves} from '/js/ol/gfx.js';
+
 
 export class MatchesGroup {
   constructor(client) {
@@ -22,8 +24,10 @@ export class MatchesGroup {
 
     const is_new_round = set_turn(match);
 
-    if (is_new_round)
+    if (is_new_round) {
+      reset_moves();
       console.info("%cRound "+(match.rounds-1)+" ended", "color: white; background: blue");
+    }
   }
 
   end_game({reason}) {

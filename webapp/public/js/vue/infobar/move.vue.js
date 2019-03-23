@@ -7,7 +7,7 @@ export const template = `
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="infobar-content p-2" :area-id="from.id" :to-id="to.id" :time="t">
+    <div v-if="from.move_left > 0" class="infobar-content p-2" :area-id="from.id" :to-id="to.id" :time="t">
 
       <div class="row row-nopad">
         <div class="col col-nopad">
@@ -19,7 +19,7 @@ export const template = `
                 <span :class="'ra ra-2x ra-unit-'+u"></span>
               </span>
             </div>
-            <input type="number" v-model="patch[u]" @focus="$event.target.select()" min="0" :max="from[u]" :class="'form-control input-2x ' + (patch[u]>from[u]?'is-invalid':'')" placeholder="<<unit name>>" aria-label="unit number" :aria-describedby="u+'a'">
+            <input type="number" v-model.number="patch[u]" @focus="$event.target.select()" min="0" :max="from[u]" :class="'form-control input-2x ' + (patch[u]>from[u]?'is-invalid':'')" placeholder="<<unit name>>" aria-label="unit number" :aria-describedby="u+'a'">
           </div>
 
         </div>
@@ -32,7 +32,7 @@ export const template = `
                 <span :class="'ra ra-2x ra-unit-'+u"></span>
               </span>
             </div>
-            <input type="number" v-model="patch[u]" @focus="$event.target.select()" min="0" :max="from[u]" :class="'form-control input-2x ' + (patch[u]>from[u]?'is-invalid':'')" placeholder="<<unit name>>" aria-label="unit number" :aria-describedby="u+'a'">
+            <input type="number" v-model.number="patch[u]" @focus="$event.target.select()" min="0" :max="from[u]" :class="'form-control input-2x ' + (patch[u]>from[u]?'is-invalid':'')" placeholder="<<unit name>>" aria-label="unit number" :aria-describedby="u+'a'">
           </div>
 
         </div>
@@ -45,7 +45,7 @@ export const template = `
                 <span :class="'ra ra-2x ra-unit-'+u"></span>
               </span>
             </div>
-            <input type="number" v-model="patch[u]" @focus="$event.target.select()" min="0" :max="from[u]" :class="'form-control input-2x ' + (patch[u]>from[u]?'is-invalid':'')" placeholder="<<unit name>>" aria-label="unit number" :aria-describedby="u+'a'">
+            <input type="number" v-model.number="patch[u]" @focus="$event.target.select()" min="0" :max="from[u]" :class="'form-control input-2x ' + (patch[u]>from[u]?'is-invalid':'')" placeholder="<<unit name>>" aria-label="unit number" :aria-describedby="u+'a'">
           </div>
 
           <!-- last input group is for send button -->
@@ -57,5 +57,9 @@ export const template = `
       </div>
 
     </div>
+    <div v-else class="infobar-content p-2" :area-id="from.id" :to-id="to.id" :time="t">
+      <p class="text-danger">You have already moved with all units in this turn.</p>
+    </div>
+
   </div>
 `;

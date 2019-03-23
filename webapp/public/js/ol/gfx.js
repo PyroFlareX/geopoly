@@ -5,7 +5,7 @@ import {borderSource} from '/js/ol/layers/borders.js';
 import {countrySource} from '/js/ol/layers/countries.js';
 import {centroid,ringCoords,multipolyCoords,vv} from '/js/ol/lib.js';
 import {map} from '/js/ol/map.js';
-import {getUnitComposition} from '/js/game/lib.js';
+import {getUnitComposition, getUnits} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 
 /**
@@ -71,22 +71,6 @@ export function updateUnits(feature, patch, dir) {
   updateUnitFeature(feature);
 }
 
-export function moveUnits(fromId, toId, patch) {
-  let from = areaSource.getFeatureById(fromId);
-  let to = areaSource.getFeatureById(toId);
-
-  from.set('selected', false);
-
-  updateUnits(from, patch, -1);
-  updateUnits(to, patch, 1);
-  areaSource.changed();
-
-  hideHoverArrow();
-
-  updateUnitFeature(from);
-  updateUnitFeature(to);
-}
-
 export function updateUnitFeature(feature) {
   // set unit feature
   let [mils, uclass, utype] = getUnitComposition(feature);
@@ -126,6 +110,51 @@ export function updateUnitFeature(feature) {
   }
 }
 
+
+/************************\
+ *     AREA MOVES       *
+\************************/
+export function moveUnits(fromId, toId, patch, move_left) {
+  let from = areaSource.getFeatureById(fromId);
+  let to = areaSource.getFeatureById(toId);
+
+  from.set('selected', false);
+
+  from.set('move_left', move_left);
+  to.set('move_left', 0);
+
+  updateUnits(from, patch, -1);
+  updateUnits(to, patch, 1);
+  areaSource.changed();
+
+  hideHoverArrow();
+
+  updateUnitFeature(from);
+  updateUnitFeature(to);
+}
+
+export function reset_moves() {
+  for (let feature of areaSource.getFeatures()) {
+
+    let unitPop = getUnits(feature);
+    feature.set('move_left', unitPop);
+  }
+}
+
+export function conquer(areaId, iso) {
+  let feature = areaSource.getFeatureById(areaId);
+
+  if (feature.get('iso') != iso) {
+    feature.set('iso', iso);
+
+    if (getUnits(feature) > 0) {
+      // reset area as well
+      for (let u of UNITS) {
+        feature.set(u, 0);
+      }
+    }
+  }
+}
 
 /************************\
  *       ARROWS         *

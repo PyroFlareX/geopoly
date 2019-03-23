@@ -17,7 +17,7 @@ class ClientController():
 
         return render_template('/client/index.html',
            ws_address=ws_address,
-           debug=self.server.conf['website'].get('debug', False),
+           debug=True,
            err=request.args.get('err')
         )
 

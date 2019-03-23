@@ -43,6 +43,10 @@ export let component = Vue.component('game-frame', {
       // end turn papa
 
       client.groups.Matches.request_end_turn();
+    },
+
+    dialog: function(name, ...params) {
+      gui.dialog(name, ...params);
     }
   },
 

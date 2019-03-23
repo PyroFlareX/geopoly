@@ -1,11 +1,11 @@
 
-//import {watercolorLayer} from '/js/ol/base/watercolor.js';
-//import {outlineLayer} from '/js/ol/base/outline.js';
-import {osmLayer} from '/js/ol/base/osm.js';
+import {watercolorLayer} from '/js/ol/base/watercolor.js';
+import {outlineLayer} from '/js/ol/base/outline.js';
+//import {osmLayer} from '/js/ol/base/osm.js';
 
 import {areaLayer} from '/js/ol/layers/areas.js';
 import {borderLayer} from '/js/ol/layers/borders.js';
-import {countryLayer} from '/js/ol/layers/countries.js';
+//import {countryLayer} from '/js/ol/layers/countries.js';
 import {unitLayer} from '/js/ol/layers/units.js';
 //import {eventLayer} from '/js/ol/layers/events.js';
 import {arrowLayer} from '/js/ol/layers/arrows.js';
@@ -19,11 +19,11 @@ export const view = new ol.View({
 
 export const map = new ol.Map({
   layers: [
-    osmLayer,
-    // watercolorLayer,
-    // outlineLayer,
+    //osmLayer,
+    watercolorLayer,
+    outlineLayer,
 
-    countryLayer,
+    //countryLayer,
     areaLayer,
     borderLayer,
 
@@ -51,9 +51,9 @@ export const map = new ol.Map({
 });
 
 export const baselayers = [
-  osmLayer,
-  //watercolorLayer,
-  //outlineLayer
+  //osmLayer,
+  watercolorLayer,
+  outlineLayer
 ];
 
 
@@ -118,7 +118,7 @@ map.on('click', (event) => {
 /**
  * Event handlers for keypress
  **/
-let keys = {
+export let keys = {
   // Config:
   smartcast_enabled: true,
 

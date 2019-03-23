@@ -134,8 +134,24 @@
     display: inline-block;
     margin-top:5px;
 }
+.flag-map {
+    zoom:0.38;
+    -moz-transform:scale(0.38);
+    -moz-transform-origin: 0 0;
+}
 .flag-inline {
     display: inline-block;
+}
+.flag-box {
+    border: 2px solid black;
+    font-size: 14px;
+    border-radius: 10%;
+    margin-top: 16px;
+    margin-left: 4px;
+    display: inline-block;
+}
+.flag-unclaimed {
+    opacity: 0.3;
 }
 
 /* GUI game frame Corners */

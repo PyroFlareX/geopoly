@@ -28,9 +28,14 @@ def getMilPop(area: Area):
 
     return n
 
-def getUnits(area: Area):
-    for u in UNITS:
-        yield u, units[u], getattr(area, u)
+def getUnits(area: Area, area2: Area=None):
+    if area2:
+        for u in UNITS:
+            yield u, units[u], getattr(area, u), getattr(area2, u)
+
+    else:
+        for u in UNITS:
+            yield u, units[u], getattr(area, u)
 
 def getEffectivePoint(u):
     unit = units[u]

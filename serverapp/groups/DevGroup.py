@@ -1,17 +1,18 @@
 import time
 
-from eme.websocket import WebsocketApp, WSClient
+from eme.websocket import WSClient
 
 from core.dal.factories import create_match
 from core.entities import User, Match, Area
 from core.instance import matches, areas
-from core.services import turns
+from core.services import turns, moves
+from serverapp.server import GeopolyServer
 
 
 class DevGroup:
 
     def __init__(self, server):
-        self.server: WebsocketApp = server
+        self.server: GeopolyServer = server
         self.group = 'Dev'
 
         self.server.no_auth.update([
@@ -66,9 +67,14 @@ class DevGroup:
 
             # start match
             turns.init(match)
+            moves.reset_map(match)
 
 
+        # Add user to server
         client.user = User(iso='AT', mid=match.mid)
+
+        if client.user.mid:
+            self.server.onlineMatches[client.user.mid].add(client)
 
         if match.current != client.user.iso:
             # let ai skip their turns

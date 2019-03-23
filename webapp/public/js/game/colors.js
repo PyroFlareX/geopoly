@@ -1,7 +1,7 @@
 import {load} from '/js/game/loader.js';
 import {countrySource} from '/js/ol/layers/countries.js';
 
-const colors = {
+export const colors = {
   not_found: new Color(0, 255, 255),
   mil_default: new Color([160, 10, 14]),
 
@@ -49,7 +49,9 @@ const isocolors = {
   // 'IR': new Color([245, 130, 48]),
 };
 
-export let colorscheme = 'softlight';
+export let color_settings = {
+  colorscheme: 'softlight'
+};
 
 export function getColor(area) {
   if (typeof area == 'string') var area = {iso: area};
@@ -67,13 +69,13 @@ export function getHighlight(color) {
 }
 
 export function getMapBlend(color) {
-  if (colorscheme == 'multiply') {
+  if (color_settings.colorscheme == 'multiply') {
     return color;
-  } else if (['softlight','lineardodge','screen','darken'].includes(colorscheme)) {
-    return colors.base.blend(color, colorscheme);
+  } else if (['softlight','lineardodge','screen','darken'].includes(color_settings.colorscheme)) {
+    return colors.base.blend(color, color_settings.colorscheme);
   }
   
-  return color.blend(colors.base, colorscheme);
+  return color.blend(colors.base, color_settings.colorscheme);
 }
 
 

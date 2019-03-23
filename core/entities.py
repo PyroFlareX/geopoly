@@ -16,6 +16,13 @@ class User(Player):
         self.uid = kwargs.get('uid')
         self.username = kwargs.get('username')
 
+    def toView(self):
+        return {
+            "uid": self.uid,
+            "username": self.username,
+            "iso": self.iso,
+            "mid": self.mid,
+        }
 
 class Match(Player):
 
@@ -80,7 +87,8 @@ class Area():
         self.art_heavy = kwargs.get('art_heavy', 0)
         self.art_mortar = kwargs.get('art_mortar', 0)
 
-        self.has_moved = kwargs.get('has_moved', False)
+        # percentage of movement from current round
+        self.move_left = kwargs.get('move_left', 0)
 
     def toView(self):
 

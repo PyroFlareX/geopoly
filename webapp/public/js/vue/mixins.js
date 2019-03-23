@@ -10,6 +10,11 @@ Vue.mixin({
       UNITS_ART: ['art_light','art_heavy','art_mortar'],
       UNITS: UNITS,
 
+      maxHeight: function () {
+        var h = $('#app-map').offsetHeight;
+        return 'max-height: ' + (h - 220) + 'px;';
+      },
+
       area_background: function(area) {
         var color = getColor(area);
         //var f = contrast == 'white' ? 1 : -1;
