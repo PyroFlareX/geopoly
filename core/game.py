@@ -1,7 +1,9 @@
+from eme.entities import EntityPatch
+
 from core.entities import Match, Area
 from core.exceptions import AreaGuardedException, MoveException, GameEndException
-from core.rules import getUnits
-from core.services import turns, moves
+from core.rules import getUnits, getMilPop, UNITS
+from core.services import turns, moves, battle
 
 
 def end_turn(match: Match, iso: str):
@@ -27,7 +29,6 @@ def end_turn(match: Match, iso: str):
 
     if match.current == prev_iso or len(match.isos) < 2:
         raise GameEndException('one_player_left')
-
 
     return True
 
@@ -77,6 +78,35 @@ def move_to(area_from: Area, area_to: Area, patch: dict):
     return True
 
 
-
 def attack_to(area_from: Area, area_to: Area, patch: dict):
-    pass
+
+    att_win, rep_from, rep_to = battle.calculate_battle(area_from, area_to, patch)
+
+    escape_patch = None
+    new_patch = None
+
+    # move to area after battle
+    if att_win:
+        def_esc = getMilPop(area_to) > 0
+
+        if def_esc:
+            # let defending army escape, if they still have some men left
+            escape_patch = area_to.toUnitView()
+
+            # reset to area
+            for u in UNITS:
+                setattr(area_to, u, 0)
+
+            print("TODO: army escape")
+
+        new_patch = moves.normalize_patch(area_from, patch)
+
+        move_to(area_from, area_to, new_patch)
+
+    return new_patch, escape_patch, EntityPatch({
+        "att_win": att_win,
+        #"def_esc": def_esc,
+
+        "rep_from": rep_from,
+        "rep_to": rep_to
+    })

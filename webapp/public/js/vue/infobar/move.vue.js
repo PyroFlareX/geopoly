@@ -1,7 +1,34 @@
 export const template = `
   <div v-if="show" class="infobar infobar-lg">
     <div class="infobar-header" :style="area_background(to)">
-      Move from {{from.name}} to {{to.name}}
+
+      <span v-if="movetype == 'normal'">
+        <div :class="'flag flag-inline flag-xs flag-'+from.iso"></div>
+
+        <span class="ra ra-lg ra-icon-move"></span>
+
+        <div :class="'flag flag-inline flag-xs flag-'+to.iso"></div>
+
+        Move to {{to.name}}
+      </span>
+      <span v-if="movetype == 'conquer'">
+        <div :class="'flag flag-inline flag-xs flag-'+from.iso"></div>
+
+        <span class="ra ra-lg ra-icon-conquer"></span>
+
+        <div :class="'flag flag-inline flag-xs flag-'+to.iso"></div>
+
+        Capture {{to.name}}
+      </span>
+      <span v-if="movetype == 'battle'">
+        <div :class="'flag flag-inline flag-xs flag-'+from.iso"></div>
+
+        <span class="ra ra-lg ra-icon-battle"></span>
+
+        <div :class="'flag flag-inline flag-xs flag-'+to.iso"></div>
+
+        Attack {{to.name}}
+      </span>
 
       <button type="button" class="close" aria-label="Close" v-on:click="close">
         <span aria-hidden="true">&times;</span>

@@ -13,7 +13,7 @@ import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
 
 export const areaSource = new ol.source.Vector({
   format: new ol.format.GeoJSON(),
-  url: '/geojson/NUTS_RG_01M_2016_3857_LEVL_0.geojson',
+  url: '/geojson/areas.geojson',
 });
 
 export const areaLayer = new ol.layer.Vector({

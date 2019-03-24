@@ -5,7 +5,7 @@ import {borderSource} from '/js/ol/layers/borders.js';
 import {countrySource} from '/js/ol/layers/countries.js';
 import {centroid,ringCoords,multipolyCoords,vv} from '/js/ol/lib.js';
 import {map} from '/js/ol/map.js';
-import {getUnitComposition, getUnits} from '/js/game/lib.js';
+import {getUnitComposition, getUnits, UNITS} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 
 /**
@@ -44,7 +44,6 @@ export function setArea(area) {
 export function init_game(ctx) {
   if (match.me) {
     //let country = countrySource.getFeatureById(match.me);
-
     gui.$refs.frame.iso = match.me;
   }
 
@@ -66,6 +65,27 @@ export function updateUnits(feature, patch, dir) {
   for (let [u, num] of Object.items(patch)) {
     //console.log(u,num);
     feature.set(u, (feature.get(u)||0) + dir*num);
+  }
+
+  updateUnitFeature(feature);
+}
+
+export function clearUnits(feature) {
+  if (!(feature instanceof ol.Feature))
+    var feature = areaSource.getFeatureById(feature);
+
+  for (let u of UNITS)
+    feature.set(u, 0);
+
+  updateUnitFeature(feature);
+}
+
+export function setUnits(feature, patch) {
+  if (!(feature instanceof ol.Feature))
+    var feature = areaSource.getFeatureById(feature);
+
+  for (let u of UNITS) {
+    feature.set(u, patch[u]);
   }
 
   updateUnitFeature(feature);
@@ -109,6 +129,7 @@ export function updateUnitFeature(feature) {
     }
   }
 }
+
 
 
 /************************\

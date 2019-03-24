@@ -21,7 +21,7 @@ export function init_app(debug, ws_address) {
 
     onload((ctx) => {
       console.info("Game loaded");
-      
+
       init_test(ctx);
       init_game(ctx);
     });

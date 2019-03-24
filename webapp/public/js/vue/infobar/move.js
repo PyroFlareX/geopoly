@@ -1,5 +1,6 @@
 import {template} from "/js/vue/infobar/move.vue.js"
 import {hideHoverArrow} from '/js/ol/gfx.js';
+import {getUnits} from '/js/game/lib.js';
 
 export let component = Vue.component('infobar-move', {
   template: template,
@@ -60,4 +61,15 @@ export let component = Vue.component('infobar-move', {
       this.t = Math.random();
     }
   },
+
+  computed: {
+    movetype: function() {
+      if (this.to.iso == this.from.iso)
+        return 'normal';
+      else if (getUnits(this.to) == 0)
+        return 'conquer';
+      else
+        return 'battle';
+    }
+  }
 });

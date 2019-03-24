@@ -2,7 +2,7 @@ import {map, view} from '/js/ol/map.js';
 
 import {setArea, generateBorders} from '/js/ol/gfx.js';
 import {centroid, gps2merc, ringCoords} from '/js/ol/lib.js';
-import {rules, match, set_turn, countries} from '/js/game/store.js';
+import {rules, match as sMatch, set_turn, countries} from '/js/game/store.js';
 import {areaSource} from '/js/ol/layers/areas.js';
 
 import {load, onload} from '/js/game/loader.js';
@@ -21,12 +21,13 @@ function special_tests() {
   // TEST:
   //gui.infobar('move', source.getFeatureById(2), source.getFeatureById(1));
 
+  //gui.infobar('events');
 }
 
 export function load_test(ws_address) {
   // debug: set global variables
   window.rules = rules;
-  window.match = match;
+  window.match = sMatch;
   window.map = map;
   window.client = client;
 
@@ -50,7 +51,13 @@ export function load_test(ws_address) {
               this.loaded();
             });
 
-            match.me = me;
+            sMatch.me = me;
+            sMatch.map = match.map;
+            sMatch.max_players = match.max_players;
+            sMatch.max_rounds = match.max_rounds;
+            sMatch.mid = match.mid;
+            sMatch.events = match.events;
+
             set_turn(match);
 
             // add usernames of players too
@@ -116,7 +123,7 @@ export function init_test() {
 // set up some match
 let areas = [
   {
-    id: 'AT1',
+    id: 'AT312',
     iso: 'AT',
 
     inf_light: 100,
@@ -132,7 +139,7 @@ let areas = [
     art_mortar: 0,
   },
   {
-    id: 'AT2',
+    id: 'AT323',
     iso: 'AT',
 
     inf_light: 0,
@@ -148,8 +155,8 @@ let areas = [
     art_mortar: 0,
   },
   {
-    id: 'HU2',
-    iso: 'TR',
+    id: 'DE22',
+    iso: 'DE',
 
     inf_light: 0,
     inf_home: 0,
@@ -164,8 +171,8 @@ let areas = [
     art_mortar: 0,
   },
   {
-    id: 'HU1',
-    iso: 'TR',
+    id: 'FRF3',
+    iso: 'FR',
 
     inf_light: 0,
     inf_home: 0,
@@ -174,22 +181,6 @@ let areas = [
     cav_lancer: 0,
     cav_hussar: 0,
     cav_dragoon: 10,
-    cav_heavy: 0,
-    art_light: 0,
-    art_heavy: 0,
-    art_mortar: 0,
-  },
-  {
-    id: 'FRF',
-    iso: 'FR',
-
-    inf_light: 0,
-    inf_home: 0,
-    inf_gren: 0,
-    inf_skirmish: 0,
-    cav_lancer: 0,
-    cav_hussar: 10,
-    cav_dragoon: 0,
     cav_heavy: 0,
     art_light: 0,
     art_heavy: 0,

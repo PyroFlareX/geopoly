@@ -1,9 +1,11 @@
 from eme.entities import EntityPatch
 
-from core.entities import User, Area
+from core.entities import User, Area, Match
 from core.exceptions import AreaGuardedException, MoveException
-from core.instance import areas
+from core.instance import areas, matches
 from core.game import move_to, attack_to
+from core.services.events import pushEvent, addEvent, addBattleEvent
+
 
 class AreasGroup:
 
@@ -53,6 +55,9 @@ class AreasGroup:
             areas.save(area_from)
             areas.save(area_to)
 
+            match: Match = matches.get(user.mid)
+            pushEvent(match, addEvent(match, 1, area_from.iso))
+
             self.server.sendToMatch(user.mid, {
                 "route": "Areas:move",
 
@@ -69,10 +74,62 @@ class AreasGroup:
 
         except AreaGuardedException as e:
             # Area is guarded, battle time
-            resp = attack_to(area_from, area_to, patch)
 
-            print("Battle", resp)
+            try:
+                new_patch, escape_patch, resp = attack_to(area_from, area_to, patch)
+
+                match: Match = matches.get(user.mid)
+                pushEvent(match, addBattleEvent(match, 3, area_from.iso, battle=resp))
+
+                areas.save(area_from)
+                areas.save(area_to)
+
+                self.server.sendToMatch(user.mid, {**{
+                    "route": "Areas:battle",
+
+                    "from_id": area_from.id,
+                    "to_id": area_to.id,
+
+                    "patch": patch,
+                    "new_patch": new_patch,
+                    "escape_patch": escape_patch,
+
+                    "iso": area_from.iso,
+                    "move_left": area_from.move_left,
+
+                }, **resp.toDict()})
+
+            except MoveException as e:
+                # Area is probably not neighbor, or we're out of exhaustion
+
+                return {"err": e.reason}
+
+
+            # if resp.def_esc:
+            #     # defendant still had some army, it attempts to leave...
+            #
+            #     pass
+            #
+            # if resp.att_win:
+            #     try:
+            #         # Let's try moving again
+            #         # ...but only with the remaining army
+            #         move_to_after_battle(area_from, area_to, patch)
+            #
+            #         areas.save(area_from)
+            #         areas.save(area_to)
+            #
+            #
+            #     except MoveException as e:
+            #         # Area is probably not neighbor, or we're out of exhaustion
+            #
+            #         return {"err": e.reason}
+            # # else:
+            # #     # Defender won, save state
+            # #     areas.save(area_from)
+            # #     areas.save(area_to)
+
         except MoveException as e:
-            # Area is probably not neighbor
+            # Area is probably not neighbor, or we're out of exhaustion
 
             return {"err": e.reason}

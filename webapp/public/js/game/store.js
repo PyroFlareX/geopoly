@@ -38,6 +38,23 @@ export function set_turn(turn0) {
   return new_round;
 }
 
+
+export const EVENT = {
+  NONE: 0,
+
+  MOVE: 1,
+  CONQUER: 2,
+  BATTLE: 3,
+  ANNIHILATE: 4,
+  ENCIRCLE: 5,
+
+  RECRUIT: 10,
+  SHIPBUILD: 11,
+
+  CLAIM: 12,
+
+};
+
 // 1853?
 // todo: maybe store it in the server later, idk
 export const countries = {

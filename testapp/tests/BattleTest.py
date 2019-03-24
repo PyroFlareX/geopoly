@@ -2,7 +2,7 @@ from itertools import product
 
 from core.entities import Area
 from core.rules import UNITS
-from core.services.battle import getAttPoint, calculateBattle
+from core.services.battle import getAttPoint, calculate_battle
 
 
 def printMatrix(A):
@@ -27,7 +27,9 @@ class BattleTest():
         area_att = area_mixed3
         area_def = area_mixed2
 
-        win, report_from, report_to = calculateBattle(area_att, area_def)
+        patch = area_att.toUnitView()
+
+        win, report_from, report_to = calculate_battle(area_att, area_def, patch)
 
         print("Successful attack" if win else "Successful defence")
 

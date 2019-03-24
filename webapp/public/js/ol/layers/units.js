@@ -40,7 +40,7 @@ export const unitLayer = new ol.layer.Vector({
     // unit class
     let offset_x = -8;
 
-    if (unit.uclass != 'inf') {
+    if (unit.uclass != 'inf' || !unit.utype) {
       styles.push(new ol.style.Style({
         zIndex: (zIndex*zLayers)+2,
 

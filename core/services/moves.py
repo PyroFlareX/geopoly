@@ -42,3 +42,12 @@ def reset_map(match: Match, save=True):
 def reset_areas(areas):
     for area in areas:
         area.move_left = getMilPop(area)
+
+
+def normalize_patch(area: Area, patch: dict):
+    new_patch = patch.copy()
+
+    for u, unit, num in getUnits(area):
+        new_patch[u] = min(patch[u], num)
+
+    return new_patch

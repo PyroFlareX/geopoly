@@ -24,6 +24,7 @@ class User(Player):
             "mid": self.mid,
         }
 
+
 class Match(Player):
 
     def __init__(self, **kwargs):
@@ -42,6 +43,8 @@ class Match(Player):
         self.current = kwargs.get('current')
         self.isos = kwargs.get('isos')
 
+        self.events = kwargs.get('events', [])
+
         # Not saved in DB
         self.round_iter = kwargs.get('round_iter')
 
@@ -58,7 +61,9 @@ class Match(Player):
             "current": self.current,
 
             "turns": self.turns,
-            "rounds": self.rounds
+            "rounds": self.rounds,
+
+            "events": self.events
         }
 
 
@@ -93,3 +98,18 @@ class Area():
     def toView(self):
 
         return self.__dict__
+
+    def toUnitView(self):
+        return {
+            "inf_light": self.inf_light,
+            "inf_home": self.inf_home,
+            "inf_heavy": self.inf_heavy,
+            "inf_skirmish": self.inf_skirmish,
+            "cav_lancer": self.cav_lancer,
+            "cav_hussar": self.cav_hussar,
+            "cav_dragoon": self.cav_dragoon,
+            "cav_heavy": self.cav_heavy,
+            "art_light": self.art_light,
+            "art_heavy": self.art_heavy,
+            "art_mortar": self.art_mortar,
+        }

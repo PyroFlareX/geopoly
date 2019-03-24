@@ -55,9 +55,14 @@ def report(total, str, loss):
     }
 
 
-def calculateBattle(area_fr, area_to, make_report=True):
-    fr_attp = getAttPoint(area_fr, area_to)
-    to_attp = getAttPoint(area_to, area_fr)
+def calculate_battle(area_fr, area_to, patch: dict, make_report=True):
+    area_pa = Area(iso=area_fr.iso, id=area_fr.id, **patch)
+
+    # todo: add annihilation
+    # todo: add annihilation by encirclement
+
+    fr_attp = getAttPoint(area_pa, area_to)
+    to_attp = getAttPoint(area_to, area_pa)
     to_defp = getDefPoint(area_to)
 
     # calculate total strength points
@@ -68,7 +73,7 @@ def calculateBattle(area_fr, area_to, make_report=True):
     fr_win = fr_str > to_str
 
     # mil pop
-    fr_total = getMilPop(area_fr)
+    fr_total = getMilPop(area_pa)
     to_total = getMilPop(area_to)
 
     # calculate relative and absolute losses

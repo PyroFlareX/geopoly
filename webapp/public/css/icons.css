@@ -195,56 +195,86 @@
  * Generated content below - do not modify
  **/
  
-.ra-class-infantry:before {
-  content: "\e90f";
-}
 .ra-class-artillery:before {
   content: "\e900";
 }
 .ra-class-cavalry:before {
   content: "\e901";
 }
-.ra-helm-cavalry:before {
+.ra-class-infantry:before {
   content: "\e902";
 }
-.ra-helm-pickelhaube:before {
+.ra-helm-cavalry:before {
   content: "\e903";
 }
-.ra-unit-art_heavy:before {
+.ra-helm-pickelhaube:before {
   content: "\e904";
 }
-.ra-unit-art_light:before {
+.ra-icon-binoculars:before {
   content: "\e905";
 }
-.ra-unit-art_mortar:before {
+.ra-icon-chat:before {
   content: "\e906";
 }
-.ra-unit-cav_dragoon:before {
+.ra-icon-conquer:before {
   content: "\e907";
+}
+.ra-icon-exit:before {
+  content: "\e908";
+}
+.ra-icon-info:before {
+  content: "\e909";
+}
+.ra-icon-move:before {
+  content: "\e90a";
+}
+.ra-icon-mute:before {
+  content: "\e90b";
+}
+.ra-icon-player:before {
+  content: "\e90c";
+}
+.ra-icon-settings:before {
+  content: "\e90d";
+}
+.ra-icon-unmute:before {
+  content: "\e90e";
+}
+.ra-unit-art_heavy:before {
+  content: "\e90f";
+}
+.ra-unit-art_light:before {
+  content: "\e910";
+}
+.ra-unit-art_mortar:before {
+  content: "\e911";
+}
+.ra-unit-cav_dragoon:before {
+  content: "\e912";
   color: #4a4a4a;
 }
 .ra-unit-cav_heavy:before {
-  content: "\e908";
+  content: "\e913";
   color: #4a4a4a;
 }
 .ra-unit-cav_hussar:before {
-  content: "\e909";
+  content: "\e914";
   color: #4e2a0b;
 }
 .ra-unit-cav_lancer:before {
-  content: "\e90a";
+  content: "\e915";
 }
 .ra-unit-inf_heavy:before {
-  content: "\e90b";
+  content: "\e916";
   color: #3c6312;
 }
 .ra-unit-inf_home:before {
-  content: "\e90c";
+  content: "\e917";
 }
 .ra-unit-inf_light:before {
-  content: "\e90d";
+  content: "\e918";
   color: #4e2a0b;
 }
 .ra-unit-inf_skirmish:before {
-  content: "\e90e";
+  content: "\e919";
 }

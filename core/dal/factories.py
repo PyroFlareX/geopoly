@@ -15,6 +15,8 @@ def create_match():
     match.max_rounds = int(settings.get('match.max_rounds'))
     match.turn_type = TurnType.EMPEROR_FIRST
 
+    match.events = []
+
     match.map = 1
 
     # match.turns = 0
