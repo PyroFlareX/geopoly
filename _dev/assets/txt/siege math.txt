@@ -1,6 +1,0 @@
-Where sieges occurred, the attackers were usually able to defeat the defences within a matter of days or weeks, rather than weeks or months as previously.
-Railways, when they were introduced, made possible the movement and supply of larger armies than those that fought in the Napoleonic Wars. It also reintroduced siege warfare, as armies seeking to use railway lines in enemy territory were forced to capture fortresses which blocked these lines.
-
-- siege: 1 to 14 days
-- factors will elongate the siege capture
-- heavily fortified cities can withstand months

@@ -1,8 +1,0 @@
-- nostalgia: copy from multiple sources
-
-- aoe, spellforce, sc, wc2, wc3, travi, grep, ikar, goodgame, forgeof,
-
-- take from multiple sources
-- emulate that works
-- modernate that doesn't 
-- give it a rose-tinted look
