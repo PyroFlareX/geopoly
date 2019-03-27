@@ -9,6 +9,8 @@ if storage == 'memory':
     users = MemoryStore('uid')
     #players = MemoryStore('pid')
 
+    decks = MemoryStore('did')
+
     matches = MemoryStore('mid')
     #countries = MemoryStore('cid')
     areas = AreaStore('id')

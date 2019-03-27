@@ -1,7 +1,4 @@
 import {} from "/js/vue/mixins.js";
-import {template} from "/js/vue/gui.vue.js";
-
-$("#app-gui").innerHTML = template;
 
 export const gui = new Vue({
   el: '#app-gui',

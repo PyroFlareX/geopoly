@@ -38,12 +38,25 @@ def getUnits(area: Area, area2: Area=None):
             yield u, units[u], getattr(area, u)
 
 def getEffectivePoint(u):
+    #  calculate effective points by averaging atts & def, and then measuring from the mean?
+    sdown = 3.6
+
     unit = units[u]
+    points = [unit['atk_i'], unit['atk_c'], unit['atk_a'], unit['def']]
 
-    # todo: calculate effective points by averaging atts & def
-    # todo: and then measuring from the mean?
+    avg = sum(points) / len(points)
+    mse = 0.5 * sum( (p-avg)**2 for p in points)
 
-    return 1
+    if u == 'inf_skirmish':
+        # special abilities
+        ov = (1.83 * mse) / sdown
+    elif u == 'inf_light':
+        # ranking up
+        ov = 0.055 * getEffectivePoint('inf_heavy')
+    else:
+        ov = 0
+
+    return round(mse / sdown + ov)
 
 
 UNITS = [

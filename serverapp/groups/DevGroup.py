@@ -2,7 +2,7 @@ import time
 
 from eme.websocket import WSClient
 
-from core.dal.factories import create_match
+from core.factories import create_match
 from core.entities import User, Match, Area
 from core.instance import matches, areas
 from core.services import turns, moves

@@ -1,5 +1,7 @@
+import json
+
 from core import settings
-from core.entities import Match, TurnType
+from core.entities import Match, TurnType, Deck
 from core.instance import matches
 
 
@@ -25,3 +27,13 @@ def create_match():
     # match.pids = []
 
     return match
+
+
+def create_default_deck(deck_type='normal'):
+
+    with open('core/content/decks.json') as fh:
+        dp = json.load(fh)
+    deck = Deck(**dp[deck_type])
+
+    return deck
+

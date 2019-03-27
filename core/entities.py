@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Player():
+class Player:
 
     def __init__(self, **kwargs):
         self.iso = kwargs.get('iso')
@@ -25,7 +25,7 @@ class User(Player):
         }
 
 
-class Match(Player):
+class Match:
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -72,7 +72,7 @@ class TurnType(Enum):
     EMPEROR_FIRST = 1  # as in Medwars
 
 
-class Area():
+class Area:
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
         self.iso = kwargs.get('iso')
@@ -96,7 +96,6 @@ class Area():
         self.move_left = kwargs.get('move_left', 0)
 
     def toView(self):
-
         return self.__dict__
 
     def toUnitView(self):
@@ -113,3 +112,23 @@ class Area():
             "art_heavy": self.art_heavy,
             "art_mortar": self.art_mortar,
         }
+
+
+class Deck:
+    def __init__(self, **kwargs):
+        self.did = kwargs.get('did')
+        self.uid = kwargs.get('uid')
+
+        self.inf_light = kwargs.get('inf_light', 0)
+        self.inf_home = kwargs.get('inf_home', 0)
+        self.inf_heavy = kwargs.get('inf_heavy', 0)
+        self.inf_skirmish = kwargs.get('inf_skirmish', 0)
+
+        self.cav_lancer = kwargs.get('cav_lancer', 0)
+        self.cav_hussar = kwargs.get('cav_hussar', 0)
+        self.cav_dragoon = kwargs.get('cav_dragoon', 0)
+        self.cav_heavy = kwargs.get('cav_heavy', 0)
+
+        self.art_light = kwargs.get('art_light', 0)
+        self.art_heavy = kwargs.get('art_heavy', 0)
+        self.art_mortar = kwargs.get('art_mortar', 0)

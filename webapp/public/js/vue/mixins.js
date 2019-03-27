@@ -25,10 +25,6 @@ Vue.mixin({
         return bg + text;
       },
 
-      country_background: function(country) {
-        // todo...
-      },
-
     };
   },
 

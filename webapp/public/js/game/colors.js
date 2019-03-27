@@ -1,5 +1,4 @@
 import {load} from '/js/game/loader.js';
-import {countrySource} from '/js/ol/layers/countries.js';
 
 export const colors = {
   not_found: new Color(0, 255, 255),

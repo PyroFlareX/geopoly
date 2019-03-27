@@ -72,7 +72,6 @@ areaLayer.click = (feature, key) => {
 
       let mils = getUnits(feature);
 
-      // todo: check if mine
       if (mils > 0) {
         feature.set('selected', true);
         
@@ -80,6 +79,10 @@ areaLayer.click = (feature, key) => {
         move.selected = feature;
       }
     } else {
+      // check if we can move there
+      if (move.selected.get('conn') && !move.selected.get('conn').includes(feature.getId()))
+        return;
+
       showMoveDialog(move.selected, feature);
 
       move.selected = null;
@@ -93,6 +96,14 @@ areaLayer.click = (feature, key) => {
 
 areaLayer.hover = (feature) => {
   if (move.selected) {
+    // check if we can move there
+    if (move.selected.get('conn')) {
+      if (!move.selected.get('conn').includes(feature.getId())) {
+        hideHoverArrow();
+
+        return;
+      }
+    }
 
     if (feature.getId() != move.selected.getId()) {
       // todo: check if two areas are connected!
