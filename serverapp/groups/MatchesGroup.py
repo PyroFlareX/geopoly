@@ -1,7 +1,9 @@
-from core.entities import Match, User
-from core.game import end_turn
-from core.exceptions import GameEndException
-from core.instance import matches
+from core.entities import User
+from core.exceptions import JoinException
+from core.factories import create_match
+from core.instance import matches, decks, areas
+from core.managers.DeckManager import DeckManager
+from core.services import turns, moves, claim
 
 
 class MatchesGroup:
@@ -9,46 +11,78 @@ class MatchesGroup:
     def __init__(self, server):
         self.server = server
         self.group = 'Matches'
+        self.deckManager = DeckManager()
 
+    def list(self, user: User):
+        if user.mid:
+            return
 
-    def load(self, user: User):
-        if user.mid is None:
-            return {"err": "not_in_match"}
-
-        match: Match = matches.get(user.mid)
-
-        # generate player list from users
-        playerlist = [user.toView() for user in self.server.getUsersAt(user.mid)]
+        lmatches = matches.get_all(raw=True)
 
         return {
-            "me": user.iso,
-            "match": match.toView(),
-            "players": playerlist,
-            #"countries": countries
+            "matches": lmatches
         }
 
-    def end_turn(self, user: User):
-        if user.mid is None:
-            return {"err": "not_in_match"}
+    def create(self, map, max_players, max_rounds, user):
+        match = create_match(map=map, max_players=max_players, max_rounds=max_rounds)
 
-        match: Match = matches.get(user.mid)
+        matches.create(match)
+
+        self.server.sendToHall({
+            "route": "Matches:create",
+            "msid": user.client.msid,
+
+            "match": match.toView()
+        })
+
+    def join(self, aid, did, mid, iso, username, user):
+        """
+        User joins match
+        """
+        match = matches.get(mid)
+        deck = self.deckManager.get(user.uid, did)
+        area = areas.get(mid, aid)
 
         try:
-            if end_turn(match, iso=user.iso):
-                matches.save(match)
+            # todo: handle reconnect
 
-                self.server.sendToMatch(match.mid, {
-                    "route": "Matches:end_turn",
-                    "match": match.toView()
-                })
-            else:
-                # it's not your turn
-                pass
-        except GameEndException as e:
-            # game has ended, finalize stuff
-            matches.delete(match)
+            # join to match
+            claim.join_match(match, iso, user, username)
 
-            self.server.sendToMatch(match.mid, {
-                "route": "Matches:end_game",
-                "reason": e.reason
-            })
+            # add deck
+            claim.add_units(area, deck)
+        except JoinException as e:
+            return {
+                "err": e.reason
+            }
+
+        # Remove from hall and add to match
+        self.server.onlineHall.remove(user.client)
+        self.server.onlineMatches[mid].add(user.client)
+
+        matches.save(match)
+        areas.save(area)
+
+        self.server.sendToMatch(mid, {
+            "route": "Matches:join",
+
+            "match": match.toView(),
+            "area": area.toView(),
+
+            "mid": mid,
+            "iso": iso,
+            "username": username,
+        })
+
+    def start(self, mid, user):
+        match = matches.get(mid)
+
+        # start match
+        turns.init(match)
+        moves.reset_map(match)
+
+        matches.save(match)
+
+        self.server.sendToMatch(mid, {
+            "match": match.toView()
+        })

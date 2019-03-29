@@ -1,5 +1,9 @@
 {
   "normal": {
+    "name": "normal",
+    "did": "normal",
+    "uid": "guest",
+
     "inf_light": 5400,
     "inf_home": 558,
     "inf_heavy": 1500,
@@ -14,6 +18,10 @@
   },
 
   "offensive": {
+    "name": "offensive",
+    "did": "offensive",
+    "uid": "guest",
+
     "inf_light": 3700,
     "inf_home": 58,
     "inf_heavy": 2000,
@@ -25,13 +33,5 @@
     "art_light": 6,
     "art_heavy": 10,
     "art_mortar": 2
-  },
-
-  "flank": {
-
-  },
-
-  "defensive": {
-
   }
 }

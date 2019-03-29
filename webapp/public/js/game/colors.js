@@ -23,7 +23,7 @@ export const colors = {
 
 };
 
-const isocolors = {
+export const isocolors = {
   'AA': colors.base,
   'UK': new Color([207, 20, 43]),
   'FR': new Color([3, 7, 147]),
@@ -49,6 +49,9 @@ const isocolors = {
   // 'IR': new Color([245, 130, 48]),
 };
 
+// todo: later: define too_light, when two components are > 400 and 1 is < 100
+const too_light = new Set(["AT"]);
+
 export let color_settings = {
   colorscheme: 'softlight'
 };
@@ -58,24 +61,42 @@ export function getColor(area) {
   else if (area instanceof ol.Feature) var area = area.getProperties();
   let iso = area.iso;
 
-  if (iso)
-    return isocolors[iso] || colors.not_found;
+  if (!iso)
+    return colors.base;
+  if (!isocolors[iso])
+    return colors.not_found;
 
-  return colors.base;
+  // use a different color if contrast is white
+  if (too_light.has(iso) && ['softlight', 'hardlight'].includes(color_settings.colorscheme))
+    return isocolors[iso].blend(colors.base, 'multiply');
+
+  if (color_settings.colorscheme == 'inverted')
+    return isocolors[iso].blend(colors.base, 'multiply');
+
+  return isocolors[iso];
+
+  //return colors.base;
 }
 
 export function getHighlight(color) {
-  return color.blend(new Color(255, 255, 255), 'softlight');
+  return color.blend(colors.base, 'multiply');
 }
 
-export function getMapBlend(color) {
-  if (color_settings.colorscheme == 'multiply') {
-    return color;
-  } else if (['softlight','lineardodge','screen','darken'].includes(color_settings.colorscheme)) {
-    return colors.base.blend(color, color_settings.colorscheme);
+export function getMapBlend(color, iso) {
+  let out_color = null;
+
+  if (color_settings.colorscheme == 'inverted') {
+    // inverted (multiply)
+    out_color = isocolors[iso] || colors.base;
+  } else if (['softlight','lineardodge','screen','darken','multiply'].includes(color_settings.colorscheme)) {
+    // softlight, light (lineardodge), screen, vivid (multiply)
+    out_color = colors.base.blend(color, color_settings.colorscheme);
+  } else {
+    // faded (normal), hardlight
+    out_color = color.blend(colors.base, color_settings.colorscheme);
   }
-  
-  return color.blend(colors.base, color_settings.colorscheme);
+
+  return out_color;
 }
 
 

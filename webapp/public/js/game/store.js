@@ -13,6 +13,8 @@ fetch('/js/game/rules.json').then((resp) => {
 
 export const match = {
   me: null,
+  spectator: false,
+  can_join: false,
 
   mid: null,
   max_players: null,
@@ -24,6 +26,8 @@ export const match = {
   rounds: 0,
   isos: [],
 };
+
+export const decks = [];
 
 export function set_turn(turn0) {
   let new_round = turn0.rounds != match.rounds;

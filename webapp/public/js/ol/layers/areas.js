@@ -1,6 +1,6 @@
 import {load} from '/js/game/loader.js';
 import {getUnits} from '/js/game/lib.js';
-import {match} from '/js/game/store.js';
+import {match, countries} from '/js/game/store.js';
 import {showHoverArrow, initHoverArrow, hideHoverArrow, showMoveDialog} from '/js/ol/gfx.js';
 import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
 
@@ -22,14 +22,14 @@ export const areaLayer = new ol.layer.Vector({
   style: (feature, res) => {
     let styles = [];
 
-    let selected = feature.get('selected', false);
+    let selected = feature.get('selected');
 
     // todo: account for multiply colorscheme!
     let color = getColor(feature);
-    let bg = getMapBlend(color);
+    let bg = getMapBlend(color, feature.get('iso'));
 
-    // if (selected)
-    //   color = getHighlight(color);
+    if (feature.get('hovered'))
+      bg = getHighlight(color);
 
     // area borders & country color
     styles.push(new ol.style.Style({
@@ -60,6 +60,16 @@ areaLayer.name = 'areas';
 
 areaLayer.click = (feature, key) => {
   let iso = feature.get('iso');
+
+
+  if (!match.me && match.can_join) {
+    // Claim feature on click
+
+    if (countries[iso].player.default) {
+      gui.dialog("join-match", match, iso, feature.getId(), feature.get('name'));
+    }
+    return;
+  }
 
   if (!key) {
     // Move feature
@@ -94,7 +104,17 @@ areaLayer.click = (feature, key) => {
   }
 };
 
+let hovered = null;
 areaLayer.hover = (feature) => {
+  if (hovered) {
+    hovered.set('hovered', false);
+  }
+
+  feature.set('hovered', true);
+  hovered = feature;
+  $("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";
+
+
   if (move.selected) {
     // check if we can move there
     if (move.selected.get('conn')) {
@@ -111,6 +131,19 @@ areaLayer.hover = (feature) => {
       // draw arrow from selected to this feature
       showHoverArrow(feature);
     }
+  }
+};
+
+areaLayer.hover_out = () => {
+  if (hovered) {
+    hovered.set('hovered', false);
+    hovered = null;
+  }
+
+  $("#app-map").style.cursor = "";
+  
+  if (move.selected) {
+    hideHoverArrow();
   }
 };
 

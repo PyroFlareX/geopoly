@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block content %}
+  <div id="app-gui"></div>
+
+  <script type="module">
+    import {template} from "/js/vue/matches-gui.vue.js";
+    $("#app-gui").innerHTML = template;
+  </script>
+  <script type="module">
+    import {init_app} from '/js/matchmaking.js';
+
+    // declare variables from backend
+
+    // start app
+    init_app({= debug|tojson =}, '{= ws_address =}', '{= current_user.uid =}', null);
+  </script>
+{% endblock %}

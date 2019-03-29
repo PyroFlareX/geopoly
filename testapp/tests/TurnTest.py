@@ -5,6 +5,27 @@ class TurnTest():
     def __init__(self, app):
         self.app = app
 
+    def test_1user(self):
+        match: Match = self.app.readMock('turns_1user', Match)
+        iso = match.isos[0]
+
+        turns.init(match)
+
+        try:
+            new = turns.next_turn(match)
+
+            assert new == iso
+
+            print("1 USER TURN: Success")
+        except (AssertionError) as e:
+
+            print("1 USER TURN: Fail")
+
+        except Exception as e:
+            print("1 USER TURN: FailNE: {}".format(e))
+            raise e
+
+
     def test_1round(self):
         match: Match = self.app.readMock('turns_match', Match)
 

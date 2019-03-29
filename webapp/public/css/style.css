@@ -150,8 +150,38 @@
     margin-left: 4px;
     display: inline-block;
 }
+.flag-box.flag-md {
+    border-width: 4px;
+    border-radius: 10%;
+}
+.flag-box.flag-active {
+    border-color: orange;
+}
+
 .flag-unclaimed {
     opacity: 0.3;
+}
+
+
+/* Recommend feature */
+#recommend-countries {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+}
+
+#recommend-countries .recommend-list {
+  width: 720px;
+}
+
+#recommend-countries .recommend-item {
+  border: solid 2px black;
+}
+#recommend-countries .recommend-item:hover {
+  border-color: crimson;
+}
+#recommend-countries .recommend-item span {
+  font-size: 16px;
 }
 
 /* GUI game frame Corners */
@@ -364,6 +394,10 @@
 
 
 /* BRAND & Texts */
+.font-brand {
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: normal;
+}
 
 .geopoly {
     font-size: 128px;
@@ -383,6 +417,11 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     z-index: 2;
+    text-shadow:
+     -1px -1px 0 #a00a0e,
+      1px -1px 0 #a00a0e,
+      -1px 1px 0 #a00a0e,
+       1px 1px 0 #a00a0e;
 }
 .subopoly {
     font-family: 'Cinzel Decorative', cursive;

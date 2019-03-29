@@ -34,6 +34,10 @@ export const template = `
               <strong>Color scheme</strong>
               
               <div class="custom-control custom-radio">
+                <input v-model="blendmode" value="normal" :checked="blendmode == 'normal'" type="radio" id="blendmode1" name="blendmode" class="custom-control-input">
+                <label class="custom-control-label" for="blendmode1">Faded</label>
+              </div>
+              <div class="custom-control custom-radio">
                 <input v-model="blendmode" value="lineardodge" :checked="blendmode == 'lineardodge'" type="radio" id="blendmode2" name="blendmode" class="custom-control-input">
                 <label class="custom-control-label" for="blendmode2">Light</label>
               </div>
@@ -46,16 +50,16 @@ export const template = `
                 <label class="custom-control-label" for="blendmode4">Softlight</label>
               </div>
               <div class="custom-control custom-radio">
-                <input v-model="blendmode" value="normal" :checked="blendmode == 'normal'" type="radio" id="blendmode1" name="blendmode" class="custom-control-input">
-                <label class="custom-control-label" for="blendmode1">Faded</label>
-              </div>
-              <div class="custom-control custom-radio">
                 <input v-model="blendmode" value="hardlight" :checked="blendmode == 'hardlight'" type="radio" id="blendmode5" name="blendmode" class="custom-control-input">
                 <label class="custom-control-label" for="blendmode5">Hardlight</label>
               </div>
               <div class="custom-control custom-radio">
-                <input v-model="blendmode" value="multiply" :checked="blendmode == 'multiply'" type="radio" id="blendmode6" name="blendmode" class="custom-control-input">
+                <input v-model="blendmode" value="inverted" :checked="blendmode == 'inverted'" type="radio" id="blendmode6" name="blendmode" class="custom-control-input">
                 <label class="custom-control-label" for="blendmode6">Vivid</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input v-model="blendmode" value="multiply" :checked="blendmode == 'multiply'" type="radio" id="blendmode7" name="blendmode" class="custom-control-input">
+                <label class="custom-control-label" for="blendmode7">Dark</label>
               </div>
             </div>
 

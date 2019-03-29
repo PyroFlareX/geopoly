@@ -1,5 +1,3 @@
-import {set_turn} from '/js/game/store.js';
-import {reset_moves} from '/js/ol/gfx.js';
 
 
 export class MatchesGroup {
@@ -7,33 +5,54 @@ export class MatchesGroup {
     this.client = client;
   }
 
-  request_end_turn() {
+  request_list() {
+    this.client.request("Matches:list");
+  }
 
-    this.client.request('Matches:end_turn', {
+  list({matches}) {
+    const m = gui.$refs.matches;
 
-    }).then(() => {
+    m.matches = {};
+    for (let match of matches)
+      m.matches[match.mid] = match;
+  }
 
-      // todo: temporal solution: call AI ender
-      this.client.request('Dev:ai_act', {});
+  request_create(map, max_players, max_rounds) {
+    this.client.request("Matches:create", {
+      map: map,
+      max_players: max_players,
+      max_rounds: max_rounds,
+    }).then(({match})=>{
+      Cookie.set("mid", match.mid);
+
+      window.location = '/client';
+      //gui.dialog("join-match", match);
+    });
+  }
+
+  create({match}) {
+    gui.$refs.matches.matches[match.mid] = match;
+  }
+
+  request_join(mid, iso, username, area_id, deck_id) {
+    Cookie.set("username", username);
+
+    this.client.request("Matches:join", {
+      mid: mid,
+      iso: iso,
+      aid: area_id,
+      did: deck_id,
+      username: username,
+    }).then(({})=>{
 
     });
   }
 
-  end_turn({match}) {
-    console.info("%cTurn "+(match.turns-1)+" ended", "color: blue");
-
-    const is_new_round = set_turn(match);
-
-    if (is_new_round) {
-      reset_moves();
-      console.info("%cRound "+(match.rounds-1)+" ended", "color: white; background: blue");
-    }
-  }
-
-  end_game({reason}) {
-    // todo: use dialog (winner / loser / draw)
-    console.info("%cGame ended: "+reason, "color: white; background: blue");
-
-    alert("Match has ended. Reason: " + reason);
+  join({mid, username, iso}) {
+    
+    
+    console.log(mid, username, iso)
+    // gui.$refs.matches.matches[match.mid]
+    // gui.$refs.matches.matches.push(match);
   }
 }

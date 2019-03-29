@@ -1,0 +1,11 @@
+{
+  "mid": "-",
+  "max_players": 6,
+  "max_rounds": 250,
+  "map": 1,
+
+  "turns": null,
+  "rounds": null,
+  "current": null,
+  "isos": ["CH"]
+}

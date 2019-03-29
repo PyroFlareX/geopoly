@@ -71,10 +71,17 @@ map.on('pointermove', (event) => {
     keys.mouse_pixel = event.pixel;
   }
 
+  let found_feature = false;
   map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
-    if (layer.hover)
+    if (layer.hover) {
+      found_feature = true;
+
       layer.hover(feature);
+    }
   });
+
+  if (!found_feature) 
+    areaLayer.hover_out();
 });
 
 map.on('click', (event) => {

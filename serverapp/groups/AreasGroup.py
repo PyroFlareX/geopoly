@@ -13,12 +13,14 @@ class AreasGroup:
         self.server = server
         self.group = 'Areas'
 
-    def load(self, user=None):
-        if user.mid is None:
-            return {"err": "not_in_match"}
+    def load(self, user=None, mid=None):
+        if mid is None:
+            if user.mid is None:
+                return {"err": "not_in_match"}
+            else:
+                mid = user.mid
 
-        lareas = areas.get_all(mid=user.mid, raw=True)
-
+        lareas = areas.get_all(mid=mid, raw=True)
 
         return {
             "areas": lareas

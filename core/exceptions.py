@@ -18,3 +18,11 @@ class MoveException(Exception):
 
     def __str__(self):
         return str(self.reason)
+
+
+class JoinException(Exception):
+    def __init__(self, reason):
+        self.reason = reason
+
+    def __str__(self):
+        return str(self.reason)

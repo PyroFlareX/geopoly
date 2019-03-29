@@ -15,6 +15,8 @@ class User(Player):
 
         self.uid = kwargs.get('uid')
         self.username = kwargs.get('username')
+        self.email = kwargs.get('email')
+        self.client = kwargs.get('client')
 
     def toView(self):
         return {
@@ -28,7 +30,7 @@ class User(Player):
 class Match:
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__()
 
         self.mid = kwargs.get('mid')
 
@@ -41,7 +43,7 @@ class Match:
         self.turns = kwargs.get('turns')
         self.rounds = kwargs.get('rounds')
         self.current = kwargs.get('current')
-        self.isos = kwargs.get('isos')
+        self.isos = kwargs.get('isos', [])
 
         self.events = kwargs.get('events', [])
 
@@ -57,7 +59,7 @@ class Match:
             "map": self.map,
 
             "isos": list(self.isos),
-            "start": self.isos[0],
+            "start": self.isos[0] if len(self.isos) > 0 else None,
             "current": self.current,
 
             "turns": self.turns,
@@ -118,6 +120,7 @@ class Deck:
     def __init__(self, **kwargs):
         self.did = kwargs.get('did')
         self.uid = kwargs.get('uid')
+        self.name = kwargs.get('name')
 
         self.inf_light = kwargs.get('inf_light', 0)
         self.inf_home = kwargs.get('inf_home', 0)
@@ -132,3 +135,6 @@ class Deck:
         self.art_light = kwargs.get('art_light', 0)
         self.art_heavy = kwargs.get('art_heavy', 0)
         self.art_mortar = kwargs.get('art_mortar', 0)
+
+    def toView(self):
+        return self.__dict__
