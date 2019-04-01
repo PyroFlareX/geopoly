@@ -6,22 +6,23 @@ export let component = Vue.component('flash', {
   template: template,
   data: function() {
     return {
-      text: null,
-      country: null,
-      theme: 'danger',
       show: false,
+
+      iso: null,
+      theme: 'danger',
+      text: null,
       timeout: null,
     }
   },
   methods: {
-    display: function(text, theme, country) {
+    display: function(text, theme, iso) {
       if (theme)
         this.theme = theme;
       else
         this.theme = 'white';
 
       this.text = text;
-      this.country = country;
+      this.iso = iso;
       this.show = true;
 
       var self = this;

@@ -33,6 +33,8 @@ export let component = Vue.component('dialog-join-match', {
       this.country = countries[iso];
       this.iso = iso;
       this.username = Cookie.get('username', '');
+
+      this.deck = this.decks[0];
     },
 
     onSubmit: function() {

@@ -29,7 +29,9 @@
 
     max-width: 36%;
     min-width: 300px;
-    min-height: 180px;
+}
+.infobar .infobar-content {
+    min-height: 100px;
 }
 .infobar.infobar-lg {
     max-width: 60%;
@@ -91,7 +93,6 @@
 
 
 /* GUI FLASH */
-
 .gui-flash-wrapper {
     position: fixed;
     left: 50%;
@@ -105,7 +106,7 @@
     max-height: 80px;
 }
 
-.gui-text-bordeaux {
+.gui-text {
     color: white;
     font-size: 14px;
     text-align: center;

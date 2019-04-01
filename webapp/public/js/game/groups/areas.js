@@ -35,6 +35,8 @@ export class AreasGroup {
       "np": len(match.isos),
       "round": match.rounds,
     });
+
+    gui.flash(`${from_id} move ${to_id}`, 'success', iso);
   }
 
   battle({from_id, to_id, iso, patch, new_patch, escape_patch, move_left, att_win, rep_from, rep_to}) {
@@ -58,12 +60,14 @@ export class AreasGroup {
       // and now remove the casualties 
       setUnits(to_id, new_patch);
 
+      gui.flash(`Conquer`, 'danger', iso);
     } else {
       if (att_win)
         console.error("att win && def_esc can't happen!!");
 
       // defender won, we just remove units from the two sides
 
+      gui.flash(`Successful defence`, 'danger', iso);
     }
   }
 }

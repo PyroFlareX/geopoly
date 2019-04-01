@@ -24,10 +24,10 @@ class GameGroup:
             return {"err": "not_found"}
 
         # generate player list from users
-        playerlist = [user.toView() for user in self.server.getUsersAt(mid)]
+        playerlist = {user.iso: user.toView() for user in self.server.getUsersAt(mid)}
 
         return {
-            "me": user.iso and user.mid,
+            "me": user.iso,
             "match": match.toView(),
             "players": playerlist,
             #"countries": countries

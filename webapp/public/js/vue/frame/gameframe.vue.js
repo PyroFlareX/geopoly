@@ -39,7 +39,7 @@ export const template = `
         <i class="ra icon-ra ra-icon-mute"></i>
       </div>
 
-      <div title="" @click="" class="gui-corner-icon tilt-90">
+      <div title="" @click="exit" class="gui-corner-icon tilt-90">
         <i class="ra icon-ra ra-icon-exit"></i>
       </div>
     </div>

@@ -55,8 +55,8 @@ export const gui = new Vue({
       return child;
     },
 
-    flash: function(text, theme, country) {
-      this.$refs.flash.display(text, theme, country);
+    flash: function(text, theme, iso) {
+      this.$refs.flash.display(text, theme, iso);
     }
   }
 });

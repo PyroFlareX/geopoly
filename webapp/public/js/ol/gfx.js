@@ -410,3 +410,43 @@ function createCountryFeature(iso) {
 
   return feature;
 }
+
+
+/* stuff */
+//   this.jumpToMe = function() {
+//     var country = game.countries[game.iso];
+//     var coords = poly2coords(country.getGeometry());
+
+//     this.jump_i++;
+//     if (this.jump_i >= coords.length)
+//       this.jump_i = 0;
+
+//     var coord = coords[this.jump_i][0];
+//     var cen = centroid(coord);
+
+//     gfx.jumpTo(cen, false);
+//   };
+
+//   this.jumpTo = function(coord, animate) {
+//     if (!Array.isArray(coord))
+//       if (coord.getGeometry)
+//         var coord = coord.getGeometry().getCoordinates();
+//       else if (coord.getCoordinates)
+//         var coord = coord.getCoordinates();
+
+//     if (typeof animate === 'undefined')
+//       var animate = true;
+
+//     if (animate)
+//       this.view.animate({
+//         center: coord,
+//         duration: 920,
+//         easing: ol.easing.inAndOut
+//       });
+//     else
+//       this.view.animate({
+//         center: coord,
+//         duration: 100,
+//         easing: ol.easing.inAndOut
+//       });
+//   };

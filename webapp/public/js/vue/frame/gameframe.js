@@ -1,5 +1,6 @@
 import {template} from "/js/vue/frame/gameframe.vue.js"
 import {match} from '/js/game/store.js';
+import {client} from '/js/game/client.js';
 import {getGameDate, getGameYear} from '/js/game/lib.js';
 
 const seasons = ['Winter','Spring','Summer','Fall'];
@@ -44,6 +45,18 @@ export let component = Vue.component('game-frame', {
     infobar: function(name, ...params) {
       gui.infobar(name, ...params);
     },
+
+    exit: function() {
+      if (match.me) {
+        let resp = confirm("Are you sure you want to leave the match?");
+        
+        if (resp)
+          client.groups.Matches.request_leave();
+      } else {
+        Cookie.delete('mid');
+        window.location = '/';        
+      }
+    }
   },
 
   computed: {

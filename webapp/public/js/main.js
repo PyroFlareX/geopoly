@@ -103,13 +103,19 @@ export function init_app(debug, ws_address) {
 
           set_turn(match);
 
-          // add usernames of players too
-          for (let user of players) {
-            let player = countries[user.iso].player;
+          for (let [iso, country] of Object.items(countries)) {
+            let player = players[iso];
 
-            player.name = user.username || (player.name + " (*)");
-            player.default = false;
-            player.uid = user.uid;
+            if (player) {
+              // add player
+              player.name = user.username || (player.name + " (*)");
+              player.default = false;
+
+              country.player = player;
+              //player.uid = player.uid;
+            } else {
+
+            }
           }
 
         });

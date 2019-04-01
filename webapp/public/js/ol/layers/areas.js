@@ -65,7 +65,7 @@ areaLayer.click = (feature, key) => {
   if (!match.me && match.can_join) {
     // Claim feature on click
 
-    if (countries[iso].player.default) {
+    if (countries[iso].player.default && !match.isos.includes(iso)) {
       gui.dialog("join-match", match, iso, feature.getId(), feature.get('name'));
     }
     return;

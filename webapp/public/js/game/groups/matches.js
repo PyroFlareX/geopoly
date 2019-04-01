@@ -55,4 +55,15 @@ export class MatchesGroup {
     // gui.$refs.matches.matches[match.mid]
     // gui.$refs.matches.matches.push(match);
   }
+
+  request_leave() {
+
+    this.client.request("Matches:leave", {}).then(({})=>{
+      Cookie.delete('mid');
+    });
+  }
+
+  leave({uid, iso}) {
+    console.log("LEAVE", uid, iso);
+  }
 }
