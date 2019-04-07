@@ -1,22 +1,34 @@
 from enum import Enum
 
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Boolean
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.ext.declarative import declarative_base
 
-class Player:
+Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = 'users'
+
+    uid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+
+    username = Column(String(32))
+    iso = Column(String(5))
+    mid = Column(postgresql.UUID(as_uuid=True))
+
+    #email = Column(String(128))
+    #salt = Column(String(128), nullable=True)
+    #token = Column(String(128), nullable=True)
+    #password = Column(String(128))
+    #created_at = Column(Integer)
 
     def __init__(self, **kwargs):
+        self.uid = kwargs.get('uid')
+        #self.email = kwargs.get('email')
+
+        self.username = kwargs.get('username')
         self.iso = kwargs.get('iso')
         self.mid = kwargs.get('mid')
-
-
-class User(Player):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.uid = kwargs.get('uid')
-        self.username = kwargs.get('username')
-        self.email = kwargs.get('email')
-        self.client = kwargs.get('client')
 
     def toView(self):
         return {

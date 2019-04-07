@@ -39,9 +39,7 @@ export let component = Vue.component('matches', {
   },
   methods: {
     join: function(match) {
-      Cookie.set("mid", match.mid);
-      
-      window.location = '/client';
+      window.location = '/client?mid='+match.mid;
     },
 
     match_icon_src: function(match) {

@@ -34,10 +34,12 @@ export let component = Vue.component('dialog-join-match', {
       this.iso = iso;
       this.username = Cookie.get('username', '');
 
-      this.deck = this.decks[0];
+      this.deck = this.decks[0].name;
     },
 
     onSubmit: function() {
+      Cookie.set('username', this.username);
+
       client.groups.Matches.request_join(this.match.mid, this.iso, this.username, this.area.id, this.deck);
 
       this.show = false;

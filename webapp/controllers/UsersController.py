@@ -9,7 +9,7 @@ from core.managers.UserManager import UserManager
 from webapp.entities import UserAuth
 
 loginManager = LoginManager()
-userManager = UserManager()
+#userManager = UserManager()
 
 def get_403(e):
     return Response('<p>Login failed</p>')
@@ -32,7 +32,7 @@ class UsersController():
         self.loginManager.login_view = "get_users/login"
 
         # Init user storage
-        self.manager = userManager
+        #self.manager = userManager
 
 
     @login_required

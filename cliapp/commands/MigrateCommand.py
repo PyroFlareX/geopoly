@@ -1,6 +1,7 @@
 from sqlalchemy import text
 
 #from core.dal.ctx import session
+from core.dal.ctx import session
 
 
 class MigrateCommand():
@@ -18,7 +19,7 @@ class MigrateCommand():
 
         conn = session.connection()
 
-        for f in ['exts', 'users', 'servers', 'files', 'file_functions', 'add_servers']:
+        for f in ['exts', 'users']:
             print('Applying migration {}...'.format(f))
             with open(base.format(f), 'r') as sql_file:
                 sql = text(sql_file.read())

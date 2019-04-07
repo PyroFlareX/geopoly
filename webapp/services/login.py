@@ -1,8 +1,10 @@
 import uuid
 
+from flask import request
 from flask_login import LoginManager, current_user, login_user
 
 from core.entities import User
+from core.instance import users
 from webapp.entities import UserAuth
 
 # userManager = UserManager()
@@ -19,15 +21,24 @@ def init_login(server, conf):
 
 
 @loginManager.user_loader
-def load_user(userid):
-    return None
+def load_user(uid):
+    user = users.get(uid)
+
+    if not user:
+        user = User(uid=uuid.UUID(uid), username=None)
+
+    return UserAuth(user)
 
 
 def getUser() -> UserAuth:
+
     if not current_user.is_authenticated:
         # fetch anon user
-        user = User(uid="guest", username=None)
+        user = User(uid=uuid.uuid4(), username=None)
 
-        login_user(UserAuth(user), remember=True)
+        setUser(UserAuth(user))
 
     return current_user
+
+def setUser(user):
+    login_user(user, remember=True)

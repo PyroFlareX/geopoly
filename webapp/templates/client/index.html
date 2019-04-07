@@ -25,6 +25,6 @@
     // declare variables from backend
 
     // start app
-    init_app({= debug|tojson =}, '{= ws_address =}');
+    init_app({= debug|tojson =}, '{= ws_address =}', '{= get_user().uid =}', '');
   </script>
 {% endblock %}

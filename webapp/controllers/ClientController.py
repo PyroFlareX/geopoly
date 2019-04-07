@@ -19,4 +19,10 @@ class ClientController():
         )
 
     def test(self):
-        return render_template('/test/test.html')
+        ws_address = self.server.conf['websocket']['address']
+
+        return render_template('/client/test.html',
+           ws_address=ws_address,
+           debug=True,
+           err=request.args.get('err')
+        )

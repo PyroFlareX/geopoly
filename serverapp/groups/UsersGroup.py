@@ -1,4 +1,8 @@
+import uuid
+
 from core.entities import User
+from core.instance import matches, users
+from serverapp.services import login
 
 
 class UsersGroup:
@@ -13,7 +17,7 @@ class UsersGroup:
         ])
 
     def guest(self, uid, client):
-        user = User(uid=uid)
+        user = login.get_user(uid)
 
         if client not in self.server.onlineHall:
             self.server.onlineHall.add(client)
@@ -21,6 +25,10 @@ class UsersGroup:
         user.client = client
         client.user = user
 
-        return {
+        # if user.mid:
+        #     # load match
+        #     match = matches.get(user.mid)
 
+        return {
+            "user": user.toView()
         }

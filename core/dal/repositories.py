@@ -12,3 +12,15 @@ class UserRepository():
         user: User = self.session.query(User).get(uid)
 
         return user
+
+    def delete(self, user: User):
+        self.session.delete(user)
+        self.session.commit()
+
+    def create(self, user: User):
+        self.session.add(user)
+        self.session.commit()
+
+    def save(self, user: User):
+        self.session.add(user)
+        self.session.commit()

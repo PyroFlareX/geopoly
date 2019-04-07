@@ -1,13 +1,15 @@
 from core import settings
+from core.dal.ctx import session
 from core.dal.localstores import MemoryStore, AreaStore, MemoryParentStore
 from core.dal.repositories import UserRepository
 
 storage = settings.get('server.storage')
 
+users = UserRepository(db_session=session)
+
 if storage == 'memory':
     # Server stores entities in memory
 
-    users = UserRepository('uid')
     #players = MemoryStore('pid')
 
     decks = MemoryParentStore('did')

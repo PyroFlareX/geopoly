@@ -1,9 +1,13 @@
-CREATE TABLE IF NOT EXISTS userspaces (
-    "uid" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    "created_at" timestamp NOT NULL DEFAULT (now() AT TIME ZONE 'UTC'),
+CREATE TABLE IF NOT EXISTS users (
+    "uid" character varying PRIMARY KEY,
+    --"created_at" timestamp NOT NULL DEFAULT (now() AT TIME ZONE 'UTC'),
 
-    "email" character varying(40) NOT NULL,
-    "salt" character varying(128) NOT NULL,
-    "token" character varying(128) NOT NULL,
-    "password" character varying(128) NOT NULL
+    "mid" character varying NULL,
+    "iso" character varying(5) NULL,
+    "username" character varying(32) NULL,
+
+    "email" character varying(40) NULL,
+    "salt" character varying(128) NULL,
+    "token" character varying(128) NULL,
+    "password" character varying(128) NULL
 );

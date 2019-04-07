@@ -1,10 +1,11 @@
 from flask import render_template, request
-from flask_login import login_required, current_user
+from flask_login import login_required
 
 from core.instance import decks
 from core.managers.DeckManager import DeckManager
 from core.rules import units
 from webapp.entities import ApiResponse
+from webapp.services.login import getUser
 
 
 class DeckController():
@@ -18,7 +19,7 @@ class DeckController():
     def index(self):
         ws_address = self.server.conf['websocket']['address']
 
-        ldecks = self.deckManager.list(current_user.id, raw=True)
+        ldecks = self.deckManager.list(getUser().id, raw=True)
 
         return render_template('/deck/index.html',
            ws_address=ws_address,

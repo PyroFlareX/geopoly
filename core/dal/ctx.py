@@ -11,7 +11,7 @@ if db_type == 'postgres':
     # resources
     some_engine = create_engine('{type}+psycopg2://{user}:{password}@{host}/{database}'.format(**config[db_type]))
 elif db_type == 'sqlite':
-    some_engine = create_engine('sqlite:///{file}'.format(**config[db_type]))
+    some_engine = create_engine('sqlite:///{file}'.format(**config[db_type]), connect_args={'check_same_thread': False})
 
 Session = sessionmaker(bind=some_engine)
 

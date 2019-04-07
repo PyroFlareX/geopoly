@@ -1,6 +1,9 @@
-from flask import render_template
+from django.shortcuts import redirect
+from flask import render_template, request
 
-from webapp.services.login import getUser
+from core.services import claim
+from webapp.entities import ApiResponse
+from webapp.services.login import getUser, setUser
 
 
 class MatchesController():
@@ -19,3 +22,18 @@ class MatchesController():
            debug=True
         )
 
+    def post_join(self):
+
+        mid = request.form['mid']
+        iso = request.form['iso']
+        username = request.form['username']
+
+        user = getUser()
+
+        claim.set_match(user, mid, iso, username)
+
+        setUser(user)
+
+        return ApiResponse({
+
+        })

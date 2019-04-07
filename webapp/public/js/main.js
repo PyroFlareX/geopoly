@@ -14,7 +14,7 @@ import {MatchesGroup} from '/js/game/groups/matches.js';
 import {init_test} from '/js/test.js';
 
 
-export function init_app(debug, ws_address) {
+export function init_app(debug, ws_address, uid, token) {
   view.setCenter([1405000, 6404000]);
   view.setZoom(5);
 
@@ -43,12 +43,8 @@ export function init_app(debug, ws_address) {
 
   load(function() {
     client.connect(ws_address, () => {
-      client.request("Users:guest", {uid: "guest"}).then(({}) => {
-        let _mid = Cookie.get("mid");
-
-        if (!_mid) {
-          window.location = '/';
-        }
+      client.request("Users:guest", {uid: uid}).then(({user}) => {
+        let _mid = user.mid || Params.get('mid', null);
 
         if (debug) {
           load(function() {
@@ -83,12 +79,11 @@ export function init_app(debug, ws_address) {
             // We area already joined
 
             sMatch.me = me;
-          } else if (Cookie.get("mid")) {
+          } else if (Params.get("mid")) {
             // We wish to join, but haven't yet
 
             //gui.$refs.recommend.show = true;
             sMatch.can_join = len(sMatch.isos) < sMatch.max_players && sMatch.rounds < 0.25*sMatch.max_rounds;
-
 
             // load decks, because the claimer will need them
 
@@ -98,7 +93,6 @@ export function init_app(debug, ws_address) {
 
               //this.loaded();
             });
-
           }
 
           set_turn(match);

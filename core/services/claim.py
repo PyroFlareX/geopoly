@@ -26,12 +26,14 @@ def join_match(match: Match, iso, user: User, username):
     if match.rounds >= 0.3 * match.max_rounds:
         raise JoinException("not_in_time")
 
-    user.mid = match.mid
-    user.iso = iso
-    user.username = username
+    set_match(user, match.mid, iso, username)
 
     match.isos.append(iso)
 
+def set_match(user: User, mid, iso, username):
+    user.mid = mid
+    user.iso = iso
+    user.username = username
 
 def leave_match(match, user):
     if not user.iso and not user.mid:

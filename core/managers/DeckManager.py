@@ -5,13 +5,17 @@ from core.instance import decks
 class DeckManager:
 
     def list(self, uid, raw=False):
-        if uid == 'guest':
-            return create_default_decks(raw=raw)
+        ldecks = decks.get_all(uid, raw=raw)
 
-        return decks.get_all(uid, raw=raw)
+        if not ldecks:
+            ldecks = create_default_decks(raw=raw)
+
+        return ldecks
 
     def get(self, uid, did, raw=False):
-        if uid == 'guest':
-            return create_default_deck(did, raw=raw)
+        deck = decks.get(uid, did, raw=raw)
 
-        return decks.get(uid, did, raw=raw)
+        if not deck:
+            deck = create_default_deck(did, raw=raw)
+
+        return deck

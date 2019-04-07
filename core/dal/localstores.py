@@ -64,10 +64,18 @@ class MemoryParentStore(MemoryStore):
     def __init__(self, primary):
         super().__init__(primary)
 
-    def get(self, mid, key):
-        key = mid + '-' + key
+    def get(self, mid: uuid.UUID, key: str, raw=False):
+        key = str(mid) + '-' + key
 
-        return super().get(key)
+        enty = super().get(key)
+
+        if not enty:
+            return enty
+
+        if raw:
+            return enty.toView()
+
+        return enty
 
     def get_all(self, mid, raw=False):
         l = []

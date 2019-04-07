@@ -2,7 +2,7 @@ from core.entities import User
 from core.exceptions import JoinException, GameEndException
 from core.factories import create_match
 from core.game import end_turn
-from core.instance import matches, decks, areas
+from core.instance import matches, decks, areas, users
 from core.managers.DeckManager import DeckManager
 from core.services import turns, moves, claim
 
@@ -64,8 +64,12 @@ class MatchesGroup:
         matches.save(match)
         areas.save(area)
 
+        # save user too (either creates a new guest user, or saves the state of logged in user)
+        users.save(user)
+
         self.server.sendToMatch(mid, {
             "route": "Matches:join",
+            "msid": user.client.msid,
 
             "match": match.toView(),
             "area": area.toView(),
