@@ -4,7 +4,7 @@ import {unitSource} from '/js/ol/layers/units.js';
 import {borderSource} from '/js/ol/layers/borders.js';
 import {countrySource} from '/js/ol/layers/countries.js';
 import {centroid,ringCoords,multipolyCoords,vv} from '/js/ol/lib.js';
-import {map} from '/js/ol/map.js';
+import {map, view} from '/js/ol/map.js';
 import {getUnitComposition, getUnits, UNITS} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 
@@ -412,41 +412,49 @@ function createCountryFeature(iso) {
 }
 
 
-/* stuff */
-//   this.jumpToMe = function() {
-//     var country = game.countries[game.iso];
-//     var coords = poly2coords(country.getGeometry());
 
-//     this.jump_i++;
-//     if (this.jump_i >= coords.length)
-//       this.jump_i = 0;
 
-//     var coord = coords[this.jump_i][0];
-//     var cen = centroid(coord);
+/* jumpTo features  */
+let jump_i = 0;
+export function jumpToRandom(iso, animate) {
+  let areas = [];
 
-//     gfx.jumpTo(cen, false);
-//   };
+  for (let feature of areaSource.getFeatures()) {
+    if (feature.get('iso') == iso)
+      areas.push(feature);
+  }
 
-//   this.jumpTo = function(coord, animate) {
-//     if (!Array.isArray(coord))
-//       if (coord.getGeometry)
-//         var coord = coord.getGeometry().getCoordinates();
-//       else if (coord.getCoordinates)
-//         var coord = coord.getCoordinates();
+  if (++jump_i >= areas.length)
+    jump_i = 0;
 
-//     if (typeof animate === 'undefined')
-//       var animate = true;
+  let feature = areas[jump_i];
+  //0let feature = random.choice(areas);
 
-//     if (animate)
-//       this.view.animate({
-//         center: coord,
-//         duration: 920,
-//         easing: ol.easing.inAndOut
-//       });
-//     else
-//       this.view.animate({
-//         center: coord,
-//         duration: 100,
-//         easing: ol.easing.inAndOut
-//       });
-//   };
+  return jumpTo(feature, animate);
+}
+
+export function jumpTo(coord, animate) {
+  if (!Array.isArray(coord)) {
+    if (!(coord instanceof ol.Feature))
+      var coord = areaSource.getFeatureById(feature);
+
+    var coord = coord.get('cen');
+
+    //if (!coord)
+    // todo: get centroid
+  }
+
+
+  if (animate)
+    view.animate({
+      center: coord,
+      duration: 920,
+      easing: ol.easing.inAndOut
+    });
+  else
+    view.animate({
+      center: coord,
+      duration: 100,
+      easing: ol.easing.inAndOut
+    });  
+}

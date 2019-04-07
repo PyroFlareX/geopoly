@@ -2,7 +2,8 @@ from eme.entities import EntityPatch
 
 from core.entities import Match, Area
 from core.exceptions import AreaGuardedException, MoveException, GameEndException
-from core.rules import getUnits, getMilPop, UNITS
+from core.instance import areas
+from core.rules import getUnits, getMilPop, UNITS, getAreaEP
 from core.services import turns, moves, battle
 
 
@@ -87,26 +88,53 @@ def attack_to(area_from: Area, area_to: Area, patch: dict):
 
     # move to area after battle
     if att_win:
-        def_esc = getMilPop(area_to) > 0
 
-        if def_esc:
+        if getMilPop(area_to) > 0:
             # let defending army escape, if they still have some men left
-            escape_patch = area_to.toUnitView()
-
-            # reset to area
-            for u in UNITS:
-                setattr(area_to, u, 0)
-
-            print("TODO: army escape")
+            # if def_survived = False, it means that they were defeated by encirclement
+            def_survived = defender_escape(area_to, area_from.id)
+        else:
+            # defender was defeated in battle
+            def_survived = False
 
         new_patch = moves.normalize_patch(area_from, patch)
 
         move_to(area_from, area_to, new_patch)
+    else:
+        # defender won
+        def_survived = True
 
     return new_patch, escape_patch, EntityPatch({
         "att_win": att_win,
-        #"def_esc": def_esc,
+        "def_survived": def_survived,
 
         "rep_from": rep_from,
         "rep_to": rep_to
     })
+
+def defender_escape(area_to, attacker_id):
+    escape_patch = area_to.toUnitView()
+
+    neighbor_ids = moves.get_neighbors(area_to.id)
+    neighbor_ids.remove(attacker_id)
+
+    neighbor_areas = list(areas.get_multiple_iso(area_to.mid, neighbor_ids, area_to.iso))
+
+    # reset area units
+    for u in UNITS:
+        setattr(area_to, u, 0)
+
+    if len(neighbor_areas) == 0:
+        # annihilation by encirclement, they will not move anywhere
+
+        return False
+
+    # get neighbor with biggest army force
+    neighbor_areas.sort(key=lambda area: getAreaEP(area), reverse=True)
+    area_escape = neighbor_areas[0]
+
+    # remaining army survived and escaped, put them into neighbor area
+    for u in UNITS:
+        setattr(area_escape, u, escape_patch[u])
+
+    return True

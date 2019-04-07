@@ -119,18 +119,14 @@ class AreaStore(MemoryParentStore):
 
         return area
 
+    def get_multiple_iso(self, mid, ids, iso):
+        for id in ids:
+            area = self.get(mid, id)
+
+            if area and area.iso == iso:
+                yield area
+
     def get_all_with_units(self, mid):
-        lareas = []
-
-        area: Area
-        for area in self.store.values():
-            if area.mid == mid:
-                if getMilPop(area) > 0:
-                    lareas.append(area)
-
-        return lareas
-
-    def get_all_with_units_iter(self, mid):
         area: Area
         for area in self.store.values():
             if area.mid == mid:

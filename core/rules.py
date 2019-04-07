@@ -59,6 +59,15 @@ def getEffectivePoint(u):
     return round(mse / sdown + ov)
 
 
+def getAreaEP(area: Area):
+    ep = 0
+
+    for u, unit, num in getUnits(area):
+        ep += num * getEffectivePoint(u)
+
+    return ep
+
+
 UNITS = [
     'inf_light', 'inf_home', 'inf_heavy', 'inf_skirmish',
     'cav_lancer', 'cav_hussar', 'cav_dragoon', 'cav_heavy',

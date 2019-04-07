@@ -10,6 +10,7 @@ import {unitLayer} from '/js/ol/layers/units.js';
 //import {eventLayer} from '/js/ol/layers/events.js';
 import {arrowLayer} from '/js/ol/layers/arrows.js';
 
+
 export const view = new ol.View({
   center: [0, 0],
   // minZoom: 3,
@@ -169,22 +170,7 @@ document.onkeydown = function (e) {
   }
 
   if (keys.keypress.has(key)) {
-
-    if (key == 'ESCAPE') {
-      // special case, escape is not smartcast, but it always cancels selection
-
-      let prevent = areaLayer.keypress(null, key);
-
-      if (!prevent) {
-        // close infobars
-        gui.infobar('close');
-        gui.dialog('close');
-      }
-
-    } else {
-      // global keypress happened
-      console.log("Keypress", key);
-    }
+    areaLayer.keypress(null, key);
   }
 };
 

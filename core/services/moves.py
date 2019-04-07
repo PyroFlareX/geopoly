@@ -1,5 +1,6 @@
 import json
 from collections import defaultdict
+from random import choice
 
 from core.entities import Area, Match
 from core.instance import areas
@@ -18,10 +19,16 @@ def is_connected(id1: str, id2: str):
 
     if id1 not in conn_graph:
         # todo: temporal code, remove late
+        print("ERR, {} not in conn_graph".format(id1))
 
         return True
 
     return id2 in conn_graph[id1]
+
+
+def get_neighbors(id1: str):
+    return conn_graph[id1]
+
 
 
 def is_guarded(area_to: Area):
@@ -31,7 +38,7 @@ def is_guarded(area_to: Area):
 def reset_map(match: Match, save=True):
     lareas = []
 
-    for area in areas.get_all_with_units_iter(match.mid):
+    for area in areas.get_all_with_units(match.mid):
         area.move_left = getMilPop(area)
 
         lareas.append(area)

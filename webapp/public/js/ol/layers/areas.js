@@ -1,7 +1,7 @@
 import {load} from '/js/game/loader.js';
 import {getUnits} from '/js/game/lib.js';
 import {match, countries} from '/js/game/store.js';
-import {showHoverArrow, initHoverArrow, hideHoverArrow, showMoveDialog} from '/js/ol/gfx.js';
+import {showHoverArrow, initHoverArrow, hideHoverArrow, showMoveDialog, jumpToRandom} from '/js/ol/gfx.js';
 import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
 
 /**
@@ -165,7 +165,17 @@ areaLayer.keypress = (feature, key) => {
     move.selected = null;
     hideHoverArrow();
 
-    return prevent;
+    // special case, escape is not smartcast, but it always cancels selection
+    if (!prevent) {
+      // close infobars
+      gui.infobar('close');
+      gui.dialog('close');
+    }
+  }
+
+  else if (key == 'SPACE' || key == ' ') {
+    // jump to random area
+    jumpToRandom(match.me, false);
   }
 };
 

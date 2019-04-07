@@ -1,6 +1,7 @@
 import {template} from "/js/vue/frame/gameframe.vue.js"
 import {match} from '/js/game/store.js';
 import {client} from '/js/game/client.js';
+import {jumpToRandom} from '/js/ol/gfx.js';
 import {getGameDate, getGameYear} from '/js/game/lib.js';
 
 const seasons = ['Winter','Spring','Summer','Fall'];
@@ -28,8 +29,7 @@ export let component = Vue.component('game-frame', {
 
   methods: {
     onClickFlag: function(e) {
-      //gfx.jumpToMe();
-      console.error("TODO: jumpToMe")
+      jumpToRandom(this.iso, true);
     },
 
     onClickSeason: function(e) {
