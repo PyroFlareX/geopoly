@@ -21,10 +21,14 @@
   </script>
   <script type="module">
     import {init_app} from '/js/main.js';
+    import {gui} from '/js/vue/gui.js';
 
     // declare variables from backend
 
+    // declare variables from backend
+    window.gui = gui;
+
     // start app
-    init_app({= debug|tojson =}, '{= ws_address =}', '{= get_user().uid =}', '');
+    init_app({{ debug|tojson }}, '{{ ws_address }}', '{{ get_user().uid }}', '');
   </script>
 {% endblock %}

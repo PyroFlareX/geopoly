@@ -19,7 +19,7 @@ class MigrateCommand():
 
         conn = session.connection()
 
-        for f in ['exts', 'users']:
+        for f in ['exts', 'users', 'decks']:
             print('Applying migration {}...'.format(f))
             with open(base.format(f), 'r') as sql_file:
                 sql = text(sql_file.read())

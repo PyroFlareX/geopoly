@@ -1,4 +1,4 @@
-import {MAP_CENTER,MAP_ZOOM,FIELD_OWNER, FIELD_ID, FIELD_NAME} from '/js/config.js';
+import {MAP_CENTER,MAP_ZOOM,FIELD_OWNER, FIELD_ID, FIELD_NAME, GEOFILE, SHOW_LABELS} from '/js/config.js';
 
 var baseLayer = new ol.layer.Tile({
   source: new ol.source.OSM()
@@ -28,6 +28,10 @@ const isocolors = {
   // 'MA': new Color([243, 67, 38]),
   // 'IR': new Color([245, 130, 48]),
 };
+
+var otherLayer = new ol.layer.Vector({
+  source: new ol.source.Vector(),
+});
 
 var areaLayer = new ol.layer.Vector({
   source: new ol.source.Vector(),
@@ -69,15 +73,18 @@ var areaLayer = new ol.layer.Vector({
         color: 'black',
         width: 0.5
       }),
-    }), new ol.style.Style({
-      text: new ol.style.Text({
-        text: feature.get(FIELD_NAME),
-        fill: new ol.style.Fill({color: "white"}),
-        stroke: new ol.style.Stroke({color: "black", width: 3}),
-        font: '14px "Opera Lyrics"'
-      }),
-      geometry: new ol.geom.Point(point)
     })];
+
+    if (SHOW_LABELS)
+        styles.push(new ol.style.Style({
+          text: new ol.style.Text({
+            text: feature.get(FIELD_NAME),
+            fill: new ol.style.Fill({color: "white"}),
+            stroke: new ol.style.Stroke({color: "black", width: 3}),
+            font: '14px "Opera Lyrics"'
+          }),
+          geometry: new ol.geom.Point(point)
+        }));
 
     return styles;
   }
@@ -106,6 +113,7 @@ var map = new ol.Map({
   layers: [
     baseLayer,
     areaLayer,
+    otherLayer
     //riverLayer,
   ],
   view: new ol.View({
@@ -162,6 +170,9 @@ function to_poly(feature) {
     var poly = turf.multiPolygon(feature.getGeometry().getCoordinates());
   } else if (geom.getType() == 'Polygon') {
     var poly = turf.polygon(feature.getGeometry().getCoordinates());
+  } else {
+    console.error("WhAT", geom.getType(), feature.getProperties());
+    return null;
   }
 
   poly.id = feature.getId();
@@ -174,7 +185,11 @@ function to_poly(feature) {
 
 function centroid(pts) {
   var first = pts[0], last = pts[pts.length-1];
-  if (first[0] != last[0] || first[1] != last[1]) pts.push(first);
+  var remove_last = false;
+  if (first[0] != last[0] || first[1] != last[1]) {
+    remove_last = true;
+    pts.push(first);
+  }
   var twicearea=0,
   x=0, y=0,
   nPts = pts.length,
@@ -187,6 +202,9 @@ function centroid(pts) {
     y += ( p1[1] + p2[1] ) * f;
   }
   f = twicearea * 3;
+
+  if (remove_last)
+    pts.pop();
   return [x/f, y/f];
 }
 
@@ -210,7 +228,7 @@ function download_file(filename, text) {
   document.body.removeChild(element);
 }
 
-function download_all() {
+function get_all() {
   let source = areaLayer.getSource();
   let cont = {
     "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::3857"}},
@@ -222,7 +240,7 @@ function download_all() {
     cont.features.push(to_poly(feature));
   }
 
-  download_file('areas.geojson', JSON.stringify(cont));
+  return cont;
 }
 
 
@@ -295,6 +313,10 @@ window.create_ownership_file = create_ownership_file;
 
 
 map.on('click', function(event) {
+  if (event.pointerEvent.shiftKey) {
+    console.log('['+round(event.coordinate[0])+','+round(event.coordinate[1])+'],');
+    return;
+  }
 
   if (event.pointerEvent.ctrlKey)
     selects[1] = null;
@@ -308,11 +330,16 @@ map.on('click', function(event) {
       selects[0] = feature;
   });
 
+  editable.clear();
+  if (selects[0] && selects[1]) {
+    editable.push(selects[0]);
+    editable.push(selects[1]);
+  }
+
   areaLayer.getSource().changed();
 });
 
-//NUTS_RG_10M_2016_3857_LEVL_2
-fetch('/geojson/areas.geojson')
+fetch('/geojson/'+GEOFILE)
 .then(function(response) { return response.json(); })
 .then(function(gjson){
   var source = areaLayer.getSource();
@@ -357,19 +384,6 @@ let contextmenuItems = [
       areaLayer.getSource().changed();
     }
   },
-  // {
-  //   text: 'Exclude',
-  //   callback: function() {
-  //     if (!selects[0] || !selects[1])
-  //       return;
-
-  //     let cont = exclude(selects[0], selects[1]);
-  //     let filename = 'exclude_'+selects[0].getId()+'_'+selects[1].getId()+'.geojson';
-
-  //     //download_file(filename, JSON.stringify(cont));
-  //     areaLayer.getSource().changed();
-  //   }
-  // },
   '-',
   {
     text: 'Edit name',
@@ -402,8 +416,9 @@ let contextmenuItems = [
   {
     text: 'Delete',
     callback: function() {
-      if (!selects[0])
+      if (!selects[0]) {
         return;
+      }
 
       areaLayer.getSource().removeFeature(selects[0]);
     }
@@ -422,8 +437,27 @@ let contextmenuItems = [
   {
     text: 'Download All',
     callback: function() {
+      let cont = get_all();
 
-      download_all();
+      download_file('areas.geojson', JSON.stringify(cont));
+    }
+  },
+  {
+    text: 'Save map',
+    callback: function() {
+      let cont = get_all();
+
+      let formData = new FormData();
+      formData.append('geojson', JSON.stringify(cont));
+
+      fetch('/home/save', {
+        method: "POST",
+        body: formData
+      }).then(function(response) {
+        return response.json();
+      }).then((resp)=>{
+
+      });
     }
   },
   '-',
@@ -434,3 +468,77 @@ let contextmenuItems = [
     }
   },
 ];
+
+
+
+let bulk_delete = false;
+
+document.onkeydown = function (e) {
+  if (e.key.toUpperCase() == 'DELETE')
+    bulk_delete = true;
+};
+document.onkeyup = function (e) {
+  if (e.key.toUpperCase() == 'DELETE')
+    bulk_delete = false;
+};
+
+
+map.on('pointermove', (event) => {
+  // bulk delete
+  if (bulk_delete) {
+    try {
+        map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+          areaLayer.getSource().removeFeature(feature);
+        });
+    } catch(e) {
+
+    }
+  }
+});
+
+
+const editable = new ol.Collection([]);
+var modify = new ol.interaction.Modify({
+  features: editable
+});
+
+map.addInteraction(modify);
+
+
+
+// TEST:
+// let coords = [
+//   [4196997.12536736,7971230.423357896],
+//   [4161571.5850789854,7841841.672016086],
+//   [4075345.7032629484,7807822.139809232],
+//   [3980083.920745379,7853312.441534439],
+//   [3971539.274313033,7864022.744073523],
+//   [3945912.6355019864,8024429.925831199],
+//   [3994446.4090898535,8137615.073796708],
+//   [4176296.8642492252,8053251.268291141]
+// ];
+
+// random.shuffle(coords);
+// let cen = centroid(coords);
+
+
+// coords.sort((a,b)=>{
+//   let aD = Math.rad2deg * Math.atan2(a[1] - cen[1], a[0] - cen[0]);
+//   let bD = Math.rad2deg * Math.atan2(b[1] - cen[1], b[0] - cen[0]);
+
+//   return round(aD - bD);
+// });
+// coords.push(coords[0]);
+
+// otherLayer.getSource().addFeature(new ol.Feature({
+//   geometry: new ol.geom.Polygon([coords])
+// }));
+
+window.add_point = function(x,y) {
+  otherLayer.getSource().addFeature(new ol.Feature({
+    geometry: new ol.geom.Point([x,y])
+  }));
+}
+window.clear_points = function() {
+  otherLayer.getSource().clear();
+}

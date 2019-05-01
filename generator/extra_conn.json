@@ -1,0 +1,26 @@
+[
+  ["saintptburg", "EE00"],
+  ["saintptburg", "LV00"],
+  ["saintptburg", "Belarus"],
+  ["saintptburg", "FI19"],
+  ["Republic of Karelia", "FI19"],
+  ["Murmansk Oblast", "FI19"],
+
+  ["Belarus", "LV00"],
+  ["Belarus", "PL84"],
+  ["Belarus", "PL84"],
+  ["Belarus", "Moscow"],
+  ["Belarus", "Kursk Oblast"],
+
+  ["Ukraine", "PL72"],
+  ["Ukraine", "PL81"],
+  ["Ukraine", "SK041"],
+  ["Ukraine", "HU322"],
+  ["Ukraine", "RO115"],
+  ["Ukraine", "RO212"],
+  ["Ukraine", "Stavropol Krai"],
+  ["Ukraine", "Kursk Oblast"],
+
+  ["Moldova", "RO212"],
+  ["Moldova", "RO216"]
+]

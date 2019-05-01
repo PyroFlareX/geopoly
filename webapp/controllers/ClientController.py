@@ -26,3 +26,12 @@ class ClientController():
            debug=True,
            err=request.args.get('err')
         )
+
+    def alpha(self):
+        ws_address = self.server.conf['websocket']['address']
+
+        return render_template('/client/alpha.html',
+           ws_address=ws_address,
+           debug=True,
+           err=request.args.get('err')
+        )

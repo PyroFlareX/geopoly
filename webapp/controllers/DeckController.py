@@ -1,5 +1,6 @@
 from flask import render_template, request
 from flask_login import login_required
+from werkzeug.utils import redirect
 
 from core.instance import decks
 from core.managers.DeckManager import DeckManager
@@ -14,6 +15,9 @@ class DeckController():
         self.group = "Deck"
 
         self.deckManager = DeckManager()
+        self.server.setRouting({
+            'DELETE /deck': '/deck/<did>'
+        })
 
     @login_required
     def index(self):
@@ -30,3 +34,26 @@ class DeckController():
 
     def units(self):
         return ApiResponse(units)
+
+    def post(self):
+        user = getUser()
+        dname = request.form['name']
+
+        self.deckManager.create(user.uid, dname, request.form.to_dict())
+
+        #return redirect('/deck')
+        return ApiResponse({})
+
+    def delete(self, did):
+        user = getUser()
+
+        try:
+            did = int(did)
+        except:
+            return ApiResponse({})
+
+        self.deckManager.delete(user.uid, did)
+
+        #return redirect('/deck')
+
+        return ApiResponse({})

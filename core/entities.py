@@ -128,7 +128,25 @@ class Area:
         }
 
 
-class Deck:
+class Deck(Base):
+    __tablename__ = 'decks'
+
+    did = Column(Integer(), primary_key=True)
+    uid = Column(postgresql.UUID(as_uuid=True))
+    name = Column(String(20))
+
+    inf_light = Column(Integer())
+    inf_home = Column(Integer())
+    inf_heavy = Column(Integer())
+    inf_skirmish = Column(Integer())
+    cav_lancer = Column(Integer())
+    cav_hussar = Column(Integer())
+    cav_dragoon = Column(Integer())
+    cav_heavy = Column(Integer())
+    art_light = Column(Integer())
+    art_heavy = Column(Integer())
+    art_mortar = Column(Integer())
+
     def __init__(self, **kwargs):
         self.did = kwargs.get('did')
         self.uid = kwargs.get('uid')
@@ -149,4 +167,20 @@ class Deck:
         self.art_mortar = kwargs.get('art_mortar', 0)
 
     def toView(self):
-        return self.__dict__
+        return {
+            "did": self.did,
+            "uid": self.uid,
+            "name": self.name,
+
+            "inf_light": self.inf_light,
+            "inf_home": self.inf_home,
+            "inf_heavy": self.inf_heavy,
+            "inf_skirmish": self.inf_skirmish,
+            "cav_lancer": self.cav_lancer,
+            "cav_hussar": self.cav_hussar,
+            "cav_dragoon": self.cav_dragoon,
+            "cav_heavy": self.cav_heavy,
+            "art_light": self.art_light,
+            "art_heavy": self.art_heavy,
+            "art_mortar": self.art_mortar,
+        }

@@ -2,21 +2,21 @@
 export const template = `
 <div>
   <div>
-    <select type="text" v-model="deck" class="form-control mb-2 mr-sm-2" id="name-input" placeholder="Deck">
+    <select type="text" v-model="deck_id" class="form-control mb-2 mr-sm-2" id="name-input" placeholder="Deck">
       <option value="">New deck</option>
 
-      <option :value="name" v-for="(deck,name) in decks">{{ name }}</option>
+      <option :value="deck.did" v-for="(deck,did) in decks">{{ deck.name }}</option>
     </select>
   </div>
   <div class="row">
     <div class="col">
 
-      <form class="form-inline">
-        <input type="text" v-model="name" class="form-control mb-2 mr-sm-2" id="name-input" placeholder="Name of deck">
+      <div class="form-inline">
+        <input type="text" v-model="deck_name" class="form-control mb-2 mr-sm-2" id="name-input" placeholder="Name of deck">
 
-
-        <button @click="onSubmit" class="btn btn-danger mb-2">Save deck</button>
-      </form>
+        <button @click="onSubmit" class="btn btn-danger mb-2 mr-sm-3">Save deck</button>
+        <button @click="onDelete" class="btn btn-danger mb-2 mr-sm-3">Delete deck</button>
+      </div>
 
     </div>
     <div class="col text-right">

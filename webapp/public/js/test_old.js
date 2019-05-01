@@ -1,6 +1,7 @@
 import {map, view} from '/js/ol/map.js';
 
-import {setArea, generateBorders} from '/js/ol/gfx.js';
+import {setArea} from '/js/ol/gfx.js';
+import {generateBorders} from '/js/ol/borders.js';
 import {centroid, gps2merc, ringCoords} from '/js/ol/lib.js';
 import {rules, match as sMatch, set_turn, countries} from '/js/game/store.js';
 import {areaSource} from '/js/ol/layers/areas.js';

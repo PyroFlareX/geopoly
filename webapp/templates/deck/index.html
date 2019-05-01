@@ -15,7 +15,12 @@
     //import {init_app} from '/js/deck.js';
     import {gui} from '/js/vue/gui.js';
 
+    let decks = {{ decks|tojson }};
+    let ddecks = {};
 
-    gui.$refs.units.decks = {= decks|tojson =};
+    for (let deck of decks)
+      ddecks[deck.did] = deck;
+
+    gui.$refs.units.decks = ddecks;
   </script>
 {% endblock %}

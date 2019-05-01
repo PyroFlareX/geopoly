@@ -1,5 +1,3 @@
-import {gui} from '/js/vue/gui.js';
-
 import {map, view} from '/js/ol/map.js';
 import {init_game} from '/js/ol/gfx.js';
 
@@ -17,8 +15,6 @@ import {init_test} from '/js/test.js';
 export function init_app(debug, ws_address, uid, token) {
   view.setCenter([1405000, 6404000]);
   view.setZoom(5);
-
-  window.gui = gui;
 
   client.groups.Areas = new AreasGroup(client);
   client.groups.Game = new GameGroup(client);

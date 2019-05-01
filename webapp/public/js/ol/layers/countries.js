@@ -1,7 +1,6 @@
 import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
 
 export const countrySource = new ol.source.Vector();
-//import {offsetGeometry} from '/js/ol/gfx.js';
 
 export const countryLayer = new ol.layer.Vector({
   source: countrySource,

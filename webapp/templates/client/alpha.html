@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="geopoly text-center">Geopoly</h1>
+
+    <p>Welcome to the Geopoly alpha testing! First, read this quick tutorial about the rules and hotkeys:</p>
+
+    <h2 class="font-brand">Rules</h2>
+    <ul>
+        <li><strong>Countries</strong> Each player controls 1 country.</li>
+        <li><strong>Turns</strong> The game consits of turns.</li>
+        <li><strong>Armies</strong> Each player starts win an army. An army consists of several units. Each unit type has different abilities and stats.</li>
+        <li><strong>Moving</strong> By clicking on one of your areas you can move your units to a neighboring area.</li>
+        <li><strong>Splitting armies</strong> You can move each of your armies once per turn. Splitting your armies is allowed.</li>
+        <li><strong>Merging armies</strong> Merging one of your armies into another one will exhaust both armies, meaning that you can't move either of them anymore during that turn.</li>
+        <li><strong>Battle</strong> Moving your army onto an enemy army will result in a battle.</li>
+        <li><strong>Winning a battle</strong> If the attacker wins the battle, the remaining part of that army will conquer the defeated area.</li>
+        <li><strong>Losing a battle</strong> If the lost defender has some army left, they will be forced to a friendly neighbor area</li>
+        <li><strong>Annihilation by encirclement</strong> If the defender can't move to any neighboring area, its remaining army will be annihilated.</li>
+        <li><strong>Winning a battle as defender</strong> If the defender wins the battle, however, the attacker moves its army back to its original area.</li>
+        <li><strong>Winning the game</strong> The aim of the game is to destroy your enemies!</li>
+    </ul>
+
+    <h2 class="font-brand">Hotkeys and GUI</h2>
+    <ul>
+      <li><strong>Q</strong> (+ click if smartcasting is off): Opens area dialog which lists units on that area.</li>
+      <li><strong>click on right corner:</strong> ends your current turn</li>
+      <li><strong>SPACE</strong> or <strong>click on left corner</strong>: will jump to one of your areas</li>
+      <li><strong>click on area</strong>: if this is your area, you can click on a neighboring area to move your army there</li>
+    </ul>
+  </div>
+{% endblock %}
