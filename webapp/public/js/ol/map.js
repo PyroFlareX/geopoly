@@ -123,6 +123,17 @@ map.on('click', (event) => {
   }
 });
 
+let start_time = new Date().getTime();
+let postcompose = function(event) {
+  var vectorContext = event.vectorContext;
+  var frameState = event.frameState;
+
+  unitLayer.update(frameState.time - start_time);
+
+  map.render();
+};
+map.on('postcompose', postcompose);
+
 /**
  * Event handlers for keypress
  **/

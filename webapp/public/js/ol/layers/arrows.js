@@ -20,7 +20,7 @@ export const arrowLayer = new ol.layer.Vector({
     let angle = Math.atan2(coords[1][1] - coords[0][1], coords[1][0] - coords[0][0]);
     let rotation = Math.PI / 2 - angle;
 
-    let mils = feature.get('mils') || 0;
+    let units = feature.get('units') || 0;
     let color = getColor(feature.get('iso'));
 
     let styles = [
@@ -30,7 +30,7 @@ export const arrowLayer = new ol.layer.Vector({
           width: 8
         }),
         text: new ol.style.Text({
-          text: mils.estimation(),
+          text: units.estimation(),
           fill: new ol.style.Fill({color: "white"}),
           stroke: new ol.style.Stroke({color: "black", width: 3}),
           font: '16px "Opera Lyrics"'

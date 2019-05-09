@@ -185,6 +185,26 @@
   font-size: 16px;
 }
 
+/* GUI frame */
+.units-bar {
+  position: fixed;
+  height: 140px;
+  width: 100%;
+  bottom: 0px;
+  color: white;
+
+}
+
+.unit-box {
+  background: black;
+  border-radius: 20px;
+
+  margin: 5px;
+  padding: 7px;
+  width: 140px;
+}
+
+
 /* GUI game frame Corners */
 .gui-corner-left {
     cursor: pointer;

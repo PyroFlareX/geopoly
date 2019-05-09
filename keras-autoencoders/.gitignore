@@ -1,0 +1,4 @@
+.idea
+conv_autoencoder
+noisy
+*.pickle

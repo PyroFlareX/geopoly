@@ -2,17 +2,11 @@ import json
 from collections import defaultdict
 from random import choice
 
-from core.entities import Area, Match
+#from core.entities import Area, Match
 from core.instance import areas
 from core.rules import getUnits, getMilPop
 
-conn_graph = defaultdict(set)
-with open('core/content/conn.json') as fh:
-    for id1, id2 in json.load(fh):
-        conn_graph[id1].add(id2)
-        conn_graph[id2].add(id1)
 
-conn_graph = dict(conn_graph)
 
 
 def is_connected(id1: str, id2: str):

@@ -3,11 +3,14 @@
 {% block scripts %}
   <!-- OpenLayers 5 -->
   <link rel="stylesheet" type="text/css" href="css/ol.css">
-  <script defer type="text/javascript" src="js/ol.js"></script>
-  <script defer type="text/javascript" src="js/ol-ext.min.js"></script>
+  <script defer type="text/javascript" src="js/vendor/ol.js"></script>
+  <script defer type="text/javascript" src="js/vendor/ol-ext.min.js"></script>
 
-  <!-- turf.js -->
+  <!-- Turf.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.1.5/turf.min.js"></script>
+
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
 {% endblock %}
 
 {% block content %}

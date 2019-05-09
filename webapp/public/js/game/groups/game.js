@@ -1,5 +1,5 @@
 import {set_turn} from '/js/game/store.js';
-import {reset_moves} from '/js/ol/gfx.js';
+//import {reset_moves} from '/js/ol/gfx.js';
 
 
 export class GameGroup {

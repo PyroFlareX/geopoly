@@ -58,5 +58,10 @@ export const gui = new Vue({
     flash: function(text, theme, iso) {
       this.$refs.flash.display(text, theme, iso);
     }
+  },
+  computed: {
+    frame: function() {
+      return this.$refs.frame;
+    }
   }
 });

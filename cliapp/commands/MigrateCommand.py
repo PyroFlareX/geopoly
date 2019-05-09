@@ -1,7 +1,8 @@
+import os
+
 from sqlalchemy import text
 
-#from core.dal.ctx import session
-from core.dal.ctx import session
+from core.dal.ctx import session, db_type
 
 
 class MigrateCommand():
@@ -14,14 +15,16 @@ class MigrateCommand():
             }
         }
 
+
     def run(self, *args):
-        base = 'cliapp/migrations/{}.sql'
+        base = 'cliapp/migrations/'+db_type+'/'
 
         conn = session.connection()
 
-        for f in ['exts', 'users', 'decks']:
+        for f in os.listdir(base):
             print('Applying migration {}...'.format(f))
-            with open(base.format(f), 'r') as sql_file:
+
+            with open(os.path.join(base,f), 'r') as sql_file:
                 sql = text(sql_file.read())
 
             result = conn.execute(sql)

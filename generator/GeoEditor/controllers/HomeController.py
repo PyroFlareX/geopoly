@@ -1,6 +1,7 @@
 import json
 import time
 import os
+import codecs
 
 
 from flask import render_template, request, Response
@@ -18,13 +19,15 @@ class HomeController():
 
     def post_save(self):
         geojson = request.form['geojson']
+        mapId = int(request.form['map'])
 
         now = time.time()
+        path = 'GeoEditor/public/geojson/areas.geojson'.format(mapId)
 
-        if os.path.isfile('GeoEditor/public/geojson/map_combined.geojson'):
-            os.rename('GeoEditor/public/geojson/map_combined.geojson', 'GeoEditor/public/geojson/backup/{}.geojson'.format(now))
+        if os.path.isfile(path):
+            os.rename(path, 'GeoEditor/public/geojson/backup/map{}_{}.geojson'.format(mapId, now))
 
-        with open('GeoEditor/public/geojson/map_combined.geojson', 'w') as fh:
-            json.dump(geojson, fh)
+        with codecs.open(path, 'w', encoding='utf8') as fh:
+            fh.write(geojson)
 
         return '{}'

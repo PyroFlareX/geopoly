@@ -21,8 +21,8 @@ from geolib import gps2merc
 
 
 eastern = {
-    "RU": "RU", "BY": "RU", "UA": "RU", "MD": "RO", "GE": "RU", "AZ": "RU", "AM": "RU", "IR": "IR", "IQ": "TR", "SY": "TR",
-    "XK": "XK", "BA": "AT",
+    "RU", "BY", "UA", "MD", "GE", "AZ", "AM", "IR", "IQ", "SY",
+    "XK", "BA",
 }
 exclude_worldmap = ['XK', 'BA']
 
@@ -115,6 +115,10 @@ def forge_balkan(country_polys):
 
 def map_eastern(cache=False, direct=False):
     final_polys = []
+
+    N = 'E'
+    if not os.path.exists('geojson/nuts{}'.format(N)):
+        os.mkdir('geojson/nuts{}'.format(N))
 
     if not cache or not os.path.exists('geojson/eastern/eastern_polygroups.pkl'):
         country_polys = {}
@@ -314,16 +318,17 @@ def map_eastern(cache=False, direct=False):
 
 
     print("Saving files...")
-    newgeo = geolib.create_geojson()
+    mapsgeo = defaultdict(geolib.create_geojson)
     i = 0
+
     for poly, prop in final_polys:
         # create feature
-        newgeo['features'].append({
+        mapsgeo[prop['iso']]['features'].append({
             'id': 'e{}'.format(i),
             'type': 'Feature',
             'properties': {
                 'name': prop['name'],
-                'iso': eastern.get(prop['iso'], prop['iso']),
+                'iso': prop['iso'],
             },
             'geometry': mapping(poly),
             #'geometry': {
@@ -333,9 +338,15 @@ def map_eastern(cache=False, direct=False):
         })
         i+=1
 
-    loc = 'geojson/eastern/eastern_europe.geojson' if not direct else 'GeoEditor/public/geojson/eastern_europe.geojson'
-    with codecs.open(loc, 'w', encoding='utf8') as fh:
-        json.dump(newgeo, fh, cls=EntityJSONEncoder)
+    N = 'E'
+    for iso,geojson in mapsgeo.items():
+        with codecs.open('geojson/nuts{}/{}.json'.format(N, iso), 'w', encoding='utf8') as fh:
+            json.dump(geojson, fh)
+
+    # if direc
+    # loc = 'geojson/eastern/eastern_europe.geojson' if not direct else 'GeoEditor/public/geojson/eastern_europe.geojson'
+    # with codecs.open(loc, 'w', encoding='utf8') as fh:
+    #     json.dump(newgeo, fh, cls=EntityJSONEncoder)
 
 
 def save_countries():

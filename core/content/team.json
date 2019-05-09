@@ -1,0 +1,10 @@
+{
+  "HERO": 1,
+  "BARD": 1,
+
+  "ARCHER": 1,
+  "DEFENDER": 5,
+  "PIKE": 2,
+
+  "LIGHTCAV": 1
+}

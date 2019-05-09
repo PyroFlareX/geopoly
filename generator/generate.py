@@ -1,5 +1,7 @@
 import os
+import sys
 
+from map_connectivity import generate_connections
 from map_merge import map_merge
 from map_separate import map_separate
 from map_eastern import map_eastern
@@ -16,6 +18,7 @@ if __name__ == "__main__":
 
     print("Merging all maps together...")
     map_merge()
-    os.replace('map_combined.geojson', 'GeoEditor/public/geojson/map_combined.geojson')
 
-    print("Saved file to "+'GeoEditor/public/geojson/map_combined.geojson')
+    if len(sys.argv) > 1 and sys.argv[1] == 'conn':
+        print("Generating connectivity graph...")
+        generate_connections()

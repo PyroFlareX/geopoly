@@ -1,99 +1,91 @@
-export const unitSource = new ol.source.Vector();
-import {getColor, getFlag, img_dim} from '/js/game/colors.js';
-import {match} from '/js/game/store.js';
-import {getUnitComposition} from '/js/game/lib.js';
+import {onload} from '/js/game/loader.js';
+import {img_dim, sprites} from '/js/ol/sprites.js';
+import {dirToIndex} from '/js/ol/units.js';
 
-// todo: fixme: this doesn't prevent overlap
-let zIndex = 0;
-// number of layers per unit image
-const zLayers = 4;
+export const unitSource = new ol.source.Vector();
 
 export const unitLayer = new ol.layer.Vector({
   source: unitSource,
 
   style: (feature, res) => {
+    let dir = feature.get('dir');
+    let frame = feature.get('frame');
+    let i = feature.get('skin');
+
     let styles = [];
-    let unit = feature.getProperties();
-    let diplo = match.me == unit.iso ? '_ally' : '_enemy';
+
+    if (!sprites[i])
+      return;
 
     styles.push(new ol.style.Style({
-      image: new ol.style.Icon({
-        src: "/img/map/unit"+diplo+".png",
-        scale: 0.95
-      }),
-    }));
-
-    // display country flag
-    styles.push(new ol.style.Style({
-      zIndex: (zIndex*zLayers)+1,
-      // flag
       image: new ol.style.Icon(({
-        img: getFlag(unit.iso),
+        img: sprites[i][dir][frame],
         imgSize: [img_dim.w, img_dim.h],
-        scale: 0.098,
-        anchorXUnits: 'pixels',
-        anchorOrigin: 'top-right',
-        anchor: [-200, 0.5],
+        scale: unit_scale
       }))
     }));
-
-    // unit class
-    let offset_x = -8;
-
-    if (unit.uclass != 'inf' || !unit.utype) {
-      styles.push(new ol.style.Style({
-        zIndex: (zIndex*zLayers)+2,
-
-        image: new ol.style.Icon({
-          src: "/img/map/class-"+unit.uclass+".png",
-
-          scale: 0.5,
-          anchorXUnits: 'pixels',
-          anchorOrigin: 'top-right',
-          anchor: [8, 0.5],
-        }),
-      }));
-
-      offset_x += 20;
-    }
-
-    // display unit type, if it matters
-    styles.push(new ol.style.Style({
-      zIndex: (zIndex*zLayers)+3,
-
-      text: new ol.style.Text({
-        offsetX: offset_x,
-        offsetY: 2,
-
-        fill: new ol.style.Fill({
-          color: 'white'
-        }),
-        text: unit.mils.estimation()
-      })
-    }));
-
-    if (unit.utype) {
-      styles.push(new ol.style.Style({
-        zIndex: (zIndex*zLayers)+4,
-
-        image: new ol.style.Icon({
-          src: "/img/map/unit-"+unit.utype+".png",
-
-          scale: 0.5,
-          anchorXUnits: 'pixels',
-          anchorOrigin: 'top-left',
-          anchor: [-54, 0.5],
-        }),
-      }));
-    }
-
-    // increment zIndex, so that different units overlap nicely
-    zIndex+=1;
-    if (zIndex > 1000) 
-      zIndex = 0;
 
     return styles;
   }
 });
 
-unitLayer.name = 'units';
+const unit_scale = 1.3;
+const sprite_speed = 10;
+const v = 0.01; // m/s
+const dt_per_area = 750;
+
+unitLayer.update = (elapsedTime) => {
+  let now = (new Date()).getTime();
+  let animation_index = Math.round(sprite_speed * elapsedTime / 1000) % 6;
+
+  for (let unit of unitSource.getFeatures()) {
+    let geom = unit.getGeometry();
+    let c1 = unit.get('move');
+    let c0 = unit.get('move_0');
+
+    if (!c1)
+      continue;
+
+    // animate
+    unit.set('frame', animation_index);
+
+    // calculate move position
+    let dist = [c1[0] - c0[0], c1[1] - c0[1]];
+
+    let dt = now - unit.get('move_t');
+    // let S = Math.sqrt(dist[0]*dist[0] + dist[1]*dist[1]);
+
+    // todo: T per area move (not path)
+    let T = dt_per_area;
+    // let T = S/v;
+    let tp = dt/T;
+
+    if (tp >= 1.0) {
+      geom.setCoordinates(unit.get('move'));
+
+      unit.set('move_t', null);
+      unit.set('move', null);
+      unit.set('move_0', null);
+    } else {
+      // partial move
+      geom.setCoordinates([dist[0]*tp + c0[0], dist[1]*tp + c0[1]]);
+    }
+  }
+}
+
+unitLayer.keypress = (c1) => {
+  if (key == 'W') {
+    // North
+  } else if (key == 'S') {
+    // South
+  } else if (key == 'D') {
+    // East
+  } else if (key == 'A') {
+    // West
+  }
+
+};
+
+onload(()=>{
+  unitSource.changed();
+});

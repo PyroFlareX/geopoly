@@ -1,25 +1,36 @@
 import csv
+from collections import defaultdict
 
-from core.entities import Area
+from core.entities import Area, Prof
 
 
-def load_csv_as_dict(filename):
+def load_csv_as_dict(filename, mapping={}):
     items = {}
 
     with open('core/content/{}.csv'.format(filename), 'r') as csvfile:
         spamreader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
 
         for row in spamreader:
-            items[row['name']] = {k:(int(v) if v else None) for k,v in row.items() if k != 'name'}
+            items[row['name']] = {k:(mapping[k](v) if v else None) for k,v in row.items() if k != 'name'}
 
     return items
 
-units = load_csv_as_dict('units')
 
+mapping = defaultdict(lambda : int)
+mapping.update({
+    'name': str,
+    'cost': float,
+    'attr_name': str,
+    'attr_val': float,
+})
+
+units = load_csv_as_dict('units', mapping)
+
+# todo: new way of wasting units in battle
 # calculate defensive percentages
-total = sum((1/u['def']) for u in units.values())
-for u in units.values():
-    u['loss_freq'] = (1/u['def']) / total
+# total = sum((1/u['def']) for u in units.values())
+# for u in units.values():
+#     u['loss_freq'] = (1/u['def']) / total
 
 def getMilPop(area: Area):
     n = 0
@@ -68,8 +79,4 @@ def getAreaEP(area: Area):
     return ep
 
 
-UNITS = [
-    'inf_light', 'inf_home', 'inf_heavy', 'inf_skirmish',
-    'cav_lancer', 'cav_hussar', 'cav_dragoon', 'cav_heavy',
-    'art_light', 'art_heavy', 'art_mortar'
-]
+UNITS = list(Prof.toDict().keys())

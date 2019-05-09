@@ -3,6 +3,7 @@ _dev/assets/
 webapp/logs.txt
 generator/logs.txt
 serverapp/logs.txt
+webapp/public/vendor/
 
 # IDE
 .idea/

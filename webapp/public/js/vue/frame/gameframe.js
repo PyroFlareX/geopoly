@@ -3,6 +3,7 @@ import {match} from '/js/game/store.js';
 import {client} from '/js/game/client.js';
 import {jumpToRandom} from '/js/ol/gfx.js';
 import {getGameDate, getGameYear} from '/js/game/lib.js';
+import {get_img, status, onReady} from '/js/game/autogen.js';
 
 const seasons = ['Winter','Spring','Summer','Fall'];
 /*
@@ -23,6 +24,9 @@ export let component = Vue.component('game-frame', {
       match: match,
       username: "",
 
+      units: null,
+
+      status: status,
       updates: 0,
     }
   },
@@ -36,6 +40,17 @@ export let component = Vue.component('game-frame', {
       // end turn papa
 
       client.groups.Matches.request_end_turn();
+    },
+
+    src_unit: function(unit) {
+      //console.log("Generating image");
+      let weights = unit.get('img_vector');
+      let color = [200, 200, 70];
+
+      if (this.status.is_ready)
+        return get_img(weights, color);
+      else
+        return '';
     },
 
     dialog: function(name, ...params) {

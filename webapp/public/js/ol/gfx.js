@@ -1,12 +1,13 @@
 import {areaSource} from '/js/ol/layers/areas.js';
 import {arrowSource} from '/js/ol/layers/arrows.js';
 import {unitSource} from '/js/ol/layers/units.js';
+import {addUnit} from '/js/ol/units.js';
 import {view} from '/js/ol/map.js';
 import {getUnitComposition, getUnits, UNITS} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 
 /**
- * GFX - graphics callbacks
+ * GFX - general graphics callbacks
  *
  *
  *
@@ -21,7 +22,7 @@ export function setArea(area) {
   // Set area properties
   let feature = areaSource.getFeatureById(area.id);
   if (!feature) {
-    console.error("Area feature not found:", area.id);
+    console.error("setArea -- Area feature not found:", area.id);
     return;
   }
 
@@ -35,196 +36,42 @@ export function setArea(area) {
   // }
 
   // Check if there's a unit feature needed
-  updateUnitFeature(feature);
+  //updateUnitFeature(feature);
 }
 
 export function init_game(ctx) {
+  match.me = ctx.iso;
+
   if (match.me) {
     //let country = countrySource.getFeatureById(match.me);
     gui.$refs.frame.iso = match.me;
   }
+}
 
-  // Set up areas
+export function init_features(ctx) {
+  const format = new ol.format.GeoJSON();
+
+  // add areas:
   for (let area of ctx.areas) {
-    setArea(area);
+    let feature = format.readFeature(area);
+
+    if (!feature.get('units')) feature.set('units', []);
+    if (!feature.get('virgin')) feature.set('virgin', true);
+    if (!feature.get('castle')) feature.set('castle', 0);
+
+    areaSource.addFeature(feature);
+  }
+
+  // Set up units
+  for (let unit of ctx.units) {
+    addUnit(unit);
   }
 };
 
-/************************\
- *        UNITS         *
-\************************/
-export function updateUnits(feature, patch, dir) {
-  if (!dir) var dir = 1;
-
-  if (!(feature instanceof ol.Feature))
-    var feature = areaSource.getFeatureById(feature);
-
-  for (let [u, num] of Object.items(patch)) {
-    //console.log(u,num);
-    feature.set(u, (feature.get(u)||0) + dir*num);
-  }
-
-  updateUnitFeature(feature);
-}
-
-export function clearUnits(feature) {
-  if (!(feature instanceof ol.Feature))
-    var feature = areaSource.getFeatureById(feature);
-
-  for (let u of UNITS)
-    feature.set(u, 0);
-
-  updateUnitFeature(feature);
-}
-
-export function setUnits(feature, patch) {
-  if (!(feature instanceof ol.Feature))
-    var feature = areaSource.getFeatureById(feature);
-
-  for (let u of UNITS) {
-    feature.set(u, patch[u]);
-  }
-
-  updateUnitFeature(feature);
-}
-
-export function updateUnitFeature(feature) {
-  // set unit feature
-  let [mils, uclass, utype] = getUnitComposition(feature);
-  let unitFeature = feature.get('unit');
-
-  if (!unitFeature) {
-    if (mils > 0) {
-      // create new unit feature
-      unitFeature = new ol.Feature({
-        geometry: new ol.geom.Point(feature.get('cen')),
-        area_id: feature.getId(),
-        iso: feature.get('iso'),
-        mils: mils,
-        uclass: uclass,
-        utype: utype
-      });
-
-      feature.set('unit', unitFeature);
-      unitSource.addFeature(unitFeature);
-    }
-  }
-  else {
-    if (mils == 0) {
-      // remove unit feature
-      feature.unset('unit');
-      unitSource.removeFeature(unitFeature);
-    }
-    else {
-      // update unit feature
-      unitFeature.set('area_id', feature.getId());
-      unitFeature.set('iso', feature.get('iso'));
-
-      unitFeature.set('mils', mils);
-      unitFeature.set('uclass', uclass);
-      unitFeature.set('utype', utype);
-    }
-  }
-}
-
-
-
-/************************\
- *     AREA MOVES       *
-\************************/
-export function moveUnits(fromId, toId, patch, move_left) {
-  let from = areaSource.getFeatureById(fromId);
-  let to = areaSource.getFeatureById(toId);
-
-  from.set('selected', false);
-
-  from.set('move_left', move_left);
-  to.set('move_left', 0);
-
-  updateUnits(from, patch, -1);
-  updateUnits(to, patch, 1);
-  areaSource.changed();
-
-  hideHoverArrow();
-
-  updateUnitFeature(from);
-  updateUnitFeature(to);
-}
-
-export function reset_moves() {
-  for (let feature of areaSource.getFeatures()) {
-
-    let unitPop = getUnits(feature);
-    feature.set('move_left', unitPop);
-  }
-}
-
-export function conquer(areaId, iso) {
-  let feature = areaSource.getFeatureById(areaId);
-
-  if (feature.get('iso') != iso) {
-    feature.set('iso', iso);
-
-    if (getUnits(feature) > 0) {
-      // reset area as well
-      for (let u of UNITS) {
-        feature.set(u, 0);
-      }
-    }
-  }
-}
-
-/************************\
- *       ARROWS         *
-\************************/
-const hoverArrow = new ol.Feature({
-  rotation: 0,
-  hide: true,
-  locked: false,
-  geometry: new ol.geom.LineString([[0,0], [0,0]])
-})
-arrowSource.addFeature(hoverArrow);
-
-export function initHoverArrow(from) {
-  hoverArrow.set('locked', false);
-  hoverArrow.set('hide', true);
-
-  let geom = hoverArrow.getGeometry();
-
-  let coords = geom.getCoordinates();
-  let p = from.get('cen');
-  hoverArrow.set('iso', from.get('iso'));
-
-  geom.setCoordinates([p, p]);
-}
-
-export function showHoverArrow(to) {
-  if (hoverArrow.set('locked'))
-    return;
-
-  hoverArrow.set('hide', false);
-
-  let geom = hoverArrow.getGeometry();
-  let coords = geom.getCoordinates();
-
-  coords[1] = to.get('cen');
-
-  geom.setCoordinates(coords);
-}
-
-export function hideHoverArrow(from) {
-  hoverArrow.set('hide', true);
-}
-
-export function showMoveDialog(from, to) {
-  hoverArrow.set('locked', true);
-  // todo: +draw arrow
-
-  gui.infobar('move', from, to);
-}
 
 
 /* jumpTo features  */
+
 let jump_i = 0;
 export function jumpToRandom(iso, animate) {
   let areas = [];

@@ -17,6 +17,13 @@ def load():
 
 
 def get(opts, cast=None):
+    if '.' not in opts:
+
+        if cast is not None:
+            return {k:cast(val) for k,val in _conf[opts].items()}
+        else:
+            return _conf[opts]
+
     main, opt = opts.split('.')
 
     if main not in _conf:

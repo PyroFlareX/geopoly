@@ -44,5 +44,16 @@ export const template = `
       </div>
     </div>
 
+
+    <div class="units-bar" v-if="units">
+      <div class="d-flex flex-row">
+        <div class="unit-box text-center p-2" v-for="unit in units" >
+          <img class="img-fluid" :src="src_unit(unit)" style="min-height:75px" />
+          <br/>
+          <span class="small">{{ unit.get('name') }}</span>
+        </div>
+      </div>      
+    </div>
+
   </div>
 `;

@@ -1,9 +1,7 @@
 
 let to_load = 0;
 let n_loaded = 0;
-let _preload = [], _postload = [], _load = function() {
-  console.error("Please set onload function")
-};
+let _preload = [], _postload = [];
 
 const ctx_obj = {
 
@@ -18,10 +16,7 @@ let loader_obj = {
       for (let l of _preload)
         l(ctx_obj);
 
-      // main onload
-      _load(ctx_obj);
-
-      // post onload
+      // onload
       for (let l of _postload)
         l(ctx_obj);
 
@@ -49,5 +44,9 @@ export function load(fun) {
 };
 
 export function onload(fun) {
-  _load = fun ;
+  _postload.push(fun);
+};
+
+export function preload(fun) {
+  _preload.push(fun);
 };

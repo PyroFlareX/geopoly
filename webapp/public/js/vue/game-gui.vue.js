@@ -8,16 +8,17 @@ import {component as playersDialog} from '/js/vue/dialog/players.js';
 
 import {component as frame} from '/js/vue/frame/gameframe.js';
 //  <recommend ref="recommend"></recommend>
+//   <infobar-move ref="infobar-move"></infobar-move>
+
+//    <dialog-join-match ref="dialog-join-match"></dialog-join-match>
+
+//    <infobar-events ref="infobar-events"></infobar-events>
 
 export const template = `
   <game-frame ref="frame"></game-frame>
 
   <dialog-settings ref="dialog-settings"></dialog-settings>
   <dialog-players ref="dialog-players"></dialog-players>
-  <dialog-join-match ref="dialog-join-match"></dialog-join-match>
 
   <infobar-area ref="infobar-area"></infobar-area>
-  <infobar-move ref="infobar-move"></infobar-move>
-  <infobar-events ref="infobar-events"></infobar-events>
-
 `;

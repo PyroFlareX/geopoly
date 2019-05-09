@@ -1,5 +1,5 @@
 import {template} from "/js/vue/infobar/move.vue.js"
-import {hideHoverArrow} from '/js/ol/gfx.js';
+//import {hideHoverArrow} from '/js/ol/gfx.js';
 import {getUnits} from '/js/game/lib.js';
 
 export let component = Vue.component('infobar-move', {

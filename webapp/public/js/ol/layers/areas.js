@@ -1,7 +1,7 @@
 import {load} from '/js/game/loader.js';
 import {getUnits} from '/js/game/lib.js';
 import {match, countries} from '/js/game/store.js';
-import {showHoverArrow, initHoverArrow, hideHoverArrow, showMoveDialog, jumpToRandom} from '/js/ol/gfx.js';
+import {onSelectUnits, onHoverUnits, onCancelSelection, hideHoverArrow} from '/js/ol/units.js';
 import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
 
 /**
@@ -12,8 +12,8 @@ import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
  */
 
 export const areaSource = new ol.source.Vector({
-  format: new ol.format.GeoJSON(),
-  url: '/geojson/areas.geojson',
+  //format: new ol.format.GeoJSON(),
+  //url: '/geojson/areas.geojson',
 });
 
 export const areaLayer = new ol.layer.Vector({
@@ -52,10 +52,6 @@ export const areaLayer = new ol.layer.Vector({
   }
 });
 
-const move = {
-  selected: null,
-}
-
 areaLayer.name = 'areas';
 
 areaLayer.click = (feature, key) => {
@@ -72,31 +68,10 @@ areaLayer.click = (feature, key) => {
   }
 
   if (!key) {
-    // Move feature
+    // Select and move units standing on area
+    onSelectUnits(feature);
 
-    if (!move.selected) {
-      // only select my area
-      if (match.me != iso) {
-        return;
-      }
-
-      let mils = getUnits(feature);
-
-      if (mils > 0) {
-        feature.set('selected', true);
-        
-        initHoverArrow(feature);
-        move.selected = feature;
-      }
-    } else {
-      // check if we can move there
-      if (move.selected.get('conn') && !move.selected.get('conn').includes(feature.getId()))
-        return;
-
-      showMoveDialog(move.selected, feature);
-
-      move.selected = null;
-    }
+    // select area / castle too:
   } else if (key == 'CTRL') {
     // todo: later: info popover, instead of console log
 
@@ -105,6 +80,7 @@ areaLayer.click = (feature, key) => {
 };
 
 let hovered = null;
+
 areaLayer.hover = (feature) => {
   if (hovered) {
     hovered.set('hovered', false);
@@ -114,24 +90,7 @@ areaLayer.hover = (feature) => {
   hovered = feature;
   $("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";
 
-
-  if (move.selected) {
-    // check if we can move there
-    if (move.selected.get('conn')) {
-      if (!move.selected.get('conn').includes(feature.getId())) {
-        hideHoverArrow();
-
-        return;
-      }
-    }
-
-    if (feature.getId() != move.selected.getId()) {
-      // todo: check if two areas are connected!
-
-      // draw arrow from selected to this feature
-      showHoverArrow(feature);
-    }
-  }
+  onHoverUnits(feature);
 };
 
 areaLayer.hover_out = () => {
@@ -142,9 +101,7 @@ areaLayer.hover_out = () => {
 
   $("#app-map").style.cursor = "";
   
-  if (move.selected) {
-    hideHoverArrow();
-  }
+  hideHoverArrow();
 };
 
 areaLayer.drop = () => {
@@ -160,10 +117,7 @@ areaLayer.keypress = (feature, key) => {
   }
 
   else if (key == 'ESCAPE') {
-    let prevent = move.selected != null;
-
-    move.selected = null;
-    hideHoverArrow();
+    let prevent = onCancelSelection();
 
     // special case, escape is not smartcast, but it always cancels selection
     if (!prevent) {
@@ -184,19 +138,19 @@ areaLayer.contextmenu = () => {
 };
 
 
-load(function() {
-  let lk = areaSource.on('change', (e) => {
-    if (areaSource.getState() == 'ready') {
+// load(function() {
+//   let lk = areaSource.on('change', (e) => {
+//     if (areaSource.getState() == 'ready') {
 
-      // something else than load happened, wait
-      if (areaSource.getFeatures().length == 0)
-        return;
+//       // something else than load happened, wait
+//       if (areaSource.getFeatures().length == 0)
+//         return;
 
-      // and unregister the "change" listener 
-      ol.Observable.unByKey(lk);
+//       // and unregister the "change" listener 
+//       ol.Observable.unByKey(lk);
 
-      console.log("Loaded layers");
-      this.loaded();
-    }
-  });
-});
+//       console.log("Loaded layers");
+//       this.loaded();
+//     }
+//   });
+// });

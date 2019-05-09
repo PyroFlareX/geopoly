@@ -1,4 +1,4 @@
-import {moveUnits, setUnits, clearUnits, conquer} from '/js/ol/gfx.js';
+//import {moveUnits, setUnits, clearUnits, conquer} from '/js/ol/gfx.js';
 import {match, EVENT} from "/js/game/store.js";
 
 export class AreasGroup {

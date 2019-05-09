@@ -1,33 +1,9 @@
-import {MAP_CENTER,MAP_ZOOM,FIELD_OWNER, FIELD_ID, FIELD_NAME, GEOFILE, SHOW_LABELS} from '/js/config.js';
+import {MAP_CENTER,MAP_ZOOM,FIELD_OWNER, FIELD_ID, FIELD_NAME, GEOFILE, SHOW_LABELS, getColor} from '/js/config.js';
 
 var baseLayer = new ol.layer.Tile({
   source: new ol.source.OSM()
 });
 
-const isocolors = {
-  'UK': new Color([207, 20, 43]),
-  'FR': new Color([3, 7, 147]),
-  'RU': new Color([63, 120, 35]),
-  'IT': new Color([30, 190, 75]),
-  'SE': new Color([0, 40, 104]),
-  'DK': new Color([230, 29, 24]),
-  'AT': new Color([254, 205, 33]),
-  'DE': new Color([60, 77, 75]),
-  'ES': new Color([170, 110, 40]),
-  'NL': new Color([253, 73, 29]),
-  'BE': new Color([128, 78, 56]),
-  'CH': new Color([232, 43, 54]),
-  'PT': new Color([0, 81, 151]),
-  'EL': new Color([116, 172, 223]),
-  'RO': new Color([145, 30, 180]),
-  'RS': new Color([128, 106, 43]),
-  'BG': new Color([0, 161, 242]),
-  'TR': new Color([194, 24, 40]),
-
-  // 'EG': new Color([158, 11, 33]),
-  // 'MA': new Color([243, 67, 38]),
-  // 'IR': new Color([245, 130, 48]),
-};
 
 var otherLayer = new ol.layer.Vector({
   source: new ol.source.Vector(),
@@ -38,18 +14,12 @@ var areaLayer = new ol.layer.Vector({
   style: function(feature) {
     var iso = feature.get(FIELD_OWNER);
 
-    // else if (iso.length == 5) {
-    //   var col = 'rgba(50,50,50,0.2)';
-    // } else {
-    // }
     if (selects[0] && selects[0].getId() == feature.getId())
       var col = 'rgba(270,50,50,0.2)';
     else if (selects[1] && selects[1].getId() == feature.getId())
       var col = 'rgba(150,50,50,0.2)';
-    else if (isocolors[iso]) {
-      var col = isocolors[iso].a(0.6).rgba();
-    } else 
-      var col = 'rgba(50,270,50,0.04)';
+    else 
+      var col = getColor(iso);
 
     let geom = feature.getGeometry();
     if (geom.getType() == 'MultiPolygon') {
@@ -141,6 +111,7 @@ contextmenu.on('open', function (evt) {
   contextmenu.extend(contextmenuItems);
 });
 
+let bulk_iso = '';
 
 function merge(feature1, feature2) {
   let poly1 = to_poly(feature1);
@@ -244,76 +215,76 @@ function get_all() {
 }
 
 
-function create_ownership_file() {
-  let ownerships = {};
+// function create_ownership_file() {
+//   let ownerships = {};
 
-  for (let feature of map.getLayers().item(1).getSource().getFeatures()) {
-    if (!ownerships[feature.get(FIELD_OWNER)])
-      ownerships[feature.get(FIELD_OWNER)] = [];
-    ownerships[feature.get(FIELD_OWNER)].push(feature.getId());
-  }
+//   for (let feature of map.getLayers().item(1).getSource().getFeatures()) {
+//     if (!ownerships[feature.get(FIELD_OWNER)])
+//       ownerships[feature.get(FIELD_OWNER)] = [];
+//     ownerships[feature.get(FIELD_OWNER)].push(feature.getId());
+//   }
 
-  download_file('ownerships.json', JSON.stringify(ownerships));
-}
+//   download_file('ownerships.json', JSON.stringify(ownerships));
+// }
 
-function create_connection_file() {
-  let connection = {};
+// function create_connection_file() {
+//   let connection = {};
 
-  let features = map.getLayers().item(1).getSource().getFeatures();
+//   let features = map.getLayers().item(1).getSource().getFeatures();
 
-  console.log("CREATING CONNECTION FILE, PLEASE WAIT...");
+//   console.log("CREATING CONNECTION FILE, PLEASE WAIT...");
 
-  for (let feature1 of features) {
-    let id1 = feature1.getId();
-    let poly1 = to_poly(feature1);
+//   for (let feature1 of features) {
+//     let id1 = feature1.getId();
+//     let poly1 = to_poly(feature1);
 
-    if (!connection[id1])
-      connection[id1] = [];
+//     if (!connection[id1])
+//       connection[id1] = [];
 
-    for (let feature2 of features) {
-      let id2 = feature2.getId();
-    if (!connection[id2])
-      connection[id2] = [];
+//     for (let feature2 of features) {
+//       let id2 = feature2.getId();
+//     if (!connection[id2])
+//       connection[id2] = [];
 
-      // save up time
-      if (id1 == id2)
-        continue;
-      if (connection[id1].includes(id2))
-        continue;
-      if (connection[id2].includes(id1))
-        continue;
+//       // save up time
+//       if (id1 == id2)
+//         continue;
+//       if (connection[id1].includes(id2))
+//         continue;
+//       if (connection[id2].includes(id1))
+//         continue;
 
-      let poly2 = to_poly(feature2);
+//       let poly2 = to_poly(feature2);
 
-      try {
-        let intersect = turf.intersect(poly1, poly2);
+//       try {
+//         let intersect = turf.intersect(poly1, poly2);
 
-        // check if the 2 polygons intersect
-        if (intersect) {
-          connection[id1].push(id2);
-          connection[id2].push(id1);
-        }
-      } catch(e) {
-        console.error(e);
-        console.log(id1, poly1, feature1.getProperties());
-        console.log(id2, poly2, feature2.getProperties());
+//         // check if the 2 polygons intersect
+//         if (intersect) {
+//           connection[id1].push(id2);
+//           connection[id2].push(id1);
+//         }
+//       } catch(e) {
+//         console.error(e);
+//         console.log(id1, poly1, feature1.getProperties());
+//         console.log(id2, poly2, feature2.getProperties());
 
-        return;
-      }
-    }
-  }
+//         return;
+//       }
+//     }
+//   }
 
-  console.log("... done");
-  download_file('connection.json', JSON.stringify(connection));
-}
+//   console.log("... done");
+//   download_file('connection.json', JSON.stringify(connection));
+// }
 
 
-window.create_connection_file = create_connection_file;
-window.create_ownership_file = create_ownership_file;
+// window.create_connection_file = create_connection_file;
+// window.create_ownership_file = create_ownership_file;
 
 
 map.on('click', function(event) {
-  if (event.pointerEvent.shiftKey) {
+  if (event.pointerEvent.altKey) {
     console.log('['+round(event.coordinate[0])+','+round(event.coordinate[1])+'],');
     return;
   }
@@ -339,7 +310,8 @@ map.on('click', function(event) {
   areaLayer.getSource().changed();
 });
 
-fetch('/geojson/'+GEOFILE)
+const mapId = Params.get("map", 0);
+fetch('/geojson/'+GEOFILE.replace("{}", mapId))
 .then(function(response) { return response.json(); })
 .then(function(gjson){
   var source = areaLayer.getSource();
@@ -348,15 +320,6 @@ fetch('/geojson/'+GEOFILE)
     gjson,
     {featureProjection: ol.proj.get('EPSG:3857')}
   ));
-
-  // fetch('/getmode')
-  // .then(function(response) { return response.json(); })
-  // .then(function(mode){
-
-  //   for (var nuts_id in mode) {
-  //     source.getFeatureById(nuts_id).set(FIELD_OWNER, mode[nuts_id]);
-  //   }
-  // });
 });
 
 
@@ -379,6 +342,7 @@ let contextmenuItems = [
 
       selects[0] = feature;
       selects[1] = null;
+      editable.clear();
 
       //download_file(filename, JSON.stringify(cont));
       areaLayer.getSource().changed();
@@ -406,8 +370,10 @@ let contextmenuItems = [
 
       let ISO = prompt('Enter iso:', selects[0].get(FIELD_OWNER));
 
-      if (ISO)
+      if (ISO) {
         selects[0].set(FIELD_OWNER, ISO);
+        bulk_iso = ISO;
+      }
 
       areaLayer.getSource().changed();
     }
@@ -419,6 +385,7 @@ let contextmenuItems = [
       if (!selects[0]) {
         return;
       }
+      editable.clear();
 
       areaLayer.getSource().removeFeature(selects[0]);
     }
@@ -449,6 +416,7 @@ let contextmenuItems = [
 
       let formData = new FormData();
       formData.append('geojson', JSON.stringify(cont));
+      formData.append("map", mapId);
 
       fetch('/home/save', {
         method: "POST",
@@ -474,18 +442,28 @@ let contextmenuItems = [
 let bulk_delete = false;
 
 document.onkeydown = function (e) {
-  if (e.key.toUpperCase() == 'DELETE')
+  let key = e.key.toUpperCase();
+
+  if (key == 'DELETE')
     bulk_delete = true;
 };
 document.onkeyup = function (e) {
-  if (e.key.toUpperCase() == 'DELETE')
+  let key = e.key.toUpperCase();
+
+  if (key == 'DELETE')
     bulk_delete = false;
 };
 
 
 map.on('pointermove', (event) => {
+  if (bulk_iso && event.originalEvent.shiftKey) {
+    map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+      feature.set('iso', bulk_iso);
+    });
+  }
+
   // bulk delete
-  if (bulk_delete) {
+  else if (bulk_delete) {
     try {
         map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
           areaLayer.getSource().removeFeature(feature);
@@ -504,6 +482,10 @@ var modify = new ol.interaction.Modify({
 
 map.addInteraction(modify);
 
+
+window.setBulkIso = function(iso) {
+  bulk_iso = iso;
+}
 
 
 // TEST:

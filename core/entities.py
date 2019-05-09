@@ -1,26 +1,62 @@
 from enum import Enum
 
-from sqlalchemy import Column, Float, ForeignKey, Integer, String, Boolean
+from eme.entities import EntityPatch
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Boolean, SmallInteger, JSON
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
 
+Prof = EntityPatch({
+    "FOOT": 0,
+    "PIKE": 1,
+    "LIGHTCAV": 2,
+    "KNIGHT": 3,
+    "ARCHER": 4,
+    "CATA": 5,
+    "BARD": 6,
+    "BARBAR": 7,
+    "THUG": 8,
+    "STRONG": 9,
+    "HERO": 10,
+    "DEFENDER": 11,
+})
+
+
+Skins = {
+    "FOOT": (1,),
+    "ARCHER": (2,9),
+    "KNIGHT": (3,5),
+    "PIKE": (4,),
+    "BARD": (6,),
+    "BARBAR": (7,),
+    "LIGHTCAV": (8,10),
+
+    "HERO": (21,22,23,24,25,26),
+
+    "THUG": (11,),
+    "CATA": (12,),
+    "DEFENDER": (13,),
+    "STRONG": (14,),
+}
+
+
 class User(Base):
     __tablename__ = 'users'
 
     uid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+    created_at = Column(Integer, nullable=True)
+
+    iso = Column(String(5))
+    wid = Column(postgresql.UUID(as_uuid=True))
 
     username = Column(String(32))
-    iso = Column(String(5))
-    mid = Column(postgresql.UUID(as_uuid=True))
+    email = Column(String(128))
+    salt = Column(String(128), nullable=True)
+    token = Column(String(128), nullable=True)
+    password = Column(String(128))
 
-    #email = Column(String(128))
-    #salt = Column(String(128), nullable=True)
-    #token = Column(String(128), nullable=True)
-    #password = Column(String(128))
-    #created_at = Column(Integer)
 
     def __init__(self, **kwargs):
         self.uid = kwargs.get('uid')
@@ -39,148 +75,104 @@ class User(Base):
         }
 
 
-class Match:
+class World:
 
     def __init__(self, **kwargs):
         super().__init__()
 
-        self.mid = kwargs.get('mid')
+        self.wid = kwargs.get('wid')
 
-        # Settings
         self.max_players = kwargs.get('max_players')
-        self.max_rounds = kwargs.get('max_rounds')
-        self.map = kwargs.get('map')
-
-        # In-game
+        self.turn_time = kwargs.get('turn_time')
         self.turns = kwargs.get('turns')
-        self.rounds = kwargs.get('rounds')
-        self.current = kwargs.get('current')
-        self.isos = kwargs.get('isos', [])
 
         self.events = kwargs.get('events', [])
 
-        # Not saved in DB
-        self.round_iter = kwargs.get('round_iter')
-
     def toView(self):
         return {
-            "mid": self.mid,
-
+            "wid": self.wid,
             "max_players": self.max_players,
-            "max_rounds": self.max_rounds,
-            "map": self.map,
-
-            "isos": list(self.isos),
-            "start": self.isos[0] if len(self.isos) > 0 else None,
-            "current": self.current,
-
             "turns": self.turns,
-            "rounds": self.rounds,
-
+            "turn_time": self.turn_time,
             "events": self.events
         }
 
 
-class TurnType(Enum):
-    ROUND = 0
-    EMPEROR_FIRST = 1  # as in Medwars
+class Area(Base):
+    __tablename__ = 'areas'
 
+    id = Column(String(8), primary_key=True)
 
-class Area:
+    # todo: itt: instead put it into a json document store
+    # todo: player -> {areaId: castle_lvl}
+
+    wid = Column(postgresql.UUID(as_uuid=True))
+    pid = Column(postgresql.UUID(as_uuid=True))
+    iso = Column(String(5))
+
+    castle = Column(SmallInteger())
+    virgin = Column(SmallInteger())
+
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
+
         self.iso = kwargs.get('iso')
-        self.mid = kwargs.get('mid')
+        self.pid = kwargs.get('pid')
+        self.wid = kwargs.get('wid')
 
-        self.inf_light = kwargs.get('inf_light', 0)
-        self.inf_home = kwargs.get('inf_home', 0)
-        self.inf_heavy = kwargs.get('inf_heavy', 0)
-        self.inf_skirmish = kwargs.get('inf_skirmish', 0)
-
-        self.cav_lancer = kwargs.get('cav_lancer', 0)
-        self.cav_hussar = kwargs.get('cav_hussar', 0)
-        self.cav_dragoon = kwargs.get('cav_dragoon', 0)
-        self.cav_heavy = kwargs.get('cav_heavy', 0)
-
-        self.art_light = kwargs.get('art_light', 0)
-        self.art_heavy = kwargs.get('art_heavy', 0)
-        self.art_mortar = kwargs.get('art_mortar', 0)
-
-        # percentage of movement from current round
-        self.move_left = kwargs.get('move_left', 0)
+        # lvl of castle, if any
+        self.castle = kwargs.get('castle', 0)
+        # is area untouched (can be claimed)
+        self.virgin = kwargs.get('virgin', 0)
 
     def toView(self):
         return self.__dict__
 
-    def toUnitView(self):
-        return {
-            "inf_light": self.inf_light,
-            "inf_home": self.inf_home,
-            "inf_heavy": self.inf_heavy,
-            "inf_skirmish": self.inf_skirmish,
-            "cav_lancer": self.cav_lancer,
-            "cav_hussar": self.cav_hussar,
-            "cav_dragoon": self.cav_dragoon,
-            "cav_heavy": self.cav_heavy,
-            "art_light": self.art_light,
-            "art_heavy": self.art_heavy,
-            "art_mortar": self.art_mortar,
-        }
 
+class Unit(Base):
+    __tablename__ = 'units'
 
-class Deck(Base):
-    __tablename__ = 'decks'
+    id = Column(Integer, primary_key=True)
+    aid = Column(String(8))
+    pid = Column(postgresql.UUID(as_uuid=True))
+    wid = Column(postgresql.UUID(as_uuid=True))
 
-    did = Column(Integer(), primary_key=True)
-    uid = Column(postgresql.UUID(as_uuid=True))
-    name = Column(String(20))
+    age = Column(Float)
+    prof = Column(SmallInteger)
+    skin = Column(SmallInteger)
+    xp = Column(SmallInteger)
 
-    inf_light = Column(Integer())
-    inf_home = Column(Integer())
-    inf_heavy = Column(Integer())
-    inf_skirmish = Column(Integer())
-    cav_lancer = Column(Integer())
-    cav_hussar = Column(Integer())
-    cav_dragoon = Column(Integer())
-    cav_heavy = Column(Integer())
-    art_light = Column(Integer())
-    art_heavy = Column(Integer())
-    art_mortar = Column(Integer())
+    name = Column(String(30))
+    img_vector = Column(postgresql.JSON)
 
     def __init__(self, **kwargs):
-        self.did = kwargs.get('did')
-        self.uid = kwargs.get('uid')
+        self.id = kwargs.get('id')
+        self.iso = kwargs.get('iso')
+        self.wid = kwargs.get('wid')
+        self.pid = kwargs.get('pid')
+        self.aid = kwargs.get('aid')
+
+        self.prof = kwargs.get('prof')
+        self.skin = kwargs.get('skin')
+        self.xp = kwargs.get('xp')
+
+        self.age = kwargs.get('age')
+
         self.name = kwargs.get('name')
+        self.img_vector = kwargs.get('img_vector')
 
-        self.inf_light = kwargs.get('inf_light', 0)
-        self.inf_home = kwargs.get('inf_home', 0)
-        self.inf_heavy = kwargs.get('inf_heavy', 0)
-        self.inf_skirmish = kwargs.get('inf_skirmish', 0)
+    def toDict(self):
+        # fixme dirty hack, return normal dict
+        d = self.__dict__.copy()
 
-        self.cav_lancer = kwargs.get('cav_lancer', 0)
-        self.cav_hussar = kwargs.get('cav_hussar', 0)
-        self.cav_dragoon = kwargs.get('cav_dragoon', 0)
-        self.cav_heavy = kwargs.get('cav_heavy', 0)
+        if '_sa_instance_state' in d:
+            d.pop('_sa_instance_state')
 
-        self.art_light = kwargs.get('art_light', 0)
-        self.art_heavy = kwargs.get('art_heavy', 0)
-        self.art_mortar = kwargs.get('art_mortar', 0)
+        return d
 
     def toView(self):
-        return {
-            "did": self.did,
-            "uid": self.uid,
-            "name": self.name,
+        return self.toDict()
 
-            "inf_light": self.inf_light,
-            "inf_home": self.inf_home,
-            "inf_heavy": self.inf_heavy,
-            "inf_skirmish": self.inf_skirmish,
-            "cav_lancer": self.cav_lancer,
-            "cav_hussar": self.cav_hussar,
-            "cav_dragoon": self.cav_dragoon,
-            "cav_heavy": self.cav_heavy,
-            "art_light": self.art_light,
-            "art_heavy": self.art_heavy,
-            "art_mortar": self.art_mortar,
-        }
+    def clone(self):
+        return Unit(**self.toDict())
+

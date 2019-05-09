@@ -46,6 +46,5 @@ def map_separate():
             with codecs.open('geojson/nuts{}/{}.json'.format(N,iso), 'w', encoding='utf8') as fh:
                 json.dump(geojson, fh)
 
-
 if __name__ == "__main__":
     map_separate()
