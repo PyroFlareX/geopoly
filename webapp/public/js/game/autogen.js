@@ -22,18 +22,18 @@ export function onReady(callback) {
   _callback = callback;
 }
 
-export function get_img(arr, color) {
+export function get_img(arr, color, bgcolor) {
   let rnd_encoded = tf.tensor2d([arr]);
 
   let decoded = model.predict(rnd_encoded);
 
   let dec_img = decoded.dataSync();
 
-  return draw(dec_img, color);
+  return draw(dec_img, color, bgcolor);
 }
 
 
-function draw(pixels, CR) {
+function draw(pixels, CR, CB) {
   // pixels are inverted y/x
   const loader_canvas = document.createElement("canvas");
   const ctx = loader_canvas.getContext("2d");
@@ -49,10 +49,11 @@ function draw(pixels, CR) {
       let p = x * imY + y;
 
       let shade = pixels[p];
+      let col = CB.interpolate(CR, shade);
 
-      idata.data[i*4 + 0] = round(CR[0]*shade);
-      idata.data[i*4 + 1] = round(CR[1]*shade);
-      idata.data[i*4 + 2] = round(CR[2]*shade);
+      idata.data[i*4 + 0] = col[0];
+      idata.data[i*4 + 1] = col[1];
+      idata.data[i*4 + 2] = col[2];
       idata.data[i*4 + 3] = 255;
 
       i++;

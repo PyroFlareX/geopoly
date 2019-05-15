@@ -1,12 +1,10 @@
 export const template = `
   <div>
-    <div class="gui-corner-left-wrapper">
+    <div v-if="match.me" class="gui-corner-left-wrapper">
       <div class="gui-corner-left" @click="onClickFlag">
         <div class="glass"></div>
         <div class="flag-wrap">
-
-          <div :class="'flag flag-LG flag-' + iso"></div>
-
+          <div class="flag-shield" :style="herald(match.me)"></div>
         </div>
       </div>
     </div>
@@ -23,15 +21,15 @@ export const template = `
         </div>
       </div>
 
-      <div title="Players" @click="dialog('players')" class="gui-corner-icon tilt-0">
+      <div title="Players" @click="open_dialog('players')" class="gui-corner-icon tilt-0">
         <i class="ra icon-ra ra-icon-player"></i>
       </div>
 
-      <div title="Events" @click="infobar('events')" class="gui-corner-icon tilt-22_5">
+      <div title="Events" @click="open_infobar('events')" class="gui-corner-icon tilt-22_5">
         <i class="ra icon-ra ra-icon-info"></i>
       </div>
 
-      <div title="Map settings" @click="dialog('settings')" class="gui-corner-icon tilt-45">
+      <div title="Map settings" @click="open_dialog('settings')" class="gui-corner-icon tilt-45">
         <i class="ra icon-ra ra-icon-settings"></i>
       </div>
 
@@ -47,10 +45,8 @@ export const template = `
 
     <div class="units-bar" v-if="units">
       <div class="d-flex flex-row">
-        <div class="unit-box text-center p-2" v-for="unit in units" >
+        <div @click="open_infobar('unit', unit)" class="pointer unit-box text-center p-2" :style="unit_background(unit)" v-for="unit in units" >
           <img class="img-fluid" :src="src_unit(unit)" style="min-height:75px" />
-          <br/>
-          <span class="small">{{ unit.get('name') }}</span>
         </div>
       </div>      
     </div>

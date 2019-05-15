@@ -1,8 +1,9 @@
 export const template = `
-  <div v-if="show" class="infobar infobar-lg">
+  <div v-if="show" class="infobar">
     <div class="infobar-header" :style="area_background(area)">
-      
-      <div :class="'flag flag-inline flag-xs flag-'+area.iso"></div> {{area.name}}
+      <div class="shield shield-inline shield-xs shield-box" :style="herald(area)"></div>
+
+      {{area.name}}
 
       <button type="button" class="close" aria-label="Close" v-on:click="show=false">
         <span aria-hidden="true">&times;</span>
@@ -10,52 +11,41 @@ export const template = `
     </div>
     <div class="infobar-content p-2" :area-id="area.id">
 
+      <div class="d-flex">
+        <div class="p-2 flex-fill">
 
-      <div class="row row-nopad">
-        <div class="col col-nopad">
-          <p class="text-center"> <span class="ra ra-2x ra-class-infantry"></span> </p>
+          <div v-if="area.castle > 0">
+            <p>
+              <i :class="'ra ra-castle-' + area.castle"></i> <strong>
+                <u v-if="area.castle == 1">Tower</u>
+                <u v-if="area.castle == 2">Town</u>
+                <u v-if="area.castle == 3">Castle</u>
+                <u v-if="area.castle == 4">Castle</u>
 
-          <div v-for="u in UNITS_INF" :id="u" class="input-group mb-1">
-            <div class="input-group-prepend">
-              <span class="input-group-text" :id="u+'a'">
-                <span :class="'ra ra-2x ra-unit-'+u"></span>
-              </span>
-            </div>
-
-            <span class="form-control input-2x">{{ area[u] || 0 }}</span>
+                (Lvl {{area.castle}})
+              </strong>
+            </p>
+            
+            <button class="btn btn-link" @click="open_infobar('training', area)">Training</button><br/>
+            <button class="btn btn-link" @click="open_infobar('teams', area)">Armies</button><br/>
+            <button class="btn btn-link" @click="open_infobar('building', area)">Upgrade</button>
           </div>
+          <div v-else>
+            <p>
+              <i class="ra ra-field"></i> Province
+            </p>
 
+            <button class="btn btn-link" @click="open_infobar('building', area)">Build here</button>
+          </div>
         </div>
-        <div class="col col-nopad">
-          <p class="text-center"> <span class="ra ra-2x ra-class-cavalry"></span> </p>
+        <div class="p-2">
+          <h3>{{country.name}}</h3>
 
-          <div v-for="u in UNITS_CAV" :id="u" class="input-group mb-1">
-            <div class="input-group-prepend">
-              <span class="input-group-text" :id="u+'a'">
-                <span :class="'ra ra-2x ra-unit-'+u"></span>
-              </span>
-            </div>
-
-            <span class="form-control input-2x">{{ area[u] || 0 }}</span>
-          </div>
-
-        </div>
-        <div class="col col-nopad">
-          <p class="text-center"> <span class="ra ra-2x ra-class-artillery"></span> </p>
-
-          <div v-for="u in UNITS_ART" :id="u" class="input-group mb-1">
-            <div class="input-group-prepend">
-              <span class="input-group-text" :id="u+'a'">
-                <span :class="'ra ra-2x ra-unit-'+u"></span>
-              </span>
-            </div>
-
-            <span class="form-control input-2x">{{ area[u] || 0 }}</span>
-          </div>
+          <div class="mx-auto shield shield shield-box" :style="herald(area)"></div>
 
         </div>
       </div>
-      
+
     </div>
   </div>
 `;

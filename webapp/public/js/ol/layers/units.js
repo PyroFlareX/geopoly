@@ -47,19 +47,6 @@ unitLayer.update = (elapsedTime) => {
   }
 }
 
-unitLayer.keypress = (c1) => {
-  if (key == 'W') {
-    // North
-  } else if (key == 'S') {
-    // South
-  } else if (key == 'D') {
-    // East
-  } else if (key == 'A') {
-    // West
-  }
-
-};
-
 onload(()=>{
   unitSource.changed();
 });

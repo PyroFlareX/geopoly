@@ -4,6 +4,7 @@ import {client} from '/js/game/client.js';
 import {jumpToRandom} from '/js/ol/gfx.js';
 import {getGameDate, getGameYear} from '/js/game/lib.js';
 import {get_img, status, onReady} from '/js/game/autogen.js';
+import {getColor, colors} from '/js/game/colors.js';
 
 const seasons = ['Winter','Spring','Summer','Fall'];
 /*
@@ -33,7 +34,7 @@ export let component = Vue.component('game-frame', {
 
   methods: {
     onClickFlag: function(e) {
-      jumpToRandom(this.iso, true);
+      jumpToRandom(this.match.me, true);
     },
 
     onClickSeason: function(e) {
@@ -43,26 +44,28 @@ export let component = Vue.component('game-frame', {
     },
 
     src_unit: function(unit) {
-      //console.log("Generating image");
-      let weights = unit.get('img_vector');
-      let color = [200, 200, 70];
-
-      if (this.status.is_ready)
-        return get_img(weights, color);
-      else
+      if (!this.status.is_ready)
         return '';
-    },
 
-    dialog: function(name, ...params) {
-      gui.dialog(name, ...params);
-    },
+      let weights = unit.get('img_vector');
+      
+      let bgcolor = getColor(unit), i = 0;
+      while (bgcolor.contrast() == 'black' && i < 8)
+        bgcolor = bgcolor.shade(-0.15);
 
-    infobar: function(name, ...params) {
-      gui.infobar(name, ...params);
+      let color = colors.WHITE;
+
+      // if (color.contrast() == 'black') {
+      //   let _c = color;
+      //   color = bgcolor;
+      //   bgcolor = _c;
+      // }
+
+      return get_img(weights, color, bgcolor);
     },
 
     exit: function() {
-      if (match.me) {
+      if (this.match.me) {
         let resp = confirm("Are you sure you want to leave the match?");
         
         if (resp)
@@ -75,6 +78,7 @@ export let component = Vue.component('game-frame', {
   },
 
   computed: {
+
     season: function() {
       let s = this.match.rounds % 4;
 

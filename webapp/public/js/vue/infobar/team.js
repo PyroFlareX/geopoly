@@ -1,7 +1,6 @@
-import {template} from "/js/vue/infobar/area.vue.js"
-import {countries} from "/js/game/store.js";
+import {template} from "/js/vue/infobar/team.vue.js"
 
-export let component = Vue.component('infobar-area', {
+export let component = Vue.component('infobar-team', {
   template: template,
 
   data: function() {
@@ -19,10 +18,4 @@ export let component = Vue.component('infobar-area', {
       this.area = area;
     },
   },
-
-  computed: {
-    country: function() {
-      return countries[this.area.iso];
-    }
-  }
 });

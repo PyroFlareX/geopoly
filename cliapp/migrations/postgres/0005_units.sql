@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS units (
     "wid" uuid REFERENCES worlds(wid),
     "pid" uuid, --REFERENCES users(pid),
     "aid" character varying(8), --REFERENCES areas(id),
+    "iso" character varying(5), --REFERENCES countries(iso),
 
     "prof" smallint NULL,
     "skin" smallint NULL,

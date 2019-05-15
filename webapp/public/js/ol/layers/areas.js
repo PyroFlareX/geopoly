@@ -43,11 +43,6 @@ export const areaLayer = new ol.layer.Vector({
       fill: new ol.style.Fill({
         color: bg.rgba()
       }),
-
-      // hack so that area is clickable
-      // fill: new ol.style.Fill({
-      //   color: 'rgba(255,255,255,0)'
-      // }),
     }));
 
     if (castle) {
@@ -127,14 +122,7 @@ areaLayer.drop = () => {
 };
 
 areaLayer.keypress = (feature, key) => {
-
-  if (key == 'Q' || key == 'CTRL') {
-    // open area infobar
-
-    gui.infobar('area', feature);
-  }
-
-  else if (key == 'ESCAPE') {
+  if (key == 'ESCAPE') {
     let prevent = onCancelSelection();
 
     // special case, escape is not smartcast, but it always cancels selection
@@ -144,10 +132,24 @@ areaLayer.keypress = (feature, key) => {
       gui.dialog('close');
     }
   }
-
   else if (key == 'SPACE' || key == ' ') {
     // jump to random area
     jumpToRandom(match.me, false);
+  }
+  else {
+    let infobar;
+    switch(key) {
+      case 'Q': infobar = 'area'; break;
+      case 'W': infobar = 'training'; break;
+      case 'E': infobar = 'team'; break;
+      case 'R': infobar = 'building'; break;
+    }
+
+    if (gui.opened && gui.opened == infobar) {
+      gui.infobar('close');
+    } else {
+      gui.infobar(infobar, feature);
+    }
   }
 };
 

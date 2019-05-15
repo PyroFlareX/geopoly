@@ -143,6 +143,7 @@ class Unit(Base):
     aid = Column(String(8))
     pid = Column(postgresql.UUID(as_uuid=True))
     wid = Column(postgresql.UUID(as_uuid=True))
+    iso = Column(String(5))
 
     prof = Column(SmallInteger)
     skin = Column(SmallInteger)
@@ -161,6 +162,7 @@ class Unit(Base):
         self.wid = kwargs.get('wid')
         self.pid = kwargs.get('pid')
         self.aid = kwargs.get('aid')
+        self.iso = kwargs.get('iso')
 
         self.prof = kwargs.get('prof')
         self.skin = kwargs.get('skin')

@@ -2,7 +2,10 @@ import {load} from '/js/game/loader.js';
 
 export const colors = {
   not_found: new Color(0, 255, 255),
-  mil_default: new Color([160, 10, 14]),
+  mil_default: new Color(160, 10, 14),
+
+  BLACK: new Color(0,0,0),
+  WHITE: new Color(255,255,255),
 
   afk: new Color([90, 90, 90]),
   base: new Color([211, 191, 158]),

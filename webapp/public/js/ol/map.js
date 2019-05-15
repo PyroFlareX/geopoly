@@ -142,12 +142,11 @@ export let keys = {
   smartcast_enabled: true,
 
   keypress: new Set([
-    // 'Q', 'W', 'E', 'R',
-    // 'A', 'S', 'D', 'F'
     ' ', 'ESCAPE'
   ]),
   smartcastable: new Set([
-    'Q',
+    'Q', 'W', 'E', 'R',
+    // 'A', 'S', 'D', 'F'
     // 'M', 'B'
   ]),
 
