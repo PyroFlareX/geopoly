@@ -9,6 +9,8 @@ var otherLayer = new ol.layer.Vector({
   source: new ol.source.Vector(),
 });
 
+let marked = [];
+
 var areaLayer = new ol.layer.Vector({
   source: new ol.source.Vector(),
   style: function(feature) {
@@ -48,7 +50,7 @@ var areaLayer = new ol.layer.Vector({
     if (SHOW_LABELS)
         styles.push(new ol.style.Style({
           text: new ol.style.Text({
-            text: feature.get(FIELD_NAME),
+            text: FIELD_NAME.replace("{id}",feature.getId()).replace("{name}",feature.get('name')),
             fill: new ol.style.Fill({color: "white"}),
             stroke: new ol.style.Stroke({color: "black", width: 3}),
             font: '14px "Opera Lyrics"'
@@ -378,6 +380,13 @@ let contextmenuItems = [
       areaLayer.getSource().changed();
     }
   },
+  {
+    text: 'Mark',
+    callback: function() {
+      if (!marked.includes(selects[0].getId()))
+        marked.push(selects[0].getId());
+    }
+  },
   '-',
   {
     text: 'Delete',
@@ -487,6 +496,7 @@ window.setBulkIso = function(iso) {
   bulk_iso = iso;
 }
 
+window.marked = marked;
 
 // TEST:
 // let coords = [

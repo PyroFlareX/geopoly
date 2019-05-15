@@ -24,8 +24,8 @@ class HomeController():
         now = time.time()
         path = 'GeoEditor/public/geojson/areas.geojson'.format(mapId)
 
-        if os.path.isfile(path):
-            os.rename(path, 'GeoEditor/public/geojson/backup/map{}_{}.geojson'.format(mapId, now))
+        # if os.path.isfile(path):
+        #     os.rename(path, 'GeoEditor/public/geojson/backup/map{}_{}.geojson'.format(mapId, now))
 
         with codecs.open(path, 'w', encoding='utf8') as fh:
             fh.write(geojson)

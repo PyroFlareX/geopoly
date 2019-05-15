@@ -16,3 +16,11 @@ elif db_type == 'sqlite':
 Session = sessionmaker(bind=some_engine)
 
 session = Session()
+
+
+def get_session(force=False):
+    if force:
+        session.close()
+
+
+    return session

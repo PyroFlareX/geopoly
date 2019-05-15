@@ -1,7 +1,7 @@
 import csv
 from collections import defaultdict
 
-from core.entities import Area, Prof
+from core.entities import Area
 
 
 def load_csv_as_dict(filename, mapping={}):
@@ -79,4 +79,12 @@ def getAreaEP(area: Area):
     return ep
 
 
-UNITS = list(Prof.toDict().keys())
+UNITS = list(units.keys())
+
+
+def prof2int(prof):
+    return units[prof]['type']
+
+def int2prof(u):
+    name = next(filter(lambda x: units[x]['type'] == u, units.keys()))
+    return name

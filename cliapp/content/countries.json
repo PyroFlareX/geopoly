@@ -1,0 +1,61 @@
+{
+  "AG": {"name": "Aragon"},
+  "ES": {"name": "Castille"},
+  "PT": {"name": "Portugal"},
+  "GR": {"name": "Granada", "title": "Sultan"},
+
+  "SC": {"name": "Scotland"},
+  "IE": {"name": "Ireland", "title": "Lord"},
+  "UK": {"name": "England"},
+
+  "FR": {"name": "France"},
+  "SV": {"name": "Savoy", "title": "Duke"},
+  "BU": {"name": "Burgundy"},
+  "LO": {"name": "Lotharingia"},
+
+  "PO": {"name": "Papal State", "title": "Pope"},
+  "NP": {"name": "Naples"},
+  "IF": {"name": "Firenze", "title": "republic", "noking": true},
+  "PP": {"name": "Provence", "title": "republic", "noking": true},
+  "GE": {"name": "Genova", "title": "republic", "noking": true},
+  "TU": {"name": "Tuscany", "title": "republic", "noking": true},
+  "MI": {"name": "Milano", "title": "Duke"},
+  "IT": {"name": "Independent Italian States", "noking": true},
+
+  "DE": {"name": "Holy Roman Empire", "title": "Emperor"},
+  "BB": {"name": "Brandenburg", "title": "Prince"},
+  "TT": {"name": "Teutonic Knights", "title": "Hochmeister"},
+
+  "LU": {"name": "Luxemburg", "title": "Duke"},
+  "NL": {"name": "Holland", "title": "republic", "noking": true},
+  "UT": {"name": "Utrecht", "title": "republic", "noking": true},
+  "FF": {"name": "Friesland"},
+
+  "DK": {"name": "Denmark"},
+  "NO": {"name": "Norway"},
+  "SE": {"name": "Sweden"},
+  "FI": {"name": "Finland", "title": "Duke", "noking": true},
+
+  "LT": {"name": "Lithuania", "title": "Duke"},
+  "PL": {"name": "Poland"},
+  "CZ": {"name": "Bohemia"},
+
+  "AT": {"name": "Austria"},
+  "HU": {"name": "Hungary"},
+  "RO": {"name": "Wallachia", "title": "Prince"},
+  "MD": {"name": "Moldavia", "title": "Prince"},
+  "BG": {"name": "Bulgaria", "title": "Emperor"},
+  "RS": {"name": "Serbia", "title": "Emperor"},
+
+  "TU": {"name": "Independent Turkic States", "noking": true},
+  "TR": {"name": "Ottoman", "title": "Sultan"},
+  "JY": {"name": "Jalayirids", "title": "Sultan"},
+  "BY": {"name": "Byzantium", "title": "Emperor"},
+  "GO": {"name": "Georgia"},
+
+  "RU": {"name": "Moscovy", "title": "Grand Duke"},
+  "NV": {"name": "Novgorod", "title": "Prince"},
+  "GD": {"name": "Golden Horde", "title": "Khan"},
+
+  "CY": {"name": "Cyprus"}
+}

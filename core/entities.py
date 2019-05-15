@@ -1,27 +1,13 @@
+import uuid
 from enum import Enum
 
 from eme.entities import EntityPatch
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, Boolean, SmallInteger, JSON
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 
 Base = declarative_base()
-
-
-Prof = EntityPatch({
-    "FOOT": 0,
-    "PIKE": 1,
-    "LIGHTCAV": 2,
-    "KNIGHT": 3,
-    "ARCHER": 4,
-    "CATA": 5,
-    "BARD": 6,
-    "BARBAR": 7,
-    "THUG": 8,
-    "STRONG": 9,
-    "HERO": 10,
-    "DEFENDER": 11,
-})
 
 
 Skins = {
@@ -45,7 +31,7 @@ Skins = {
 class User(Base):
     __tablename__ = 'users'
 
-    uid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+    uid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     created_at = Column(Integer, nullable=True)
 
     iso = Column(String(5))
@@ -75,7 +61,14 @@ class User(Base):
         }
 
 
-class World:
+class World(Base):
+    __tablename__ = 'worlds'
+
+    wid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    max_players = Column(SmallInteger)
+    turn_time = Column(SmallInteger)
+    turns = Column(SmallInteger)
 
     def __init__(self, **kwargs):
         super().__init__()
@@ -86,7 +79,7 @@ class World:
         self.turn_time = kwargs.get('turn_time')
         self.turns = kwargs.get('turns')
 
-        self.events = kwargs.get('events', [])
+        #self.events = kwargs.get('events', [])
 
     def toView(self):
         return {
@@ -102,16 +95,15 @@ class Area(Base):
     __tablename__ = 'areas'
 
     id = Column(String(8), primary_key=True)
+    wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
 
-    # todo: itt: instead put it into a json document store
-    # todo: player -> {areaId: castle_lvl}
-
-    wid = Column(postgresql.UUID(as_uuid=True))
     pid = Column(postgresql.UUID(as_uuid=True))
     iso = Column(String(5))
 
-    castle = Column(SmallInteger())
-    virgin = Column(SmallInteger())
+    castle = Column(SmallInteger)
+    virgin = Column(SmallInteger)
+    training = Column(SmallInteger)
+    train_left = Column(SmallInteger)
 
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
@@ -125,8 +117,23 @@ class Area(Base):
         # is area untouched (can be claimed)
         self.virgin = kwargs.get('virgin', 0)
 
-    def toView(self):
-        return self.__dict__
+        # type of unit in training
+        self.training = kwargs.get('training')
+        # turns left till new unit is trained
+        self.train_left = kwargs.get('train_left')
+
+    def toDict(self):
+        return {
+            "id": self.id,
+            "iso": self.iso,
+            "pid": self.pid,
+            "wid": self.wid,
+            "castle": self.castle,
+            "virgin": self.virgin,
+
+            "training": self.training,
+            "train_left": self.train_left,
+        }
 
 
 class Unit(Base):
@@ -137,13 +144,16 @@ class Unit(Base):
     pid = Column(postgresql.UUID(as_uuid=True))
     wid = Column(postgresql.UUID(as_uuid=True))
 
-    age = Column(Float)
     prof = Column(SmallInteger)
     skin = Column(SmallInteger)
-    xp = Column(SmallInteger)
 
+    age = Column(Float)
     name = Column(String(30))
     img_vector = Column(postgresql.JSON)
+
+    move_left = Column(SmallInteger)
+    health = Column(SmallInteger)
+    xp = Column(SmallInteger)
 
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
@@ -154,12 +164,14 @@ class Unit(Base):
 
         self.prof = kwargs.get('prof')
         self.skin = kwargs.get('skin')
-        self.xp = kwargs.get('xp')
-
-        self.age = kwargs.get('age')
 
         self.name = kwargs.get('name')
+        self.age = kwargs.get('age')
         self.img_vector = kwargs.get('img_vector')
+
+        self.move_left = kwargs.get('move_left')
+        self.health = kwargs.get('health')
+        self.xp = kwargs.get('xp')
 
     def toDict(self):
         # fixme dirty hack, return normal dict

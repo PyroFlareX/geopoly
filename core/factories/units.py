@@ -4,7 +4,7 @@ from random import choice
 import numpy as np
 from numpy.random.mtrand import normal
 
-from core.entities import Unit, Skins, Prof
+from core.entities import Unit, Skins
 
 from core import rules
 from core.factories.names import create_name
@@ -18,10 +18,13 @@ def create_unit(prof, iso, **kwargs):
 
     unit.age = int(normal(35, 6))
     unit.name = create_name(iso)
-    unit.prof = Prof.__dict__.get(prof)
+    unit.prof = rules.prof2int(prof) if isinstance(prof, str) else prof
     unit.skin = choice(Skins[prof])
     unit.img_vector = np.round(np.random.uniform(face_weights['lows'], face_weights['highs'])).tolist()
+
     unit.xp = 0
+    unit.health = 100
+    unit.move_left = rules.units[prof]['speed']
 
     return unit
 

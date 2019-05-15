@@ -1,6 +1,7 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from core.entities import User, Unit, Area
+from core.entities import User, Unit, Area, World
 
 
 class UserRepository():
@@ -26,6 +27,81 @@ class UserRepository():
         self.session.commit()
 
 
+
+class WorldRepository:
+    def __init__(self, db_session):
+        self.session: Session = db_session
+
+    def count(self):
+        return self.session.query(World).count()
+
+    def get(self, wid):
+        world: World = self.session.query(World).get(wid)
+
+        return world
+
+    def list_all(self):
+        worlds = self.session.query(World).all()
+
+        return worlds
+
+    def create(self, world: World):
+        self.session.add(world)
+        self.session.commit()
+
+    def save(self, world: World):
+        self.session.add(world)
+        self.session.commit()
+
+    def delete(self, world: World):
+        self.session.delete(world)
+        self.session.commit()
+
+
+class AreaRepository:
+    def __init__(self, db_session):
+        self.session: Session = db_session
+
+    def count(self):
+        return self.session.query(Area).count()
+
+    def get(self, aid, wid):
+        area: Area = self.session.query(Area).get([aid, wid])
+
+        return area
+
+    def list(self, area_ids, wid, as_dict=False):
+        areas = self.session.query(Area).filter(Area.wid == wid).filter(Area.id.in_(area_ids)).all()
+
+        if not as_dict:
+            return areas
+
+        return {area.id: area for area in areas}
+
+    def list_by_player(self, pid):
+        #area: Area = self.session.query(Area).filter(Area.pid == pid).all()
+        area: Area = self.session.query(Area).all()
+
+        return area
+
+    def create(self, area: Area):
+        self.session.add(area)
+        self.session.commit()
+
+    def save(self, area: Area):
+        self.session.add(area)
+        self.session.commit()
+
+    def save_all(self, areas):
+        for area in areas:
+            self.session.add(area)
+        self.session.commit()
+
+    def delete(self, area: Area):
+        self.session.delete(area)
+        self.session.commit()
+
+
 class UnitRepository:
 
     def __init__(self, db_session):
@@ -40,14 +116,6 @@ class UnitRepository:
         units = self.session.query(Unit).filter(Unit.pid == pid).all()
 
         return units
-
-    # def get_all(self, uid, raw=False):
-    #     decks = self.session.query(Unit).filter(Unit.uid == uid).all()
-    #
-    #     if raw:
-    #         return [deck.toView() for deck in decks]
-    #
-    #     return decks
 
     def create(self, unit: Unit):
         self.session.add(unit)
@@ -68,43 +136,4 @@ class UnitRepository:
 
     def delete_all(self):
         self.session.query(Unit).delete()
-        self.session.commit()
-
-class AreaRepository:
-
-    def __init__(self, db_session):
-        self.session: Session = db_session
-
-    def count(self):
-        return self.session.query(Area).count()
-
-    def get(self, did):
-        area: Area = self.session.query(Area).get(did)
-
-        return area
-
-    def list(self, area_ids, as_dict=False):
-        areas = self.session.query(Unit).filter(Area.id.in_(area_ids)).all()
-
-        if not as_dict:
-            return areas
-
-        return {area.id: area for area in areas}
-
-    def list_by_player(self, pid):
-        #area: Area = self.session.query(Area).filter(Area.pid == pid).all()
-        area: Area = self.session.query(Area).all()
-
-        return area
-
-    def delete(self, area: Area):
-        self.session.delete(area)
-        self.session.commit()
-
-    def create(self, area: Area):
-        self.session.add(area)
-        self.session.commit()
-
-    def save(self, area: Area):
-        self.session.add(area)
         self.session.commit()

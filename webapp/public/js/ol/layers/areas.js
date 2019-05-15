@@ -28,6 +28,8 @@ export const areaLayer = new ol.layer.Vector({
     let color = getColor(feature);
     let bg = getMapBlend(color, feature.get('iso'));
 
+    let castle = feature.get('castle');
+
     if (feature.get('hovered'))
       bg = getHighlight(color);
 
@@ -47,6 +49,22 @@ export const areaLayer = new ol.layer.Vector({
       //   color: 'rgba(255,255,255,0)'
       // }),
     }));
+
+    if (castle) {
+      if (!feature.get('cen')) {
+        console.error("Centroid not found for", feature.getId());
+        return;
+      }
+
+      styles.push(new ol.style.Style({
+        image: new ol.style.Icon(({
+          src: '/img/map/castle'+feature.get('castle')+'.png',
+          //imgSize: [32, 32],
+          scale: 0.4
+        })),
+        geometry: new ol.geom.Point(feature.get('cen'))
+      }));
+    }
 
     return styles;
   }

@@ -1,6 +1,7 @@
 import {areaSource} from '/js/ol/layers/areas.js';
 import {unitSource} from '/js/ol/layers/units.js';
 import {arrowSource} from '/js/ol/layers/arrows.js';
+import {find_path} from '/js/game/pathfinder.js';
 
 const move = {
   selected: null,
@@ -12,11 +13,6 @@ export function onSelectUnits(feature) {
   // called when area feature is clicked!
 
   if (!move.selected) {
-    // only select my area
-    if (match.me != feature.get('iso')) {
-      return;
-    }
-
     if (len(feature.get('units')) == 0) {
       onCancelSelection();
       return;
@@ -25,6 +21,11 @@ export function onSelectUnits(feature) {
     let units = feature.get('units');
 
     if (len(units) > 0) {
+      // only select my units
+      //if (match.me != units[0].get('iso')) {
+      //  return;
+      //}
+
       feature.set('selected', true);
       
       initHoverArrow(feature);
@@ -33,6 +34,8 @@ export function onSelectUnits(feature) {
 
       gui.frame.units = units;
       //gui.infobar('move', from, to);
+    } else {
+      // select area / castle
     }
   } else {
     let units = move.selected.get('units');
@@ -47,31 +50,42 @@ export function onSelectUnits(feature) {
       return;
     }
 
-    // todo: later check if path exists & find path
-    //if (move.selected.get('conn') && !move.selected.get('conn').includes(feature.getId()))
-    //  return;
+    // check if path exists & find path
+    let path = find_path(move.selected.getId(), feature.getId());
+    let coord_path = [];
 
-    // move to 
-    let cen = feature.get('cen');
+    for (let iso of path) {
+      let feature = areaSource.getFeatureById(iso);
+      coord_path.push(feature.get('cen'));
+    }
+
+    // move to next in path
+    let next = coord_path.shift();
     let now = (new Date()).getTime();
+    
+    let unit_ids = [];
 
     for (let unit of units) {
       toUnits.push(unit);
+      unit_ids.push(unit.getId());
 
       let c0 = unit.getGeometry().getCoordinates();
-
+      let c1 = posToCoord(next, unit.get('pos'));
       //let dist = [c1[0] - c0[0], c1[1] - c0[1]];
       //let S = Math.sqrt(dist[0]*dist[0] + dist[1]*dist[1]);
-      let c1 = posToCoord(cen, unit.get('pos'));
 
       unit.set('dir', dirToIndex(c0, c1));
       unit.set('move', c1);
       unit.set('move_0', c0);
       unit.set('move_t', now);
+      unit.set('path', coord_path.slice());
     }
 
-    // todo: find path there & call controller right away
+    // todo: call controller right away
+    //client.groups.Units.request_move(path, unit_ids);
+    client.groups.Areas.request_vision(feature);
     
+
     move.selected.set('units', []);
     onCancelSelection();
     gui.frame.units = toUnits;
@@ -138,7 +152,7 @@ export function addUnit(unit) {
   units.push(unitFeature);
 }
 
-export function dirToIndex(c0, c1) {
+function dirToIndex(c0, c1) {
   let angle = Math.RAD_PER_DEG * Math.atan2(c1[1] - c0[1], c1[0] - c0[0]);
   let i;
 
@@ -157,7 +171,7 @@ export function dirToIndex(c0, c1) {
 
 const D = 40000;
 
-export function posToCoord(refcoord, pos) {
+function posToCoord(refcoord, pos) {
   if (pos >= 9)
     pos = pos % 9;
 
@@ -181,6 +195,49 @@ export function posToCoord(refcoord, pos) {
     case 8: return [x+D, y+0]; break;
   }
 
+}
+
+const dt_per_area = 750;
+
+export function simulate_movement(unit, now) {
+  if (!now) var now = (new Date()).getTime();
+
+  let geom = unit.getGeometry();
+  let c1 = unit.get('move');
+  let c0 = unit.get('move_0');
+
+  // calculate move position
+  let dist = [c1[0] - c0[0], c1[1] - c0[1]];
+
+  let dt = now - unit.get('move_t');
+  // let S = Math.sqrt(dist[0]*dist[0] + dist[1]*dist[1]);
+
+  // todo: T per area move (not path)
+  let T = dt_per_area;
+  // let T = S/v;
+  let tp = dt/T;
+
+  if (tp >= 1.0) {
+    let c2 = unit.get('move');
+    geom.setCoordinates(c2);
+
+    if (len(unit.get('path')) > 0) {
+      let c3 = posToCoord(unit.get('path').shift(), unit.get('pos'));
+
+      unit.set('dir', dirToIndex(c2, c3));
+      unit.set('move', c3);
+      unit.set('move_0', c2);
+      unit.set('move_t', now);
+    } else {
+      unit.set('move_t', null);
+      unit.set('move', null);
+      unit.set('move_0', null);
+      unit.set('path', null);
+    }
+  } else {
+    // partial move
+    geom.setCoordinates([dist[0]*tp + c0[0], dist[1]*tp + c0[1]]);
+  }
 }
 
 

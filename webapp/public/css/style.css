@@ -163,6 +163,52 @@
     opacity: 0.3;
 }
 
+/* Shield flag */
+.shield {
+    /* r = 30px */
+    width: 90px;
+    height: 100px;
+    
+    background-size: 100px;
+    
+
+    border-bottom-left-radius: 45px 78px;
+    border-bottom-right-radius: 45px 78px;
+}
+.shield-md {
+    /* r = 10px */
+    width: 60px;
+    height: 72px;
+    
+    background-size: 72px;
+    
+    border-bottom-left-radius: 45px 78px;
+    border-bottom-right-radius: 45px 78px;
+}
+.shield-sm {
+    /* r = 10px */
+    width: 30px;
+    height: 36px;
+    
+    background-size: 36px;
+    
+    border-bottom-left-radius: 45px 78px;
+    border-bottom-right-radius: 45px 78px;
+}
+.shield-inline {
+    display: inline-block;
+}
+.shield-unclaimed {
+    opacity: 0.3;
+}
+.shield-box {
+  border: 2px solid black;
+  margin-top: 16px;
+  margin-left: 4px;
+}
+.pointer.shield-box:hover {
+    border-color: orange;
+}
 
 /* Recommend feature */
 #recommend-countries {

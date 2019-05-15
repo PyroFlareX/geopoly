@@ -9,7 +9,7 @@ import {AreasGroup} from '/js/game/groups/areas.js';
 import {GameGroup} from '/js/game/groups/game.js';
 import {MatchesGroup} from '/js/game/groups/matches.js';
 
-//import {init_test} from '/js/test.js';
+import {init_test} from '/js/test.js';
 
 
 export function init_app(debug, ws_address, uid, token) {
@@ -23,6 +23,7 @@ export function init_app(debug, ws_address, uid, token) {
   onload((ctx) => {
     console.info("Game loaded");
     init_game(ctx);
+    init_test();
   });
 
   if (debug) {

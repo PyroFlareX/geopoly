@@ -3,6 +3,7 @@ import {arrowSource} from '/js/ol/layers/arrows.js';
 import {unitSource} from '/js/ol/layers/units.js';
 import {addUnit} from '/js/ol/units.js';
 import {view} from '/js/ol/map.js';
+import {centroid,multipolyCoords} from '/js/ol/lib.js';
 import {getUnitComposition, getUnits, UNITS} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 
@@ -58,6 +59,13 @@ export function init_features(ctx) {
     if (!feature.get('units')) feature.set('units', []);
     if (!feature.get('virgin')) feature.set('virgin', true);
     if (!feature.get('castle')) feature.set('castle', 0);
+
+    if (!feature.get('cen')) {
+      let coords = multipolyCoords(feature.getGeometry());
+      let cen = centroid(coords[0][0]);
+
+      feature.set('cen', cen);
+    }
 
     areaSource.addFeature(feature);
   }

@@ -3,8 +3,8 @@ import uuid
 from flask import render_template, request
 
 from core.factories.units import create_team
-from core.instance import units, areas
-from core.services.areas import discover_areas, load_areas_raw
+from core.instance import units, areas, worlds
+from core.services.areas import load_areas_raw
 from serverapp.services import login
 from webapp.entities import ApiResponse
 
@@ -28,6 +28,7 @@ class ClientController():
         # Todo: dont fake player :(
         pid = '210845bf-8cc8-41b0-9049-583f0723e16a'
         iso = "HU"
+        world = worlds.list_all()[0]
 
         lunits = units.list_by_player(pid=pid)
 
@@ -38,7 +39,7 @@ class ClientController():
             vunits.append(unit.toView())
             area_ids.add(unit.aid)
 
-        geojson_areas = load_areas_raw(area_ids)
+        geojson_areas = load_areas_raw(area_ids, wid=world.wid, discover_fog=True)
 
         return ApiResponse({
             "iso": iso,

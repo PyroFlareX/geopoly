@@ -19,7 +19,8 @@ def generate_connections():
     with open('extra_conn.json') as fh:
         extra_conn = json.load(fh)
 
-    connectivity = extra_conn
+        connectivity = extra_conn['conn'] + extra_conn['conn_bridge']
+
     geoms = {}
     i = 0; L = len(areasGEOJSON['features']) **2; IC = round(L / 10)
 
