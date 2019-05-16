@@ -162,6 +162,9 @@
 .flag-unclaimed {
     opacity: 0.3;
 }
+.text-black {
+  color: black;
+}
 
 /* Shield flag */
 .shield {
@@ -246,11 +249,10 @@
 /* GUI frame */
 .units-bar {
   position: fixed;
-  height: 140px;
+  height: 100px;
   width: 100%;
-  bottom: 0px;
+  bottom: 10px;
   color: white;
-
 }
 .unit-box {
   border: 2px solid black;
@@ -272,7 +274,16 @@
 
   margin: 2px;
 }
-
+.garrison-box {
+    border: 1px solid black;
+    padding: 2px;
+    margin: 2px;
+    background: darkgrey;
+    text-align: center;
+}
+.garrison-box.pointer:hover {
+  border-color: orange;
+}
 /* GUI game frame Corners */
 .gui-corner-left {
     cursor: pointer;

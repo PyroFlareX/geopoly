@@ -2,8 +2,8 @@ import {areaSource} from '/js/ol/layers/areas.js';
 import {arrowSource} from '/js/ol/layers/arrows.js';
 import {unitSource} from '/js/ol/layers/units.js';
 import {addUnit} from '/js/ol/units.js';
+import {addArea} from '/js/ol/areas.js';
 import {view} from '/js/ol/map.js';
-import {centroid,multipolyCoords} from '/js/ol/lib.js';
 import {getUnitComposition, getUnits, UNITS} from '/js/game/lib.js';
 import {match} from '/js/game/store.js';
 
@@ -51,52 +51,19 @@ export function init_game(ctx) {
 
 export function init_features(ctx) {
   const format = new ol.format.GeoJSON();
+  const format2 = {'type': 'json'};
 
   // add areas:
   for (let area of ctx.areas) {
-    let feature = format.readFeature(area);
-
-    if (!feature.get('units')) feature.set('units', []);
-    if (!feature.get('virgin')) feature.set('virgin', true);
-    if (!feature.get('castle')) feature.set('castle', 0);
-
-    if (!feature.get('cen')) {
-      let coords = multipolyCoords(feature.getGeometry());
-      let cen = centroid(coords[0][0]);
-
-      feature.set('cen', cen);
-    }
-
-    areaSource.addFeature(feature);
+    addArea(area, format);
   }
 
   // Set up units
   for (let unit of ctx.units) {
-    addUnit(unit);
+    addUnit(unit, format2);
   }
 };
 
-
-
-/* jumpTo features  */
-
-let jump_i = 0;
-export function jumpToRandom(iso, animate) {
-  let areas = [];
-
-  for (let feature of areaSource.getFeatures()) {
-    if (feature.get('iso') == iso)
-      areas.push(feature);
-  }
-
-  if (++jump_i >= areas.length)
-    jump_i = 0;
-
-  let feature = areas[jump_i];
-  //0let feature = random.choice(areas);
-
-  return jumpTo(feature, animate);
-}
 
 export function jumpTo(coord, animate) {
   if (!Array.isArray(coord)) {

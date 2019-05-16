@@ -112,6 +112,19 @@ class UnitRepository:
 
         return deck
 
+    def list(self, unit_ids, wid, as_dict=False):
+        units = self.session.query(Unit).filter(Unit.wid == wid).filter(Unit.id.in_(unit_ids)).all()
+
+        if not as_dict:
+            return units
+
+        return {unit.id: unit for unit in units}
+
+    def list_by_area(self, area_id, wid):
+        units = self.session.query(Unit).filter(Unit.wid == wid).filter(Unit.aid == area_id).all()
+
+        return units
+
     def list_by_player(self, pid):
         units = self.session.query(Unit).filter(Unit.pid == pid).all()
 

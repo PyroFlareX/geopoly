@@ -1,7 +1,7 @@
 import {template} from "/js/vue/frame/gameframe.vue.js"
 import {match} from '/js/game/store.js';
 import {client} from '/js/game/client.js';
-import {jumpToRandom} from '/js/ol/gfx.js';
+import {openRandom} from '/js/ol/areas.js';
 import {getGameDate, getGameYear} from '/js/game/lib.js';
 import {get_img, status, onReady} from '/js/game/autogen.js';
 import {getColor, colors} from '/js/game/colors.js';
@@ -25,7 +25,7 @@ export let component = Vue.component('game-frame', {
       match: match,
       username: "",
 
-      units: null,
+      team: null,
 
       status: status,
       updates: 0,
@@ -34,7 +34,7 @@ export let component = Vue.component('game-frame', {
 
   methods: {
     onClickFlag: function(e) {
-      jumpToRandom(this.match.me, true);
+      openRandom();
     },
 
     onClickSeason: function(e) {

@@ -11,6 +11,7 @@ const move = {
 
 export function onSelectUnits(feature) {
   // called when area feature is clicked!
+  gui.infobar('close');
 
   if (!move.selected) {
     if (len(feature.get('units')) == 0) {
@@ -20,19 +21,21 @@ export function onSelectUnits(feature) {
 
     let units = feature.get('units');
 
+    // only select units that are in the team (garrison stay on their asses)
+    units = units.filter(unit => unit.get('role') == 'team');
+
     if (len(units) > 0) {
       // only select my units
       //if (match.me != units[0].get('iso')) {
       //  return;
       //}
-
       feature.set('selected', true);
       
       initHoverArrow(feature);
       move.selected = feature;
       move.units = units;
 
-      gui.frame.units = units;
+      gui.frame.team = units;
       //gui.infobar('move', from, to);
     } else {
       // select area / castle
@@ -40,12 +43,13 @@ export function onSelectUnits(feature) {
   } else {
     let units = move.selected.get('units');
     let toUnits = feature.get('units');
+    units = units.filter(unit => unit.get('role') == 'team');
 
     // check if we can move
     const N = len(toUnits) + len(units);
     const is_castle = feature.get('castle');
 
-    if ((N > 18 && is_castle) || N > 9) {
+    if (N > 9) {
       console.error("can't move there");
       return;
     }
@@ -67,7 +71,7 @@ export function onSelectUnits(feature) {
 
     for (let unit of units) {
       toUnits.push(unit);
-      unit_ids.push(unit.getId());
+      unit_ids.push(unit.get('id'));
 
       let c0 = unit.getGeometry().getCoordinates();
       let c1 = posToCoord(next, unit.get('pos'));
@@ -81,14 +85,13 @@ export function onSelectUnits(feature) {
       unit.set('path', coord_path.slice());
     }
 
-    // todo: call controller right away
-    //client.groups.Units.request_move(path, unit_ids);
+    client.groups.Units.request_move(path, unit_ids);
     client.groups.Areas.request_vision(feature);
     
 
     move.selected.set('units', []);
     onCancelSelection();
-    gui.frame.units = toUnits;
+    gui.frame.team = toUnits;
   }
 }
 
@@ -115,13 +118,12 @@ export function onHoverUnits(feature) {
 }
 
 export function onCancelSelection() {
+  gui.frame.team = null;
+  hideHoverArrow();
+
   if (move.selected) {
     move.selected = null;
     move.units = null;
-
-    gui.frame.units = null;
-
-    hideHoverArrow();
 
     return true;
   }
@@ -133,19 +135,23 @@ export function onCancelSelection() {
 export function addUnit(unit) {
   let feature = areaSource.getFeatureById(unit.aid);
   let units = feature.get('units');
+  let N = len(units);
+  let is_castle = feature.get('castle');
 
-  if (len(units) >= 9) {
+  if ((!is_castle && N >= 9) || (is_castle && N >= 18)) {
     console.error("Can't add more units to area");
     return;
   }
 
   let unitFeature = new ol.Feature(Object.assign(unit, {
-    geometry: new ol.geom.Point(posToCoord(feature.get('cen'), len(units))),
+    geometry: new ol.geom.Point(posToCoord(feature.get('cen'), N)),
 
     frame: 0,
     dir: 4,
-    pos: len(units),
+    pos: N,
     move: null,
+    // automatic role assignment, the player can change this in team infobar
+    role: is_castle && N > 8 ? 'garrison' : 'team',
   }));
 
   unitSource.addFeature(unitFeature);
@@ -261,7 +267,7 @@ function initHoverArrow(from) {
   let coords = geom.getCoordinates();
   let p = from.get('cen');
   hoverArrow.set('iso', from.get('iso'));
-  hoverArrow.set('units', len(from.get('units')));
+  hoverArrow.set('units', len(from.get('units').filter(unit => unit.get('role') == 'team')));
 
   geom.setCoordinates([p, p]);
 }

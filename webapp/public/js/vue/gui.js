@@ -24,7 +24,7 @@ export const gui = new Vue({
       child.open(...params);
       child.show = true;
       this.opened_comp = child;
-      this.opened = name;
+      this.opened = child.infobar_id;
 
       return child;
     },

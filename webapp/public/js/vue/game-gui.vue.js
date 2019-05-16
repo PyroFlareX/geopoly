@@ -3,9 +3,10 @@ import {component as unitInfobar} from '/js/vue/infobar/unit.js';
 import {component as trainingInfobar} from '/js/vue/infobar/training.js';
 import {component as buildingInfobar} from '/js/vue/infobar/building.js';
 import {component as teamInfobar} from '/js/vue/infobar/team.js';
+import {component as unitsInfobar} from '/js/vue/infobar/units.js';
+import {component as countryInfobar} from '/js/vue/infobar/country.js';
 
 import {component as settingsDialog} from '/js/vue/dialog/settings.js';
-import {component as joinmatchDialog} from '/js/vue/dialog/join-match.js';
 import {component as playersDialog} from '/js/vue/dialog/players.js';
 
 import {component as frame} from '/js/vue/frame/gameframe.js';
@@ -23,8 +24,10 @@ export const template = `
   <dialog-players ref="dialog-players"></dialog-players>
 
   <infobar-unit ref="infobar-unit"></infobar-unit>
+  <infobar-country ref="infobar-country"></infobar-country>
   <infobar-area ref="infobar-area"></infobar-area>
   <infobar-training ref="infobar-training"></infobar-training>
   <infobar-building ref="infobar-building"></infobar-building>
   <infobar-team ref="infobar-team"></infobar-team>
+  <infobar-units ref="infobar-units"></infobar-units>
 `;

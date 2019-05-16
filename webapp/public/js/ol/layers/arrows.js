@@ -20,7 +20,7 @@ export const arrowLayer = new ol.layer.Vector({
     let angle = Math.atan2(coords[1][1] - coords[0][1], coords[1][0] - coords[0][0]);
     let rotation = Math.PI / 2 - angle;
 
-    let units = feature.get('units') || 0;
+    let units = feature.get('units');
     let color = getColor(feature.get('iso'));
 
     let styles = [

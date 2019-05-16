@@ -2,7 +2,9 @@ import {load} from '/js/game/loader.js';
 import {getUnits} from '/js/game/lib.js';
 import {match, countries} from '/js/game/store.js';
 import {onSelectUnits, onHoverUnits, onCancelSelection, hideHoverArrow} from '/js/ol/units.js';
+import {openRandom} from '/js/ol/areas.js';
 import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
+
 
 /**
  * Area layer
@@ -23,12 +25,12 @@ export const areaLayer = new ol.layer.Vector({
     let styles = [];
 
     let selected = feature.get('selected');
+    let castle = feature.get('castle');
+    let units_team = feature.get('units').filter(unit => unit.get('role') == 'team');
 
     // todo: account for multiply colorscheme!
     let color = getColor(feature);
     let bg = getMapBlend(color, feature.get('iso'));
-
-    let castle = feature.get('castle');
 
     if (feature.get('hovered'))
       bg = getHighlight(color);
@@ -134,20 +136,43 @@ areaLayer.keypress = (feature, key) => {
   }
   else if (key == 'SPACE' || key == ' ') {
     // jump to random area
-    jumpToRandom(match.me, false);
+    openRandom();
   }
   else {
     let infobar;
     switch(key) {
-      case 'Q': infobar = 'area'; break;
-      case 'W': infobar = 'training'; break;
-      case 'E': infobar = 'team'; break;
-      case 'R': infobar = 'building'; break;
+      case 'Q':
+        infobar = 'area';
+      break;
+      case 'W':
+        infobar = 'training';
+
+        if (!feature.get('castle')) 
+          infobar = 'close';
+        // todo: if not mine
+      break;
+      case 'E':
+        infobar = 'team';
+
+        if (!feature.get('castle')) 
+          infobar = 'units';
+
+        // todo: if not mine, disable input in team window 
+      break;
+      case 'R':
+        infobar = 'building';
+
+      break;
     }
 
-    if (gui.opened && gui.opened == infobar) {
+    if (gui.opened && gui.opened == infobar+'_'+feature.get('id')) {
       gui.infobar('close');
     } else {
+      // if (key != 'Q' && match.me != ) {
+        
+      // }
+      onCancelSelection();
+      
       gui.infobar(infobar, feature);
     }
   }

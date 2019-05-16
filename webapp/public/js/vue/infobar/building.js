@@ -17,5 +17,9 @@ export let component = Vue.component('infobar-building', {
 
       this.area = area;
     },
+
+    infobar_id: function() {
+      return 'building_' + this.area.id;
+    }
   },
 });

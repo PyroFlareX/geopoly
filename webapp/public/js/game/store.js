@@ -25,12 +25,14 @@ export let countries = {};
 fetch('/json/countries.json', {cache: 'force-cache'}).then((resp) => {
   return resp.json();
 }).then((resp) => {
-  countries = resp;
+  for (let [k, country] of Object.items(resp)) {
+    countries[k] = country;
+  }
 });
 
 
 export let units = {};
-fetch('/client/units', {cache: 'force-cache'}).then((resp) => {
+fetch('/units/config', {cache: 'force-cache'}).then((resp) => {
   return resp.json();
 }).then((resp) => {
 
@@ -40,7 +42,6 @@ fetch('/client/units', {cache: 'force-cache'}).then((resp) => {
     units[k] = unit;
   }
 });
-
 
 const professions = {
   10: 'Player avatar',
@@ -58,49 +59,53 @@ const professions = {
 };
 
 export const match = {
+  wid: null,
+  pid: null,
+
+  // my iso @todo: rename
   me: null,
+
+  players: {},
+
   spectator: false,
   can_join: false,
 
-  mid: null,
-  max_players: null,
-  max_rounds: null,
-  map: null,
+  // max_players: null,
+  // max_rounds: null,
+  // map: null,
 
-  current: null,
-  turns: 0,
-  rounds: 0,
-  isos: [],
+  // current: null,
+  // turns: 0,
+  // rounds: 0,
+  // isos: [],
 };
 
-export const decks = [];
+// export function set_turn(turn0) {
+//   let new_round = turn0.rounds != match.rounds;
 
-export function set_turn(turn0) {
-  let new_round = turn0.rounds != match.rounds;
+//   match.current = turn0.current;
+//   match.rounds = turn0.rounds;
+//   match.turns = turn0.turns;
 
-  match.current = turn0.current;
-  match.rounds = turn0.rounds;
-  match.turns = turn0.turns;
+//   if (turn0.isos)
+//     match.isos = turn0.isos;  
 
-  if (turn0.isos)
-    match.isos = turn0.isos;  
-
-  return new_round;
-}
+//   return new_round;
+// }
 
 
-export const EVENT = {
-  NONE: 0,
+// export const EVENT = {
+//   NONE: 0,
 
-  MOVE: 1,
-  CONQUER: 2,
-  BATTLE: 3,
-  ANNIHILATE: 4,
-  ENCIRCLE: 5,
+//   MOVE: 1,
+//   CONQUER: 2,
+//   BATTLE: 3,
+//   ANNIHILATE: 4,
+//   ENCIRCLE: 5,
 
-  RECRUIT: 10,
-  SHIPBUILD: 11,
+//   RECRUIT: 10,
+//   SHIPBUILD: 11,
 
-  CLAIM: 12,
+//   CLAIM: 12,
 
-};
+// };

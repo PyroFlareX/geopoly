@@ -195,108 +195,126 @@
  * Generated content below - do not modify
  **/
 
-.ra-castle-1:before {
+.ra-action-garrison:before {
   content: "\e900";
 }
-.ra-castle-2:before {
+.ra-action-team:before {
   content: "\e901";
 }
-.ra-castle-3:before {
+.ra-castle-1:before {
   content: "\e902";
 }
-.ra-castle-4:before {
+.ra-castle-2:before {
   content: "\e903";
 }
-.ra-head-admin:before {
+.ra-castle-3:before {
   content: "\e904";
 }
-.ra-head-duke:before {
+.ra-castle-4:before {
   content: "\e905";
 }
-.ra-head-emperor:before {
+.ra-head-admin:before {
   content: "\e906";
 }
-.ra-head-emperor2:before {
+.ra-head-duke:before {
   content: "\e907";
 }
-.ra-head-hochmeister:before {
+.ra-head-emperor:before {
   content: "\e908";
 }
-.ra-head-khan:before {
+.ra-head-emperor2:before {
   content: "\e909";
 }
-.ra-head-king:before {
+.ra-head-hochmeister:before {
   content: "\e90a";
 }
-.ra-head-lord:before {
+.ra-head-khan:before {
   content: "\e90b";
 }
-.ra-head-pope:before {
+.ra-head-king:before {
   content: "\e90c";
 }
-.ra-head-prince:before {
+.ra-head-lord:before {
   content: "\e90d";
 }
-.ra-head-sultan:before {
+.ra-head-pope:before {
   content: "\e90e";
 }
-.ra-icon-chat:before {
+.ra-head-prince:before {
   content: "\e90f";
 }
-.ra-icon-conquer:before {
+.ra-head-sultan:before {
   content: "\e910";
 }
-.ra-icon-health:before {
+.ra-icon-arrow-left:before {
   content: "\e911";
 }
-.ra-icon-info:before {
+.ra-icon-arrow-right:before {
   content: "\e912";
 }
-.ra-icon-mute:before {
+.ra-icon-chat:before {
   content: "\e913";
 }
-.ra-icon-player:before {
+.ra-icon-conquer:before {
   content: "\e914";
 }
-.ra-icon-settings:before {
+.ra-icon-health:before {
   content: "\e915";
 }
-.ra-icon-unmute:before {
+.ra-icon-info:before {
   content: "\e916";
 }
-.ra-unit-archer:before {
+.ra-icon-king:before {
   content: "\e917";
 }
-.ra-unit-barbar:before {
+.ra-icon-mute:before {
   content: "\e918";
 }
-.ra-unit-bard:before {
+.ra-icon-none:before {
   content: "\e919";
 }
-.ra-unit-cata:before {
+.ra-icon-player:before {
   content: "\e91a";
 }
-.ra-unit-defender:before {
+.ra-icon-settings:before {
   content: "\e91b";
 }
-.ra-unit-foot:before {
+.ra-icon-unmute:before {
   content: "\e91c";
 }
-.ra-unit-hero:before {
+.ra-unit-archer:before {
   content: "\e91d";
 }
-.ra-unit-knight:before {
+.ra-unit-barbar:before {
   content: "\e91e";
 }
-.ra-unit-lightcav:before {
+.ra-unit-bard:before {
   content: "\e91f";
 }
-.ra-unit-pike:before {
+.ra-unit-cata:before {
   content: "\e920";
 }
-.ra-unit-strong:before {
+.ra-unit-defender:before {
   content: "\e921";
 }
-.ra-unit-thug:before {
+.ra-unit-foot:before {
   content: "\e922";
+}
+.ra-unit-hero:before {
+  content: "\e923";
+}
+.ra-unit-knight:before {
+  content: "\e924";
+}
+.ra-unit-lightcav:before {
+  content: "\e925";
+}
+.ra-unit-pike:before {
+  content: "\e926";
+}
+.ra-unit-strong:before {
+  content: "\e927";
+}
+.ra-unit-thug:before {
+  content: "\e928";
 }

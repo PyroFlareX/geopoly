@@ -27,7 +27,7 @@ export const template = `
             </p>
             
             <button class="btn btn-link" @click="open_infobar('training', area)">Training</button><br/>
-            <button class="btn btn-link" @click="open_infobar('teams', area)">Armies</button><br/>
+            <button class="btn btn-link" @click="open_infobar('team', area)">Armies</button><br/>
             <button class="btn btn-link" @click="open_infobar('building', area)">Upgrade</button>
           </div>
           <div v-else>

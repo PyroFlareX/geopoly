@@ -2,11 +2,8 @@ import uuid
 
 from flask import render_template, request
 
-from core import rules
-from core.factories.units import create_team
 from core.instance import units, areas, worlds
 from core.services.areas import load_areas_raw
-from serverapp.services import login
 from webapp.entities import ApiResponse
 
 
@@ -14,7 +11,6 @@ class ClientController():
     def __init__(self, server):
         self.server = server
         self.group = "Client"
-
 
     def index(self):
         #ws_address = self.server.conf['websocket']['address']
@@ -47,6 +43,3 @@ class ClientController():
             "units": vunits,
             "areas": geojson_areas,
         })
-
-    def get_units(self):
-        return ApiResponse(rules.units)

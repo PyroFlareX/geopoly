@@ -1,6 +1,7 @@
 import {onload} from '/js/game/loader.js';
 import {img_dim, sprites} from '/js/ol/sprites.js';
 import {simulate_movement} from '/js/ol/units.js';
+import {getFlag, img_dim as flag_dim} from '/js/game/colors.js';
 
 export const unitSource = new ol.source.Vector();
 
@@ -11,6 +12,7 @@ export const unitLayer = new ol.layer.Vector({
     let dir = feature.get('dir');
     let frame = feature.get('frame');
     let i = feature.get('skin');
+    let pos = feature.get('pos');
 
     let styles = [];
 
@@ -24,6 +26,22 @@ export const unitLayer = new ol.layer.Vector({
         scale: unit_scale
       }))
     }));
+
+
+    // if (pos == 0) {
+    //   let iso = feature.get('iso');
+    //   let img = getFlag(iso);
+
+    //   if (img)
+    //     styles.push(new ol.style.Style({
+    //       image: new ol.style.Icon(({
+    //         img: img,
+    //         imgSize: [flag_dim.w, flag_dim.h],
+    //         scale: 0.05
+    //       })),
+    //       //geometry: new ol.geom.Point(feature.get('cen'))
+    //     }));
+    // }
 
     return styles;
   }

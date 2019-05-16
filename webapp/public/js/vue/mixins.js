@@ -1,10 +1,7 @@
-import {getColor} from '/js/game/colors.js';
+import {getColor, has_texture} from '/js/game/colors.js';
 import {UNITS} from '/js/game/lib.js';
 import {units} from "/js/game/store.js";
 
-const has_texture = new Set([
-  "AG","ES","PT","GR","SC","IE","UK","FR","SV","BU","LO","PO","NP","IF","PP","GE","TU","MI","IT","DE","BB","TT","LU","NL","UT","FF","DK","NO","SE","FI","LT","PL","CZ","AT","HU","RO","MD","BG","RS","TU","TR","JY","BY","GO","RU","NV","GD","CY"
-]);
 
 Vue.mixin({
   

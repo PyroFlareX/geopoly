@@ -44,5 +44,10 @@ export let component = Vue.component('infobar-unit', {
 
       return get_img(weights, color, bgcolor);
     },
+
+
+    infobar_id: function() {
+      return 'unit_' + this.unit.id;
+    }
   }
 });

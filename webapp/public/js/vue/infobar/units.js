@@ -1,6 +1,6 @@
-import {template} from "/js/vue/infobar/area.vue.js"
+import {template} from "/js/vue/infobar/units.vue.js"
 
-export let component = Vue.component('infobar-area', {
+export let component = Vue.component('infobar-units', {
   template: template,
 
   data: function() {

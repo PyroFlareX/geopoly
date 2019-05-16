@@ -22,14 +22,17 @@ export let component = Vue.component('infobar-training', {
       this.area.training = unit.type;
       this.area.train_left = unit.train_turns;
 
-      console.log("TODO: send rq")
+      client.groups.Areas.request_training(this.area.id, this.area.training);
     },
 
     onClearTraining: function() {
       this.area.training = null;
 
-      console.log("TODO: send rq")
+      client.groups.Areas.request_training(this.area.id, this.area.training);
     },
 
+    infobar_id: function() {
+      return 'training_' + this.area.id;
+    }
   },
 });

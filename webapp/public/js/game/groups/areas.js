@@ -36,4 +36,18 @@ export class AreasGroup {
       }
     });
   }
+
+  request_training(area_id, prof) {
+    let formData = new FormData();
+    formData.append('prof', prof);
+
+    fetch('/areas/training/'+area_id, {
+      method: "POST",
+      body: formData
+    })
+    .then((resp) => { return resp.json() })
+    .then(function() {
+      // ok
+    });
+  }
 }

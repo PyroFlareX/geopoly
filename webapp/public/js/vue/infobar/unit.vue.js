@@ -16,6 +16,7 @@ export const template = `
           <ul>
             <li><i :class="'ra ra-unit-' + units[unit.prof].name.lower()"></i> {{ units[unit.prof].dispname }}</li>
             <li>XP: {{ unit.xp }}</li>
+            <li>Assignment: {{ unit.role.title() }}</li>
             <li>Aged {{ unit.age }}</li>
             <li>Born in ?, <div class="shield shield-inline shield-xs shield-box" :style="herald(unit)"></div> {{country.name}}
             </li>

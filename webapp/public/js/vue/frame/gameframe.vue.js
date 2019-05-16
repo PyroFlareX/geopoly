@@ -43,10 +43,14 @@ export const template = `
     </div>
 
 
-    <div class="units-bar" v-if="units">
+    <div class="units-bar" v-if="team">
       <div class="d-flex flex-row">
-        <div @click="open_infobar('unit', unit)" class="pointer unit-box text-center p-2" :style="unit_background(unit)" v-for="unit in units" >
+        <div @click="open_infobar('unit', unit)" class="pointer unit-box text-center p-2" :style="unit_background(unit)" v-for="unit in team" >
+
+
           <img class="img-fluid" :src="src_unit(unit)" style="min-height:75px" />
+
+          <i :class="'ra ra-lg ra-unit-' + units[unit.get('prof')].name.lower()" style="position: absolute; top: 70px"></i>
         </div>
       </div>      
     </div>

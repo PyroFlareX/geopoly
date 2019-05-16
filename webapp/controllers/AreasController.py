@@ -1,3 +1,5 @@
+from flask import request
+
 from core.instance import worlds
 from core.services import areas
 from core.services.areas import load_areas_raw
@@ -11,6 +13,7 @@ class AreasController():
 
         self.server.addUrlRule({
             'GET /areas/radius/<area_id>': 'areas/load',
+            'POST /areas/training/<area_id>': 'areas/training',
         })
 
     def get_load(self, area_id):
@@ -21,4 +24,15 @@ class AreasController():
 
         return ApiResponse({
             "areas": geojson_areas,
+        })
+
+    def post_training(self, area_id):
+        prof = request.form['prof']
+
+        # todo: get wid from user
+        wid = worlds.list_all()[0].wid
+
+        areas.set_training(area_id, wid, prof)
+
+        return ApiResponse({
         })

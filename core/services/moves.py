@@ -3,52 +3,73 @@ from collections import defaultdict
 from random import choice
 
 #from core.entities import Area, Match
-from core.instance import areas
+from core.instance import areas, units
 from core.rules import getUnits, getMilPop
+from core.services.areas import is_path_connected
 
 
+def bulk_move_to(unit_ids, wid, path, pid):
+    # validate path
+    if not is_path_connected(path):
+        return False
 
+    lunits = units.list(unit_ids, wid)
+    iso = lunits[0].iso
+    from_id = path[0]
+    to_id = path[-1]
 
-def is_connected(id1: str, id2: str):
+    area = areas.get(to_id, wid)
+    nunits = units.list_by_area(area.id, wid)
+    is_castle = area.castle > 0
+    is_conquer = False
+    was_conquered = False
 
-    if id1 not in conn_graph:
-        # todo: temporal code, remove late
-        print("ERR, {} not in conn_graph".format(id1))
+    # check if this is a friendly or enemy move
+    if not is_conquer:
+        for nunit in units:
+            if nunit.iso != iso or nunit.pid != pid:
+                # we can't merge with friendly units
+                return False
 
-        return True
+        # check if area is not occupied
+        total_len = len(nunits) + len(lunits)
+        if (is_castle and total_len > 18) or (not is_castle and total_len > 9):
+            return False
+    else:
+        if len(nunits) > 0:
+            # this is a battle.
+            print("TODO: battle")
+            # todo: later: battle
+            return False
 
-    return id2 in conn_graph[id1]
+        if len(nunits) == 0:
+            # conquer empty area
+            area.iso = iso
+            area.pid = pid
 
+            was_conquered = True
 
-def get_neighbors(id1: str):
-    return conn_graph[id1]
+    path_len = len(path)
 
+    for unit in lunits:
+        # validate move
+        if unit.aid != from_id or unit.iso != iso or unit.pid != pid or unit.wid != wid:
+            # naughtly little player trying to manipulate someone else's units
+            return False
 
+        if unit.move_left < path_len:
+            # this unit can't move anymore
+            return False
 
-def is_guarded(area_to: Area):
-    return None
+        # set unit move
+        unit.aid = to_id
+        unit.move_left -= path_len
 
+    # finalize movement:
+    units.save_all(lunits)
 
-def reset_map(match: Match, save=True):
-    lareas = []
+    if is_conquer and was_conquered:
+        # area has been captured, so save it
+        areas.save(area)
 
-    for area in areas.get_all_with_units(match.mid):
-        area.move_left = getMilPop(area)
-
-        lareas.append(area)
-
-    if save:
-        areas.save_all(lareas)
-
-def reset_areas(areas):
-    for area in areas:
-        area.move_left = getMilPop(area)
-
-
-def normalize_patch(area: Area, patch: dict):
-    new_patch = patch.copy()
-
-    for u, unit, num in getUnits(area):
-        new_patch[u] = min(patch[u], num)
-
-    return new_patch
+    return True

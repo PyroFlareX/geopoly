@@ -23,6 +23,10 @@ export let component = Vue.component('infobar-area', {
   computed: {
     country: function() {
       return countries[this.area.iso];
+    },
+
+    infobar_id: function() {
+      return 'area_' + this.area.id;
     }
   }
 });

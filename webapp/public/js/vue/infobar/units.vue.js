@@ -1,5 +1,5 @@
 export const template = `
-  <div v-if="show" class="infobar">
+  <div v-if="show" class="infobar infobar-lg">
     <div class="infobar-header" :style="area_background(area)">
       <div class="shield shield-inline shield-xs shield-box" :style="herald(area)"></div>
 
@@ -10,7 +10,8 @@ export const template = `
       </button>
     </div>
     <div class="infobar-content p-2" :area-id="area.id">
-      Build view
+      <h3>TODO Units: </h3>
+
     </div>
   </div>
 `;

@@ -21,7 +21,7 @@ export const template = `
                 <i :class="'ra ra-4x ra-unit-' + units[area.training].name.lower()"></i>
               </div>
 
-              <p class="card-text"><b>{{ units[area.training].dispname }}</b><br/>
+              <p class="card-text small"><b>{{ units[area.training].dispname }}</b><br/>
                 <span>({{area.train_left}} {{area.train_left>1?'turns':'turn'}} left)</span>
               </p>
             </div>

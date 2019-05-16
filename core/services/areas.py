@@ -3,6 +3,7 @@ import json
 from queue import Queue
 from collections import defaultdict
 
+from core import rules
 from core.entities import Area
 from core.instance import areas
 
@@ -152,3 +153,44 @@ def load_areas(area_ids, wid, discover_fog=False):
         lareas.append(area)
 
     return lareas
+
+
+def set_training(area_id, wid, prof):
+    area = areas.get(area_id, wid)
+
+    if prof is not None:
+        area.train_left = rules.units[prof]['train_turns']
+        area.training = prof
+    else:
+        area.train_left = None
+        area.training = None
+
+    return area
+
+
+def is_connected(id1: str, id2: str):
+
+    if id1 not in conn_graph:
+        # todo: temporal code, remove late
+        print("ERR, {} not in conn_graph".format(id1))
+
+        return True
+
+    return id2 in conn_graph[id1]
+
+
+def is_path_connected(path):
+    idnow = path[0]
+
+    for id1 in path[1:]:
+        if id1 not in conn_graph[idnow]:
+            return False
+        idnow = id1
+
+    return True
+
+
+def get_neighbors(id1: str):
+    return conn_graph[id1]
+
+

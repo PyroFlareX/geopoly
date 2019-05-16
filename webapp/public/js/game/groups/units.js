@@ -5,13 +5,17 @@ export class UnitsGroup {
   }
 
   request_move(move_path, unit_ids) {
-    console.log('MOVE', move_path, unit_ids)    
-    // this.client.request('Areas:move', {
-    //   from_id: fromId, 
-    //   to_id: toId,
-    //   patch: patch
-    // }).then(function() {
-      
-    // });
+    let formData = new FormData();
+    formData.append('path', JSON.stringify(move_path));
+    formData.append('units', JSON.stringify(unit_ids));
+
+    fetch('/units/move', {
+      method: "PATCH",
+      body: formData
+    })
+    .then((resp) => { return resp.json() })
+    .then(function() {
+      // ok
+    });
   }
 }
