@@ -18,7 +18,7 @@ def create_unit(prof, iso, **kwargs):
 
     unit.age = int(normal(35, 6))
     unit.name = create_name(iso)
-    unit.prof = rules.prof2int(prof) if isinstance(prof, str) else prof
+    unit.prof = prof#rules.prof2int(prof) if isinstance(prof, str) else prof
     unit.skin = choice(Skins[prof])
     unit.img_vector = np.round(np.random.uniform(face_weights['lows'], face_weights['highs'])).tolist()
     unit.iso = iso

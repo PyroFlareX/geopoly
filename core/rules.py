@@ -11,13 +11,15 @@ def load_csv_as_dict(filename, mapping={}):
         spamreader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
 
         for row in spamreader:
-            items[row['name']] = {k:(mapping[k](v) if v else None) for k,v in row.items() if k != 'name'}
+            items[row['type']] = {k:(mapping[k](v) if v else None) for k,v in row.items()}
 
     return items
 
 
 mapping = defaultdict(lambda : int)
 mapping.update({
+    'id': str,
+    'prof': str,
     'name': str,
     'cost': float,
     'attr_name': str,

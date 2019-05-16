@@ -194,87 +194,109 @@
 /**
  * Generated content below - do not modify
  **/
- 
-.ra-class-artillery:before {
+
+.ra-castle-1:before {
   content: "\e900";
 }
-.ra-class-cavalry:before {
+.ra-castle-2:before {
   content: "\e901";
 }
-.ra-class-infantry:before {
+.ra-castle-3:before {
   content: "\e902";
 }
-.ra-helm-cavalry:before {
+.ra-castle-4:before {
   content: "\e903";
 }
-.ra-helm-pickelhaube:before {
+.ra-head-admin:before {
   content: "\e904";
 }
-.ra-icon-binoculars:before {
+.ra-head-duke:before {
   content: "\e905";
 }
-.ra-icon-chat:before {
+.ra-head-emperor:before {
   content: "\e906";
 }
-.ra-icon-conquer:before {
+.ra-head-emperor2:before {
   content: "\e907";
 }
-.ra-icon-exit:before {
+.ra-head-hochmeister:before {
   content: "\e908";
 }
-.ra-icon-info:before {
+.ra-head-khan:before {
   content: "\e909";
 }
-.ra-icon-move:before {
+.ra-head-king:before {
   content: "\e90a";
 }
-.ra-icon-mute:before {
+.ra-head-lord:before {
   content: "\e90b";
 }
-.ra-icon-player:before {
+.ra-head-pope:before {
   content: "\e90c";
 }
-.ra-icon-settings:before {
+.ra-head-prince:before {
   content: "\e90d";
 }
-.ra-icon-unmute:before {
+.ra-head-sultan:before {
   content: "\e90e";
 }
-.ra-unit-art_heavy:before {
+.ra-icon-chat:before {
   content: "\e90f";
 }
-.ra-unit-art_light:before {
+.ra-icon-conquer:before {
   content: "\e910";
 }
-.ra-unit-art_mortar:before {
+.ra-icon-health:before {
   content: "\e911";
 }
-.ra-unit-cav_dragoon:before {
+.ra-icon-info:before {
   content: "\e912";
-  color: #4a4a4a;
 }
-.ra-unit-cav_heavy:before {
+.ra-icon-mute:before {
   content: "\e913";
-  color: #4a4a4a;
 }
-.ra-unit-cav_hussar:before {
+.ra-icon-player:before {
   content: "\e914";
-  color: #4e2a0b;
 }
-.ra-unit-cav_lancer:before {
+.ra-icon-settings:before {
   content: "\e915";
 }
-.ra-unit-inf_heavy:before {
+.ra-icon-unmute:before {
   content: "\e916";
-  color: #3c6312;
 }
-.ra-unit-inf_home:before {
+.ra-unit-archer:before {
   content: "\e917";
 }
-.ra-unit-inf_light:before {
+.ra-unit-barbar:before {
   content: "\e918";
-  color: #4e2a0b;
 }
-.ra-unit-inf_skirmish:before {
+.ra-unit-bard:before {
   content: "\e919";
+}
+.ra-unit-cata:before {
+  content: "\e91a";
+}
+.ra-unit-defender:before {
+  content: "\e91b";
+}
+.ra-unit-foot:before {
+  content: "\e91c";
+}
+.ra-unit-hero:before {
+  content: "\e91d";
+}
+.ra-unit-knight:before {
+  content: "\e91e";
+}
+.ra-unit-lightcav:before {
+  content: "\e91f";
+}
+.ra-unit-pike:before {
+  content: "\e920";
+}
+.ra-unit-strong:before {
+  content: "\e921";
+}
+.ra-unit-thug:before {
+  content: "\e922";
 }

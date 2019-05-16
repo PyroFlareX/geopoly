@@ -2,6 +2,7 @@ import uuid
 
 from flask import render_template, request
 
+from core import rules
 from core.factories.units import create_team
 from core.instance import units, areas, worlds
 from core.services.areas import load_areas_raw
@@ -48,13 +49,4 @@ class ClientController():
         })
 
     def get_units(self):
-        uid = uuid.uuid4()
-        wid = uuid.uuid4()
-        iso = 'HU'
-        aid = 'AT1'
-
-        lunits = create_team(wid=wid, uid=uid, iso=iso, aid=aid)
-
-        return ApiResponse({
-            'units': [unit.toDict() for unit in lunits]
-        })
+        return ApiResponse(rules.units)

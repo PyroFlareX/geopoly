@@ -35,7 +35,7 @@
 }
 .infobar.infobar-lg {
     max-width: 60%;
-    min-width: 600px;
+    min-width: 400px;
     min-height: 230px;    
 }
 .infobar.infobar-xl {
@@ -264,6 +264,13 @@
 }
 .image-box {
   border: 1px solid black;
+}
+.train-box {
+  border: 1px solid black;
+  border-radius: 4px;
+  background: white;
+
+  margin: 2px;
 }
 
 /* GUI game frame Corners */

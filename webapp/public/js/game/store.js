@@ -28,7 +28,21 @@ fetch('/json/countries.json', {cache: 'force-cache'}).then((resp) => {
   countries = resp;
 });
 
-export const professions = {
+
+export let units = {};
+fetch('/client/units', {cache: 'force-cache'}).then((resp) => {
+  return resp.json();
+}).then((resp) => {
+
+  for (let [k, unit] of Object.items(resp)) {
+    unit.dispname = professions[k];
+
+    units[k] = unit;
+  }
+});
+
+
+const professions = {
   10: 'Player avatar',
   6: 'Bard',
   0: 'Footman',

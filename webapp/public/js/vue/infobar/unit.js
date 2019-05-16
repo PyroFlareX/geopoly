@@ -1,7 +1,7 @@
 import {template} from "/js/vue/infobar/unit.vue.js"
 import {get_img, status, onReady} from '/js/game/autogen.js';
 import {getColor, colors} from '/js/game/colors.js';
-import {countries, professions} from "/js/game/store.js";
+import {countries} from "/js/game/store.js";
 
 
 export let component = Vue.component('infobar-unit', {
@@ -28,10 +28,6 @@ export let component = Vue.component('infobar-unit', {
   computed: {
     country: function() {
       return countries[this.unit.iso];
-    },
-
-    prof_name: function() {
-      return professions[this.unit.prof];
     },
 
     src_unit: function() {

@@ -14,11 +14,11 @@ export const template = `
       <div class="d-flex">
         <div class="p-2 flex-fill">
           <ul>
+            <li><i :class="'ra ra-unit-' + units[unit.prof].name.lower()"></i> {{ units[unit.prof].dispname }}</li>
+            <li>XP: {{ unit.xp }}</li>
             <li>Aged {{ unit.age }}</li>
             <li>Born in ?, <div class="shield shield-inline shield-xs shield-box" :style="herald(unit)"></div> {{country.name}}
             </li>
-            <li>{{ prof_name }}</li>
-            <li>XP: {{ unit.xp }}</li>
           </ul>
 
           <p>Can travel {{ unit.move_left }} areas this turn.</p>

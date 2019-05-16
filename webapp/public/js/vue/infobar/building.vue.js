@@ -10,7 +10,7 @@ export const template = `
       </button>
     </div>
     <div class="infobar-content p-2" :area-id="area.id">
-      yo
+      Build view
     </div>
   </div>
 `;

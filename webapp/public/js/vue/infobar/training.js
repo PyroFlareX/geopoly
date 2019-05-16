@@ -17,5 +17,19 @@ export let component = Vue.component('infobar-training', {
 
       this.area = area;
     },
+
+    onSetTraining: function(unit) {
+      this.area.training = unit.type;
+      this.area.train_left = unit.train_turns;
+
+      console.log("TODO: send rq")
+    },
+
+    onClearTraining: function() {
+      this.area.training = null;
+
+      console.log("TODO: send rq")
+    },
+
   },
 });

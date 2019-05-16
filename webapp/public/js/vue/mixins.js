@@ -1,5 +1,6 @@
 import {getColor} from '/js/game/colors.js';
 import {UNITS} from '/js/game/lib.js';
+import {units} from "/js/game/store.js";
 
 const has_texture = new Set([
   "AG","ES","PT","GR","SC","IE","UK","FR","SV","BU","LO","PO","NP","IF","PP","GE","TU","MI","IT","DE","BB","TT","LU","NL","UT","FF","DK","NO","SE","FI","LT","PL","CZ","AT","HU","RO","MD","BG","RS","TU","TR","JY","BY","GO","RU","NV","GD","CY"
@@ -9,10 +10,11 @@ Vue.mixin({
   
   data: function() {
     return {
-      UNITS_INF: ['inf_light','inf_home','inf_heavy','inf_skirmish',],
-      UNITS_CAV: ['cav_lancer','cav_hussar','cav_dragoon','cav_heavy',],
-      UNITS_ART: ['art_light','art_heavy','art_mortar'],
-      UNITS: UNITS,
+      // UNITS_INF: ['inf_light','inf_home','inf_heavy','inf_skirmish',],
+      // UNITS_CAV: ['cav_lancer','cav_hussar','cav_dragoon','cav_heavy',],
+      // UNITS_ART: ['art_light','art_heavy','art_mortar'],
+      // UNITS: UNITS,
+      units: units,
 
       open_dialog: function(name, ...params) {
         gui.dialog(name, ...params);
@@ -45,7 +47,7 @@ Vue.mixin({
 
         return bg + text;
       },
-
+      
       herald: function(area) {
         let iso;
         if (typeof area == 'string') iso = area;
