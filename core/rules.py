@@ -84,9 +84,7 @@ def getAreaEP(area: Area):
 UNITS = list(units.keys())
 
 
-def prof2int(prof):
-    return units[prof]['type']
+def name2prof(u):
+    prof = next(filter(lambda x: units[x]['name'] == u, units.keys()))
 
-def int2prof(u):
-    name = next(filter(lambda x: units[x]['type'] == u, units.keys()))
-    return name
+    return prof

@@ -80,7 +80,8 @@
     cursor: pointer;
 }
 .scroll {
-    overflow-y: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .unselectable {
@@ -211,6 +212,9 @@
 .shield-unclaimed {
     opacity: 0.3;
 }
+.shield-box-hidden {
+  border: 2px solid rgba(255,255,255,0.0);
+}
 .shield-box {
   border: 2px solid black;
   /*margin-top: 16px;
@@ -221,9 +225,13 @@
   /*margin-top: 16px;
   margin-left: 4px;*/
 }
-.pointer.shield-box:hover {
+.shield-box.pointer:hover, .shield-box-hidden.pointer:hover {
     border-color: orange;
 }
+.shield-box.active {
+  border-width: 6px;
+}
+
 
 /* Recommend feature */
 #recommend-countries {
@@ -284,6 +292,15 @@
 .garrison-box.pointer:hover {
   border-color: orange;
 }
+
+.character-profile {
+  min-height: 80px;
+  border: 2px solid black;
+}
+.character-profile.pointer:hover {
+  border-color: orange;
+}
+
 /* GUI game frame Corners */
 .gui-corner-left {
     cursor: pointer;
@@ -510,34 +527,46 @@
     font-family: 'Cinzel Decorative', cursive;
     font-weight: normal;
 
-    color: rgba(4,166,155,1);
-
-    background: #f9e12a; /* Old browsers */
-    background: -moz-linear-gradient(top, #f9e12a 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #f9e12a 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #f9e12a 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9e12a', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
-
-    background: -o-linear-gradient(transparent, transparent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #dbdb9b; /* Old browsers */
     z-index: 2;
     text-shadow:
-     -1px -1px 0 #a00a0e,
-      1px -1px 0 #a00a0e,
-      -1px 1px 0 #a00a0e,
-       1px 1px 0 #a00a0e;
+     -2px -1px 0 #a00a0e,
+      2px -1px 0 #a00a0e,
+      -2px 1px 0 #a00a0e,
+       2px 1px 0 #a00a0e;
 }
 .subopoly {
     font-family: 'Cinzel Decorative', cursive;
-    font-size: 24px;
-    color: #ecde78;
-    top: -40px;
-    left: 60px;
+    font-size: 28px;
+    color: #dbdbdb;
+    top: -32px;
+    left: 20px;
     position: relative;
     z-index: 1;
+    text-shadow:
+     -0.5px -0.5px 0 black,
+      0.5px -0.5px 0 black,
+      -0.5px 0.5px 0 black,
+       0.5px 0.5px 0 black;
+
 }
 .brand-wrapper {
   text-align: center;
 }
-
+.text-brand, a {
+   color: #a00a0e;
+   transition: 0.3s;
+}
+a:hover {
+   color: crimson;
+}
+.btn-brand {
+    background-color: #dbdb9b;
+    border-color: #a00a0e;
+    border-width: 1.6px;
+    color: #a00a0e;
+    transition: 0.3s;
+}
+.btn-brand:hover {
+    color: crimson;
+}

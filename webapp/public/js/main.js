@@ -5,10 +5,9 @@ import {load, onload} from '/js/game/loader.js';
 import {client} from '/js/game/client.js';
 import {rules,countries,units, match} from '/js/game/store.js';
 
-import {AreasGroup} from '/js/game/groups/areas.js';
-import {UnitsGroup} from '/js/game/groups/units.js';
-import {GameGroup} from '/js/game/groups/game.js';
-import {MatchesGroup} from '/js/game/groups/matches.js';
+import {AreasController} from '/js/game/controllers/areas.js';
+import {UnitsController} from '/js/game/controllers/units.js';
+import {GameController} from '/js/game/controllers/game.js';
 
 import {init_test} from '/js/test.js';
 
@@ -17,10 +16,11 @@ export function init_app(debug, ws_address, uid, token) {
   view.setCenter([1475042.8063459413, 6077055.881901362]);
   view.setZoom(6);
 
-  client.groups.Areas = new AreasGroup(client);
-  client.groups.Units = new UnitsGroup(client);
-  client.groups.Game = new GameGroup(client);
-  client.groups.Matches = new MatchesGroup(client);
+  client.controllers = {};
+
+  client.controllers.Areas = new AreasController(client);
+  client.controllers.Units = new UnitsController(client);
+  client.controllers.Game = new GameController(client);
 
   onload((ctx) => {
     console.info("Game loaded");

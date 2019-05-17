@@ -1,8 +1,8 @@
-import {set_turn} from '/js/game/store.js';
+//import {set_turn} from '/js/game/store.js';
 //import {reset_moves} from '/js/ol/gfx.js';
 
 
-export class GameGroup {
+export class GameController {
   constructor(client) {
     this.client = client;
   }
@@ -18,7 +18,7 @@ export class GameGroup {
   end_turn({match}) {
     console.info("%cTurn "+(match.turns-1)+" ended", "color: blue");
 
-    const is_new_round = set_turn(match);
+    //const is_new_round = set_turn(match);
 
     if (is_new_round) {
       reset_moves();

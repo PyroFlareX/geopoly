@@ -46,11 +46,15 @@ class User(Base):
 
     def __init__(self, **kwargs):
         self.uid = kwargs.get('uid')
-        #self.email = kwargs.get('email')
 
+        self.email = kwargs.get('email')
         self.username = kwargs.get('username')
         self.iso = kwargs.get('iso')
-        self.mid = kwargs.get('mid')
+        self.wid = kwargs.get('wid')
+
+        self.salt = kwargs.get('salt')
+        self.token = kwargs.get('token')
+        self.password = kwargs.get('password')
 
     def toView(self):
         return {

@@ -1,5 +1,5 @@
 
-export class UnitsGroup {
+export class UnitsController {
   constructor(client) {
     this.client = client;
   }

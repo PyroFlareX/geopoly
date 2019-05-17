@@ -12,7 +12,7 @@ export let component = Vue.component('infobar-training', {
 
   methods: {
     open: function(area) {
-      if (area instanceof ol.Feature)
+      if (area.getProperties)
         area = area.getProperties();
 
       this.area = area;
@@ -22,13 +22,13 @@ export let component = Vue.component('infobar-training', {
       this.area.training = unit.type;
       this.area.train_left = unit.train_turns;
 
-      client.groups.Areas.request_training(this.area.id, this.area.training);
+      client.controllers.Areas.request_training(this.area.id, this.area.training);
     },
 
     onClearTraining: function() {
       this.area.training = null;
 
-      client.groups.Areas.request_training(this.area.id, this.area.training);
+      client.controllers.Areas.request_training(this.area.id, this.area.training);
     },
 
     infobar_id: function() {

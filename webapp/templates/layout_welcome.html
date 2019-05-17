@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+
+{% block head %}
+  <meta property="og:title" content="Geopoly" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://geopoly.net" />
+  <meta property="og:image" content="/public/img/banner.png" />
+  <meta property="og:description" content="" />
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="geopoly text-center">GeOPoLy</h1>
+    <h4 class="subopoly text-center">Warfare is Deception.</h4>
+
+    <div id="app-gui"></div>
+
+    {% block content_body %}{% endblock %}
+
+    <div class="card">
+      {% if current_user %}
+      <div class="card-body">
+        <span class="small">
+          {% if current_user.username %}
+            Logged in as {{ current_user.username }}<br/>
+            <a class="col-3 text-center" href="/users/logout">Logout</a>
+          {% else %}
+            Playing as Guest({{ current_user.uid }})
+          {% endif %}
+        </span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script type="module">
+    import {gui} from '/js/vue/gui.js';
+
+    // declare variables from backend
+    window.gui = gui;
+  </script>
+
+{% endblock %}

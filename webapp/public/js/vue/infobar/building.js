@@ -12,7 +12,7 @@ export let component = Vue.component('infobar-building', {
 
   methods: {
     open: function(area) {
-      if (area instanceof ol.Feature)
+      if (area.getProperties)
         area = area.getProperties();
 
       this.area = area;

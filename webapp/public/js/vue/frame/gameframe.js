@@ -2,19 +2,10 @@ import {template} from "/js/vue/frame/gameframe.vue.js"
 import {match} from '/js/game/store.js';
 import {client} from '/js/game/client.js';
 import {openRandom} from '/js/ol/areas.js';
-import {getGameDate, getGameYear} from '/js/game/lib.js';
 import {get_img, status, onReady} from '/js/game/autogen.js';
 import {getColor, colors} from '/js/game/colors.js';
+import {SRNG} from '/js/vendor/srng.js';
 
-const seasons = ['Winter','Spring','Summer','Fall'];
-/*
-  1 match is ~120 rounds
-  if 1 round is 1 season, 
-  then that's /4 = 30 years overall
-
-  so 1 round is 3 months
-  then 1 turn is ~2 weeks
-*/
 
 // Game GUI's main frame
 export let component = Vue.component('game-frame', {
@@ -40,7 +31,7 @@ export let component = Vue.component('game-frame', {
     onClickSeason: function(e) {
       // end turn papa
 
-      client.groups.Matches.request_end_turn();
+      client.controllers.Matches.request_end_turn();
     },
 
     src_unit: function(unit) {
@@ -69,7 +60,7 @@ export let component = Vue.component('game-frame', {
         let resp = confirm("Are you sure you want to leave the match?");
         
         if (resp)
-          client.groups.Matches.request_leave();
+          client.controllers.Matches.request_leave();
       } else {
         Cookie.delete('mid');
         window.location = '/';        
@@ -80,17 +71,38 @@ export let component = Vue.component('game-frame', {
   computed: {
 
     season: function() {
-      let s = this.match.rounds % 4;
+      let m = this.match.turns % 12 + 1;
 
-      return seasons[s];
+      if (m <= 2 || m == 12)
+        return 'Winter';
+      else if (3 <= m && m <= 5)
+        return 'Spring';
+      else if (6 <= m && m <= 8)
+        return 'Summer';
+      else if (9 <= m && m <= 11)
+        return 'Fall';
+      return 'Rawr XD';
     },
 
     gameyear: function() {
-      return getGameYear(this.match.rounds);
+      const start_year = 1348;
+      let dy = Math.floor(this.match.turns / 12);
+
+      return start_year + dy;
     },
 
     gamedate: function() {
-      let {month, day} = getGameDate(this.match.rounds, len(this.match.isos));
+      let y = this.gameyear;
+      let m = this.match.turns % 12 + 1;
+      let d = round((new SRNG(this.match.turns)).random()*(m == 2 ? 30 : 28));
+
+      m = ('0' + m).slice(-2);
+      d = ('0' + d).slice(-2);
+
+      let t_beg = new Date(y+"-"+m+"-"+d+"T01:00:00");
+      
+      let month = t_beg.toLocaleString("en-US", { month: "short" });
+      let day = t_beg.getDate();
 
       return month + ' ' + day;
     }

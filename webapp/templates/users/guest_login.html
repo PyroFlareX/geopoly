@@ -1,0 +1,71 @@
+{% extends "layout_welcome.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content_body %}
+ <div class="row justify-content-md-center">
+    <div class="col-md-auto" style="margin-top: 50px;">
+      <h1 class="card-title brand">
+        <img src="/public/img/logo.png"/>
+        <span class="text-lightbrand">Tharse</span>
+      </h1>
+
+      <div class="card">
+        <div class="card-body" id="app-index" style="display: none">
+
+          <p class="card-text">Please provide an email to use Tharse. This email will be used to retrieve your files. If you want to </p>
+
+          <p class="card-text row">
+            <a class="col-4" href="/my-files">My files</a>
+            <a class="col-4" href="/userspace">My user</a>
+            <a class="col-4" href="/about">About us</a>
+          </p>
+
+          <file-upload :time_indicators="{{ time_indicators|safe }}" :allow_encrypt="{{ 'true' if allow_encrypt else 'false' }}"></file-upload>
+        </div>
+        <div class="card-body">
+          <!--<span class="ra ra- text-darkbrand"></span>-->
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+
+<script type="module">
+import {} from "/public/js/vue/mixins.js";
+import {open_app} from "/public/js/viewer/AppFactory.js";
+
+let gui = new Vue({
+  el: '#app-index',
+  data: {
+    file: null,
+    policy: 'open',
+    app: null
+  },
+
+  watch: {
+    file: {
+      handler: function(file, oldFile) {
+        open_app(file, this.policy, (app) => {
+          this.app = app;
+          this.file = file;
+        });
+      },
+      immediate: true
+    }
+  }
+});
+
+window.gui = gui;
+gui.file = {{ file|tojson }};
+
+</script>
+
+{% endblock %}

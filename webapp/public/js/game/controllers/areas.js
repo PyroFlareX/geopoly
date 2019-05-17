@@ -3,7 +3,7 @@
 import {areaSource} from '/js/ol/layers/areas.js';
 
 
-export class AreasGroup {
+export class AreasController {
   constructor(client) {
     this.client = client;
   }

@@ -12,7 +12,7 @@ export let component = Vue.component('infobar-country', {
 
   methods: {
     open: function(country) {
-      if (country instanceof ol.Feature)
+      if (country.getProperties)
         country = country.getProperties();
 
       this.country = country;

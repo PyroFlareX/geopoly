@@ -19,7 +19,7 @@ export let component = Vue.component('infobar-unit', {
 
   methods: {
     open: function(unit) {
-      if (unit instanceof ol.Feature)
+      if (unit.getProperties)
         unit = unit.getProperties();
 
       this.unit = unit;

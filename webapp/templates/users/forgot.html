@@ -1,0 +1,21 @@
+{% extends "layout_welcome.html" %}
+
+
+{% block content_body %}
+  <h2>Forgotten password</h2>
+
+  <form accept-charset="UTF-8" role="form" action="/users/forgot" method="POST">
+    <fieldset>
+      <div class="form-group">
+        <input class="form-control" placeholder="Email" name="email" type="text">
+      </div>
+
+      <input class="btn btn-lg btn-brand btn-block" type="submit" value="Send password reset link">
+    </fieldset>
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+

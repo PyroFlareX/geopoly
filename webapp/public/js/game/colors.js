@@ -1,4 +1,4 @@
-import {load} from '/js/game/loader.js';
+//import {load} from '/js/game/loader.js';
 
 export const colors = {
   not_found: new Color(0, 255, 255),
@@ -61,7 +61,7 @@ export let color_settings = {
 
 export function getColor(area) {
   if (typeof area == 'string') var area = {iso: area};
-  else if (area instanceof ol.Feature) var area = area.getProperties();
+  else if (area.getProperties) var area = area.getProperties();
   let iso = area.iso;
 
   if (!iso)
@@ -154,7 +154,7 @@ let ctx = loader_canvas.getContext("2d");
 
 export function getFlag(area) {
   if (typeof area == 'string') var area = {iso: area};
-  else if (area instanceof ol.Feature) var area = area.getProperties();
+  else if (area.getProperties) var area = area.getProperties();
   let iso = area.iso;
 
   if (iso && flags[iso]) {

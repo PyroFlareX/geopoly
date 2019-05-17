@@ -1,6 +1,6 @@
 import {template} from "/js/vue/dialog/character.vue.js";
 
-import {get_img, status, onReady} from '/js/autogen.js';
+import {get_img, status, onReady} from '/js/game/autogen.js';
 
 
 export let component = Vue.component('dialog-character', {
@@ -8,7 +8,8 @@ export let component = Vue.component('dialog-character', {
 
   data: function() {
     return {
-      color: [0, 123, 255],
+      color: new Color(165, 175, 255),
+      bgcolor: new Color(0, 0, 0),
 
       variable: [0,1,4,5,6,7,8,10,12,13,15],
       weights: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
@@ -18,14 +19,29 @@ export let component = Vue.component('dialog-character', {
       status: status,
       updates: 0,
 
+      name: '',
+      age: 25,
+
       show: false
     }
   },
   methods: {
     open: function() {
-      onReady(() => {
-        this.randomize();
-      });
+      const rdy = () => {
+        if (Cookie.get('weights'))
+          this.weights = JSON.parse(Cookie.get('weights'));
+        else
+          this.randomize();
+      };
+
+      if (this.status.is_ready) {
+        rdy();
+      } else {
+        onReady(rdy);
+      }
+
+      this.name = Cookie.get('name', '');
+      this.age = Cookie.get('age', 25);
     },
 
     randomize: function() {
@@ -53,11 +69,15 @@ export let component = Vue.component('dialog-character', {
     },
 
     onSubmit: function() {
-
       let imgurl = this.src_weights.toString().split(';base64,')[1];
 
+      this.$emit('picked', {img_src: this.src_weights, weights:this.weights, name: ''});
+      this.show = false;
+
+      Cookie.set("weights", JSON.stringify(this.weights));
       Cookie.set("imgurl", imgurl);
-      window.location = '/home/game';
+      Cookie.set("name", this.name);
+      Cookie.set("age", this.age);
     }
   },
 
@@ -66,7 +86,7 @@ export let component = Vue.component('dialog-character', {
       console.log("Generating image", this.updates);
 
       if (this.status.is_ready)
-        return get_img(this.weights, this.color);
+        return get_img(this.weights, this.color, this.bgcolor);
       else
         return '';
     }

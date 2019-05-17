@@ -48,7 +48,7 @@ Vue.mixin({
       herald: function(area) {
         let iso;
         if (typeof area == 'string') iso = area;
-        else if (area instanceof ol.Feature) iso = area.get('iso');
+        else if (area.get || area.getProperties) iso = area.get('iso');
         else iso = area.iso;
 
         if (has_texture.has(iso)) {

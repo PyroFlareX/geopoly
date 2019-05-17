@@ -1,3 +1,5 @@
+import random
+import string
 import time
 import bcrypt
 import hashlib
@@ -7,85 +9,122 @@ from core.instance import users
 
 
 class UserException(Exception):
-    def __init__(self, code):
-        self.code = code
+    def __init__(self, reason):
+        self.reason = reason
+
     def __str__(self):
-        return str(self.code)
+        return str(self.reason)
 
 
 class UserManager:
     def __init__(self):
         pass
 
-    def create(self, userPatch):
+    def create(self, **userPatch):
+        raw_password = userPatch.pop('password')
+        raw_password2 = userPatch.pop('password-confirm')
+
         user = User(**userPatch)
 
-        if not user.password == userPatch.get('password-confirm'):
-            raise UserException(4)
+        # pw don't match
+        if not raw_password == raw_password2:
+            raise UserException('passwords_differ')
+        # email exists
+        if users.get(email=user.email):
+            raise UserException('email_exists')
+        # username exists
+        if users.get(username=user.username):
+            raise UserException('user_exists')
 
-        existingUser = users.get(email=user.email)
-        if existingUser:
-            raise UserException(5)
-
-        user.password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        # create user & pw salt
+        user.password = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         user.salt = bcrypt.gensalt().decode('utf-8')
         user.token = self.getToken(user)
-        user.id = users.create(user)
+        users.create(user)
 
         return user
 
-    def getUser(self, uid) -> User:
+    def getUser(self, uid):
         user = users.get(uid)
 
         return user
 
     def authenticateToken(self, uid, token):
-        user: User = users.get(uid)
+        user = users.get(uid)
         if not user:
-            raise UserException(1)
+            raise UserException('user_doesnt_exist')
 
         # user
         if user.token == token:
 
             return user
         else:
-            raise UserException(3)
+            raise UserException('wrong_token')
 
-    def authenticateCredentials(self, nameOrEmail, password):
-        user: User = users.getOne(email=nameOrEmail)
+    def authenticateCredentials(self, password, email=None, username=None):
+        if email:
+            user = users.get(email=email)
 
-        if not user:
-            # let's try with username
-            user: User = users.getOne(name=nameOrEmail)
+            if not user:
+                raise UserException('email_not_found')
+        else:
+            user = users.get(username=username)
 
-        if not user:
-            raise UserException(1)
+            if not user:
+                raise UserException('user_not_found')
 
         if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-            # todo: perhaps delete sensitive data (UserBase class?)
             user.token = self.getToken(user)
+            users.save(user)
 
-            users.edit(user.id, token=user.token, timestamp=False)
             return user
         else:
-            raise UserException(2)
+            raise UserException('wrong_password')
 
-    # def createGuest(self, uid):
-    #     user: User = self.cache.get(uid)
-    #
-    #     if not user:
-    #         user = EntityPatch(uid=uid)
-    #         # todo: later: don't save all data just uid
-    #         #user = User(uid=uid)
-    #         self.cache.create(user)
-    #
-    #         return user
-    #     return False
+    def authenticateCode(self, code):
+        user = users.get(code=code)
 
-    def getToken(self, user: User):
+        return user
+
+    def getToken(self, user):
         swd = '-'
-        # todo: no need to encode, just store everything in bytestring!
-        salt = str(user.id) + swd + user.salt + "GPL2018v9$__SALUD" + str(time.time())
+        salt = str(user.uid) + swd + user.salt + "GPL2018v9$__SALUD" + str(time.time())
         token = hashlib.sha256(salt.encode('utf-8')).hexdigest()
 
         return token
+
+    def forgot(self, nameOrEmail):
+        user = users.get(email=nameOrEmail)
+
+        # #let's try with username
+        # if not user:
+        #     user = users.get(name=nameOrEmail)
+
+        if not user:
+            return None
+
+        N = 128
+        code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+
+        user.forgot_code = code
+        users.save(user)
+
+        return code
+
+    def reset_password(self, code, raw_password, raw_password2):
+
+        if not raw_password == raw_password2:
+            raise UserException('passwords_differ')
+
+        user = users.get(code=code)
+
+        if not user:
+            raise UserException('wrong_code')
+
+        user.password = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        user.salt = bcrypt.gensalt().decode('utf-8')
+        user.token = self.getToken(user)
+        user.forgot_code = None
+        users.save(user)
+
+        return user

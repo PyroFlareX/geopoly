@@ -85,8 +85,8 @@ export function onSelectUnits(feature) {
       unit.set('path', coord_path.slice());
     }
 
-    client.groups.Units.request_move(path, unit_ids);
-    client.groups.Areas.request_vision(feature);
+    client.controllers.Units.request_move(path, unit_ids);
+    client.controllers.Areas.request_vision(feature);
     
 
     move.selected.set('units', []);

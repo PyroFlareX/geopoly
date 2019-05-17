@@ -26,6 +26,7 @@ class WorldCommand():
 
         for area in castles:
             area.castle = 4
+            area.virgin = True
 
         areas.areas.save_all(castles)
 

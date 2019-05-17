@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS areas (
     "iso" character varying(3),
 
     "castle" smallint,
-    "virgin" smallint,
+    "virgin" boolean,
 
     "training" smallint,
     "train_left" smallint,

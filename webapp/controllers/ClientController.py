@@ -1,10 +1,12 @@
 import uuid
 
 from flask import render_template, request
+from werkzeug.utils import redirect
 
 from core.instance import units, areas, worlds
 from core.services.areas import load_areas_raw
 from webapp.entities import ApiResponse
+from webapp.services.login import getUser
 
 
 class ClientController():
@@ -14,11 +16,33 @@ class ClientController():
 
     def index(self):
         #ws_address = self.server.conf['websocket']['address']
+        user = getUser()
+
+        if not user.wid:
+            return redirect('/client/welcome')
 
         return render_template('/client/index.html',
-           #ws_address=ws_address,
-           debug=True,
-           err=request.args.get('err')
+            #ws_address=ws_address,
+            debug=True,
+            err=request.args.get('err')
+        )
+
+    def new(self):
+        user = getUser()
+        if user.wid:
+            return redirect('/')
+
+        return render_template('/client/new.html',
+            debug=True,
+            err=request.args.get('err')
+        )
+
+    def welcome(self):
+        user = getUser()
+
+        return render_template('/client/welcome.html',
+            debug=True,
+            err=request.args.get('err')
         )
 
     def get_load(self):

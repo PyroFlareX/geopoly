@@ -2,7 +2,7 @@ from eme.entities import loadConfig
 from eme.website import WebsiteApp
 
 from webapp.services.login import init_login
-from webapp.services import login
+from webapp.services import login, mail
 
 
 class Website(WebsiteApp):
@@ -15,4 +15,6 @@ class Website(WebsiteApp):
         super().__init__(self.conf)
 
         self.jinja_env.globals.update(get_user=login.getUser)
-        init_login(self, self.conf['login'])
+
+        login.init_login(self, self.conf['login'])
+        mail.init_mail(self, self.conf['mail'])
