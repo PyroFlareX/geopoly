@@ -47,11 +47,14 @@ class ClientController():
 
     def get_load(self):
         # Todo: dont fake player :(
-        pid = '210845bf-8cc8-41b0-9049-583f0723e16a'
-        iso = "HU"
+        user = getUser()
+
+        if not user.wid or not user.iso:
+            return ApiResponse({})
+
         world = worlds.list_all()[0]
 
-        lunits = units.list_by_player(pid=pid)
+        lunits = units.list_by_player(pid=user.uid)
 
         area_ids = set()
         vunits = []
@@ -63,7 +66,7 @@ class ClientController():
         geojson_areas = load_areas_raw(area_ids, wid=world.wid, discover_fog=True)
 
         return ApiResponse({
-            "iso": iso,
+            "iso": user.iso,
             "units": vunits,
             "areas": geojson_areas,
         })

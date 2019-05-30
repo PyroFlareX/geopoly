@@ -32,6 +32,6 @@
     window.gui = gui;
 
     // start app
-    init_app({{ debug|tojson }}, '{{ ws_address }}', '{{ get_user().uid }}', '');
+    init_app({{ debug|tojson }}, '{{ ws_address }}', {{ get_user().toView()|tojson }}, '');
   </script>
 {% endblock %}

@@ -12,7 +12,7 @@ import {GameController} from '/js/game/controllers/game.js';
 import {init_test} from '/js/test.js';
 
 
-export function init_app(debug, ws_address, uid, token) {
+export function init_app(debug, ws_address, user, token) {
   view.setCenter([1475042.8063459413, 6077055.881901362]);
   view.setZoom(6);
 
@@ -28,6 +28,10 @@ export function init_app(debug, ws_address, uid, token) {
     init_test();
   });
 
+  match.wid = user.wid;
+  match.me = user.iso;
+  match.pid = user.uid;
+
   if (debug) {
     window.store = {
       units: units,
@@ -41,15 +45,15 @@ export function init_app(debug, ws_address, uid, token) {
     window.areas = window.layers.item(1).getSource();
   }
 
-  load(function() {
-    fetch('/client/load').then((resp)=>{
-      return resp.json();
-    }).then((resp)=>{
-      this.ctx.iso = resp.iso;
-
-      init_features(resp);
-
-      this.loaded();
-    });
-  });
+//  load(function() {
+//    fetch('/client/load').then((resp)=>{
+//      return resp.json();
+//    }).then((resp)=>{
+//      this.ctx.iso = resp.iso;
+//
+//      init_features(resp);
+//
+//      this.loaded();
+//    });
+//  });
 }

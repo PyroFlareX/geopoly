@@ -8,3 +8,6 @@
 export const osmLayer = new ol.layer.Tile({
   source: new ol.source.OSM()
 });
+
+
+osmLayer.name = "OSM";

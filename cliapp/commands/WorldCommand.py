@@ -16,7 +16,7 @@ class WorldCommand():
         }
 
     def runCreate(self):
-        with open('cliapp/content/castles.json', 'r') as fh:
+        with open('generator/content/castles.json', 'r') as fh:
             castles = json.load(fh)
 
         world = World(max_players=12, turn_time=12, turns=0)

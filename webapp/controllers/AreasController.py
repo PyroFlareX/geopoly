@@ -2,7 +2,7 @@ from flask import request
 
 from core.instance import worlds
 from core.services import areas
-from core.services.areas import load_areas_raw
+from core.services.areas import load_areas_raw, load_areas_all_raw
 from webapp.entities import ApiResponse
 
 
@@ -14,6 +14,16 @@ class AreasController():
         self.server.addUrlRule({
             'GET /areas/radius/<area_id>': 'areas/load',
             'POST /areas/training/<area_id>': 'areas/training',
+        })
+
+    def index(self):
+        # todo: get wid from user
+        wid = worlds.list_all()[0].wid
+
+        geojson_areas = load_areas_all_raw(wid)
+
+        return ApiResponse({
+            "areas": geojson_areas,
         })
 
     def get_load(self, area_id):

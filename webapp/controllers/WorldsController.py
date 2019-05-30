@@ -50,7 +50,7 @@ class WorldsController():
         lunits = create_team(iso=iso,wid=world.wid,pid=user.uid,aid=area.id)
 
         HERO = 10
-        hero = create_unit(iso=iso,wid=world.wid,pid=user.uid,aid=area.id,img_vector=weights,age=age,name=name,prof=HERO)
+        hero = create_unit(iso=iso, wid=world.wid, pid=user.uid, aid=area.id, img_vector=weights, age=age, name=name, prof=HERO)
         lunits.append(hero)
 
         # save everything

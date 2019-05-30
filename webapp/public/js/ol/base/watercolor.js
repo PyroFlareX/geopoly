@@ -4,3 +4,6 @@ export const watercolorLayer = new ol.layer.Tile({
     layer: 'watercolor'
   })
 });
+
+
+watercolorLayer.name = "watercolor";

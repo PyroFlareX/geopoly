@@ -61,7 +61,7 @@ class User(Base):
             "uid": self.uid,
             "username": self.username,
             "iso": self.iso,
-            "mid": self.mid,
+            "wid": self.wid,
         }
 
 

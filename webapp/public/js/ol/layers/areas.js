@@ -1,4 +1,4 @@
-import {load} from '/js/game/loader.js';
+import {onload} from '/js/game/loader.js';
 import {getUnits} from '/js/game/lib.js';
 import {match, countries} from '/js/game/store.js';
 import {onSelectUnits, onHoverUnits, onCancelSelection, hideHoverArrow} from '/js/ol/units.js';
@@ -13,55 +13,66 @@ import {getColor, getMapBlend, getHighlight} from '/js/game/colors.js';
  * onmousemove, onclick, 
  */
 
+// todo: later: download as zip & unzip
 export const areaSource = new ol.source.Vector({
-  //format: new ol.format.GeoJSON(),
-  //url: '/geojson/areas.geojson',
+  format: new ol.format.GeoJSON(),
+  url: '/geojson/areas.geojson',
 });
+
+const cache = {};
 
 export const areaLayer = new ol.layer.Vector({
   source: areaSource,
+  maxResolution: 3000,
 
   style: (feature, res) => {
-    let styles = [];
+    const styles = [];
 
-    let selected = feature.get('selected');
-    let castle = feature.get('castle');
-    let units_team = feature.get('units').filter(unit => unit.get('role') == 'team');
+    const visible = feature.get('visible');
+    const selected = feature.get('selected');
+    const hovered = feature.get('hovered');
+
+    const area_id = feature.get('id');
+    const castle = feature.get('castle') || 0;
+    const color = getColor(feature);
+    const bg = getMapBlend(color, feature.get('iso'));
+    const dark_bg = getHighlight(color);
 
     // todo: account for multiply colorscheme!
-    let color = getColor(feature);
-    let bg = getMapBlend(color, feature.get('iso'));
+    if (visible) {
+      if (hovered)
+        bg = dark_bg;
 
-    if (feature.get('hovered'))
-      bg = getHighlight(color);
-
-    // area borders & country color
-    styles.push(new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: color.rgb(),
-        width: 1
-      }),
-
-      fill: new ol.style.Fill({
-        color: bg.rgba()
-      }),
-    }));
-
-    if (castle) {
-      if (!feature.get('cen')) {
-        console.error("Centroid not found for", feature.getId());
-        return;
-      }
-
+      // area borders & country color
       styles.push(new ol.style.Style({
-        image: new ol.style.Icon(({
-          src: '/img/map/castle'+feature.get('castle')+'.png',
-          //imgSize: [32, 32],
-          scale: 0.4
-        })),
-        geometry: new ol.geom.Point(feature.get('cen'))
+        stroke: new ol.style.Stroke({
+          color: color.rgb(),
+          width: 1
+        }),
+
+        fill: new ol.style.Fill({
+          color: bg.rgba()
+        }),
       }));
     }
+  
+    styles.push(new ol.style.Style({
+      image: new ol.style.Icon(({
+        color: castle || hovered || selected || visible ? dark_bg.rgb() : bg.a(0.3).rgb(),
+        src: `/img/map/castle${castle}_${dark_bg.contrast()}.png`,
+        //imgSize: [32, 32],
+        scale: 0.4
+      })),
+      text: (hovered || selected || visible) ? new ol.style.Text({
+        text: feature.get('name'),
+        fill: new ol.style.Fill({color: dark_bg.rgb()}),
+        stroke: new ol.style.Stroke({color: dark_bg.contrast(), width: 3}),
+        font: '14px "Opera Lyrics"',
+        offsetY: 28,
+      }) : null,
+      geometry: new ol.geom.Point(feature.get('cen'))
+    }));
+
 
     return styles;
   }
@@ -98,10 +109,10 @@ let hovered = null;
 
 areaLayer.hover = (feature) => {
   if (hovered) {
-    hovered.set('hovered', false);
+    hovered.set('visible', false);
   }
 
-  feature.set('hovered', true);
+  feature.set('visible', true);
   hovered = feature;
   $("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";
 
@@ -110,7 +121,7 @@ areaLayer.hover = (feature) => {
 
 areaLayer.hover_out = () => {
   if (hovered) {
-    hovered.set('hovered', false);
+    hovered.set('visible', false);
     hovered = null;
   }
 
@@ -181,21 +192,3 @@ areaLayer.keypress = (feature, key) => {
 areaLayer.contextmenu = () => {
   // todo
 };
-
-
-// load(function() {
-//   let lk = areaSource.on('change', (e) => {
-//     if (areaSource.getState() == 'ready') {
-
-//       // something else than load happened, wait
-//       if (areaSource.getFeatures().length == 0)
-//         return;
-
-//       // and unregister the "change" listener 
-//       ol.Observable.unByKey(lk);
-
-//       console.log("Loaded layers");
-//       this.loaded();
-//     }
-//   });
-// });

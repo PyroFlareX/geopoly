@@ -23,8 +23,8 @@ def create_unit(prof, iso, **kwargs):
     unit.iso = iso
 
     if not unit.name: unit.name = create_name(iso)
-    if not unit.img_vector: np.round(np.random.uniform(face_weights['lows'], face_weights['highs'])).tolist()
-    if not unit.age: int(normal(35, 6))
+    if not unit.img_vector: unit.img_vector = np.round(np.random.uniform(face_weights['lows'], face_weights['highs'])).tolist()
+    if not unit.age: unit.age = int(normal(35, 6))
 
     unit.xp = 0
     unit.health = 100

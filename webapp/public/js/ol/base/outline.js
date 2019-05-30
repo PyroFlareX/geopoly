@@ -18,3 +18,5 @@ export const outlineLayer = new ol.layer.Vector({
     });
   }
 });
+
+outlineLayer.name = "outline";

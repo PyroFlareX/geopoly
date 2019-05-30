@@ -87,12 +87,12 @@ export let component = Vue.component('dialog-settings', {
       this.layers['baseLayer'] = val;
       Cookie.set('layers', JSON.stringify(this.layers));
 
-      if (val == 'watercolor') {
-        watercolorLayer.setVisible(true);
-        outlineLayer.setVisible(false);
-      } else {
+      if (val == 'outline') {
         watercolorLayer.setVisible(false);
         outlineLayer.setVisible(true);
+      } else {
+        watercolorLayer.setVisible(true);
+        outlineLayer.setVisible(false);
       }
     },
     // coloring: function(val) {

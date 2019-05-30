@@ -2,6 +2,8 @@ import {onload} from '/js/game/loader.js';
 import {img_dim, sprites} from '/js/ol/sprites.js';
 import {simulate_movement} from '/js/ol/units.js';
 import {getFlag, img_dim as flag_dim} from '/js/game/colors.js';
+import {onSelectUnits, onHoverUnits, onCancelSelection, hideHoverArrow} from '/js/ol/units.js';
+import {areaSource} from '/js/ol/layers/areas.js';
 
 export const unitSource = new ol.source.Vector();
 
@@ -50,6 +52,8 @@ export const unitLayer = new ol.layer.Vector({
 const unit_scale = 1.3;
 const sprite_speed = 10;
 
+unitLayer.name = "units";
+
 unitLayer.update = (elapsedTime) => {
   let now = (new Date()).getTime();
   let animation_index = Math.round(sprite_speed * elapsedTime / 1000) % 6;
@@ -64,6 +68,34 @@ unitLayer.update = (elapsedTime) => {
     simulate_movement(unit, now);
   }
 }
+
+
+// let hovered = null;
+
+// unitLayer.hover = (feature) => {
+//   if (hovered) {
+//     hovered.set('hovered', false);
+//   }
+//   let feature_area = areaSource.getFeatureById(feature.get('aid'));
+
+//   feature_area.set('hovered', true);
+//   hovered = feature_area;
+//   $("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";
+
+//   onHoverUnits(feature_area);
+// };
+
+// unitLayer.hover_out = () => {
+//   if (hovered) {
+//     hovered.set('hovered', false);
+//     hovered = null;
+//   }
+
+//   $("#app-map").style.cursor = "";
+  
+//   hideHoverArrow();
+// };
+
 
 onload(()=>{
   unitSource.changed();

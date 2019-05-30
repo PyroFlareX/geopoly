@@ -5,7 +5,6 @@ import {outlineLayer} from '/js/ol/base/outline.js';
 
 import {areaLayer} from '/js/ol/layers/areas.js';
 import {borderLayer} from '/js/ol/layers/borders.js';
-//import {countryLayer} from '/js/ol/layers/countries.js';
 import {unitLayer} from '/js/ol/layers/units.js';
 //import {eventLayer} from '/js/ol/layers/events.js';
 import {arrowLayer} from '/js/ol/layers/arrows.js';
@@ -22,17 +21,17 @@ export const map = new ol.Map({
   layers: [
     //osmLayer,
     watercolorLayer,
-    outlineLayer,
+    //outlineLayer,
 
-    //countryLayer,
     areaLayer,
-    borderLayer,
+    //borderLayer,
 
     arrowLayer,
     // eventLayer,
     unitLayer,
   ],
   target: 'app-map',
+  //renderer: 'webgl',
   controls: ol.control.defaults({
     attribution: false,
     // attributionOptions: {
@@ -81,8 +80,9 @@ map.on('pointermove', (event) => {
     }
   });
 
-  if (!found_feature) 
+  if (!found_feature) {
     areaLayer.hover_out();
+  }
 });
 
 map.on('click', (event) => {

@@ -58,8 +58,14 @@ export function onSelectUnits(feature) {
     let path = find_path(move.selected.getId(), feature.getId());
     let coord_path = [];
 
-    for (let iso of path) {
-      let feature = areaSource.getFeatureById(iso);
+    for (let area_id of path) {
+      let feature = areaSource.getFeatureById(area_id);
+
+      if (!feature) {
+        console.error("  Area is not loaded: ", area_id);
+        continue;
+      }
+
       coord_path.push(feature.get('cen'));
     }
 

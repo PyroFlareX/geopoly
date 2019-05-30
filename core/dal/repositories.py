@@ -98,6 +98,14 @@ class AreaRepository:
 
         return area
 
+    def list_all(self, wid, as_dict=False):
+        areas = self.session.query(Area).filter(Area.wid == wid).all()
+
+        if not as_dict:
+            return areas
+
+        return {area.id: area for area in areas}
+
     def list_castle_virgin_by_iso(self, iso, wid):
         """
         Lists areas that are:

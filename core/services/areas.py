@@ -7,11 +7,11 @@ from core import rules
 from core.entities import Area
 from core.instance import areas
 
-with open('core/content/areas.geojson', 'r', encoding='utf8') as fh:
-    l = json.load(fh)
-    features = {feature['id']: feature for feature in l['features']}
-
-    del l
+# with open('core/content/areas.geojson', 'r', encoding='utf8') as fh:
+#     l = json.load(fh)
+#     features = {feature['id']: feature for feature in l['features']}
+#
+#     del l
 
 conn_graph = defaultdict(set)
 with open('core/content/conn.json') as fh:
@@ -122,6 +122,24 @@ def load_areas_raw(area_ids, wid, discover_fog=False):
     return geojson
 
 
+def load_areas_all_raw(wid):
+    geojson = []
+
+    d_areas = areas.list_all(wid, as_dict=True)
+
+    for id, feature in features.items():
+        feature = feature.copy()
+        feature['properties']['id'] = id
+
+        if id in d_areas:
+            area = d_areas[id]
+            feature['properties'].update(area.toDict())
+
+        geojson.append(feature)
+
+    return geojson
+
+
 def load_areas(area_ids, wid, discover_fog=False):
     """ Loads Area objects based on area ids and world id
 
@@ -153,6 +171,17 @@ def load_areas(area_ids, wid, discover_fog=False):
         lareas.append(area)
 
     return lareas
+
+
+def load_area(area_id, wid):
+    area = areas.get(area_id, wid)
+
+    if not area:
+        area = Area(**features[area_id]['properties'])
+    area.id = area_id
+    area.wid = wid
+
+    return area
 
 
 def set_training(area_id, wid, prof):
@@ -192,5 +221,4 @@ def is_path_connected(path):
 
 def get_neighbors(id1: str):
     return conn_graph[id1]
-
 
