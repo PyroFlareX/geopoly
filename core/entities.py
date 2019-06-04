@@ -11,20 +11,35 @@ Base = declarative_base()
 
 
 Skins = {
-    "FOOT": (1,),
-    "ARCHER": (2,9),
-    "KNIGHT": (3,5),
-    "PIKE": (4,),
-    "BARD": (6,),
-    "BARBAR": (7,),
-    "LIGHTCAV": (8,10),
+    0: (1,),
+    4: (2,9),
+    3: (3,5),
+    1: (4,),
+    6: (6,),
+    7: (7,),
+    2: (8,10),
 
-    "HERO": (21,22,23,24,25,26),
+    10: (21,22,23,24,25,26),
 
-    "THUG": (11,),
-    "CATA": (12,),
-    "DEFENDER": (13,),
-    "STRONG": (14,),
+    8: (11,),
+    5: (12,),
+    11: (13,),
+    9: (14,),
+}
+
+unit_names = {
+  0: "FOOT",
+  4: "ARCHER",
+  3: "KNIGHT",
+  1: "PIKE",
+  6: "BARD",
+  7: "BARBAR",
+  2: "LIGHTCAV",
+  10: "HERO",
+  8: "THUG",
+  5: "CATA",
+  11: "DEFENDER",
+  9: "STRONG",
 }
 
 
@@ -91,7 +106,7 @@ class World(Base):
             "max_players": self.max_players,
             "turns": self.turns,
             "turn_time": self.turn_time,
-            "events": self.events
+            #"events": self.events
         }
 
 
@@ -194,3 +209,5 @@ class Unit(Base):
     def clone(self):
         return Unit(**self.toDict())
 
+    def __repr__(self):
+        return '{} ({})'.format(self.name, unit_names[self.prof])

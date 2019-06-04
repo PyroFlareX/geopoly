@@ -6,7 +6,6 @@ from numpy.random.mtrand import normal
 
 from core.entities import Unit, Skins
 
-from core import rules
 from core.factories.names import create_name
 from core.rules import name2prof
 
@@ -19,7 +18,7 @@ def create_unit(prof, iso, **kwargs):
     unit = Unit(iso=iso, **kwargs)
 
     unit.prof = prof #rules.prof2int(prof) if isinstance(prof, str) else prof
-    unit.skin = choice(Skins[rules.units[str(prof)]['name']])
+    unit.skin = choice(Skins[prof])
     unit.iso = iso
 
     if not unit.name: unit.name = create_name(iso)
@@ -28,7 +27,7 @@ def create_unit(prof, iso, **kwargs):
 
     unit.xp = 0
     unit.health = 100
-    unit.move_left = rules.units[str(prof)]['speed']
+    unit.move_left = 2#rules.units[str(prof)]['speed']
 
     return unit
 

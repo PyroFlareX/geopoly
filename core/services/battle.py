@@ -1,11 +1,35 @@
+import json
 from collections import defaultdict
+from itertools import product
+
+from eme.entities import EntityPatch
+from shapely.speedups._speedups import numpy as np
 
 from core import rules
 
 
 #rules.units
-from core.entities import Area
-from core.rules import getUnits, getEffectivePoint, getMilPop
+from core.entities import Area, Unit
+from core.rules import getUnits, getMilPop, UNITS, load_csv_as_dict
+
+mapping = defaultdict(lambda: float)
+mapping.update({"__ID__": "prof"})
+dmg = load_csv_as_dict('dmg', mapping=mapping)
+
+
+with open('core/content/units_spc.json') as fh:
+    special = EntityPatch(json.load(fh))
+
+
+
+def getDmg(a,b):
+    return dmg[str(a)][str(b)]
+
+
+def cmp(a,b):
+    a = round(a, 2)
+    b = round(b, 2)
+    return (a > b) - (a < b)
 
 
 def getCasualties(fr_str, to_str, fr_total):
@@ -47,46 +71,138 @@ def calculateCasualties(area: Area, total_cas: int):
     return losses
 
 
-def report(total, str, loss):
-    return {
-        'mils': total,
-        'strength': round(str),
-        'loss': dict(loss)
+def getEffectivePoint(unit):
+    uu = dmg[str(unit.prof)].copy()
+
+    EP = sum(uu.values()) / len(uu)
+
+    # apply extra boosters:
+    if special.ranged == unit.prof: EP *= 2
+    elif special.dharok == unit.prof: EP *= 1.5
+    elif special.booster == unit.prof: EP *= 1.25
+
+    return EP
+
+
+def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
+    unit_fr: Unit; unit_to: Unit
+    is_siege = area_to.castle > 0
+
+    # sort units by their effective points
+    units_fr.sort(key=getEffectivePoint)
+    units_to.sort(key=getEffectivePoint)
+
+    fr_str = 0; to_str = 0
+
+    report = {
+        "is_siege": is_siege,
+        "fr_dmg": {
+            "archers_wall": 0,
+            "berserk": 0,
+            "boosted": 0,
+
+            "total": 0,
+        },
+        "to_dmg": {
+            "archers_wall": 0,
+            "berserk": 0,
+            "boosted": 0,
+
+            "total": 0,
+        }
     }
 
+    for unit_fr, unit_to in product(units_fr, units_to):
+        fr_dmg = getDmg(unit_fr.prof, unit_to.prof)
+        to_dmg = getDmg(unit_to.prof, unit_fr.prof)
 
-def calculate_battle(area_fr, area_to, patch: dict, make_report=True):
-    area_pa = Area(iso=area_fr.iso, id=area_fr.id, **patch)
+        # defenders' strength only works in defensive siege
+        if special.defender == unit_to.prof:
+            if not is_siege:
+                to_dmg = 1 if unit_fr.prof in (2,3) else 2
+            else:
+                report['to_dmg']['defenders'] += to_dmg
+        # attacker's defenders are always useless:
+        if special.defender == unit_fr.prof:
+            to_dmg = 1 if unit_fr.prof in (2,3) else 2
 
-    # todo: add annihilation
-    # todo: add annihilation by encirclement
+        # siege archers gain extra dmg
+        if is_siege and special.ranged == unit_to.prof:
+            report['to_dmg']['archers_wall'] += to_dmg
+            to_dmg *= 2.00
 
-    fr_attp = getAttPoint(area_pa, area_to)
-    to_attp = getAttPoint(area_to, area_pa)
-    to_defp = getDefPoint(area_to)
+        # barbar boost:
+        if not is_siege:
+            if special.dharok == unit_to.prof:
+                if unit_to.health < 25: to_dmg *= 2
+                elif unit_to.health < 50: to_dmg *= 1.5
+                report['to_dmg']['berserk'] += to_dmg
 
-    # calculate total strength points
-    fr_str = fr_attp
-    to_str = to_attp + to_defp
+            if special.dharok == unit_fr.prof:
+                if unit_fr.health < 25: fr_dmg *= 2
+                elif unit_fr.health < 50: fr_dmg *= 1.5
+                report['fr_dmg']['berserk'] += to_dmg
+
+        fr_str += fr_dmg
+        to_str += to_dmg
+
+
+    # get specials for attacker
+    fr_booster = 0; fr_siege = 0
+    for unit_fr in units_fr:
+        if special.booster == unit_fr.prof: fr_booster += 1
+        if special.siege == unit_fr.prof: fr_siege += 1
+
+    # get specials for defender
+    to_booster = 0
+    for unit_to in units_to:
+        if special.booster == unit_to.prof: to_booster += 1
+
+
+    # apply global boosters:
+    if fr_booster:
+        report['fr_dmg']['booster'] = fr_str*0.10
+        fr_str *= 1.10
+    if to_booster:
+        report['to_dmg']['booster'] = to_str*0.10
+        to_str *= 1.10
+
+    if is_siege:
+        report['to_dmg']['defensive'] = to_str*1.15
+        to_str *= 1.15
+
+    # todo: apply siege damage
+    if fr_siege:
+        pass
+
+    # normalize str points:
+    fr_str /= len(units_to)
+    to_str /= len(units_fr)
 
     # check if attacker wins
-    fr_win = fr_str > to_str
-
-    # mil pop
-    fr_total = getMilPop(area_pa)
-    to_total = getMilPop(area_to)
+    winner = cmp(fr_str, to_str)
 
     # calculate relative and absolute losses
-    fr_cas = getCasualties(fr_str, to_str, fr_total)
-    to_cas = getCasualties(to_str, fr_str, to_total)
+    fr_dmg = getPCas(to_str/fr_str) * len(units_fr)
+    to_dmg = getPCas(fr_str/to_str) * len(units_to)
+
+
 
     # calculate rate of deaths, based on defs multiplied by enemy weights
-    # todo: itt
-    fr_loss = calculateCasualties(area_fr, fr_cas)
-    to_loss = calculateCasualties(area_to, to_cas)
+    units_fr, dead_fr = units_fr[round(fr_dmg):], units_fr[:round(fr_dmg)]
+    units_to, dead_to = units_to[round(to_dmg):], units_to[:round(to_dmg)]
 
-    if make_report:
-        return fr_win, report(fr_total, fr_str, fr_loss), report(to_total, to_str, to_loss)
+    print(1)
+
+
+    return report
+
+    # then apply floating damage as hp intake from next unit
+
+    # todo: apply hero respawn if in list of death
+
+    #if make_report:
+    #    return fr_win, report(fr_total, fr_str, fr_loss), report(to_total, to_str, to_loss)
 
 def getDefPoint(defenders: Area):
     dp = 0
@@ -96,7 +212,9 @@ def getDefPoint(defenders: Area):
 
     return dp
 
-def getAttPoint(units: Area, unitsAgainst: Area):
+def getAttPoint(units, unitsDef: Area):
+
+
     # percentages of enemy units
     weight_classes = {
         'inf': 0, 'cav': 0, 'art': 0
@@ -104,7 +222,8 @@ def getAttPoint(units: Area, unitsAgainst: Area):
     weight_total = 0.000001
 
     # get enemy unit type percentages, weighted by their effective points
-    for uid, unit, num in getUnits(unitsAgainst):
+    for unit in unitsAgainst:
+
         uclass = uid[:3]
         weight = num * getEffectivePoint(uid)
 

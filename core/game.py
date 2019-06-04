@@ -1,13 +1,13 @@
 from eme.entities import EntityPatch
 
-from core.entities import Match, Area
+from core.entities import Area
 from core.exceptions import AreaGuardedException, MoveException, GameEndException
 from core.instance import areas
 from core.rules import getUnits, getMilPop, UNITS, getAreaEP
 from core.services import turns, moves, battle
 
 
-def end_turn(match: Match, iso: str):
+def end_turn(match, iso: str):
     if iso != match.current:
         return False
 

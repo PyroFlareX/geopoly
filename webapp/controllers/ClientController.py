@@ -63,10 +63,11 @@ class ClientController():
             vunits.append(unit.toView())
             area_ids.add(unit.aid)
 
-        geojson_areas = load_areas_raw(area_ids, wid=world.wid, discover_fog=True)
+        #geojson_areas = load_areas_raw(area_ids, wid=world.wid, discover_fog=True)
 
         return ApiResponse({
+            "world": world.toView(),
             "iso": user.iso,
             "units": vunits,
-            "areas": geojson_areas,
+            "areas": [],
         })

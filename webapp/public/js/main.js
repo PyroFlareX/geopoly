@@ -22,12 +22,6 @@ export function init_app(debug, ws_address, user, token) {
   client.controllers.Units = new UnitsController(client);
   client.controllers.Game = new GameController(client);
 
-  onload((ctx) => {
-    console.info("Game loaded");
-    init_game(ctx);
-    init_test();
-  });
-
   match.wid = user.wid;
   match.me = user.iso;
   match.pid = user.uid;
@@ -45,15 +39,22 @@ export function init_app(debug, ws_address, user, token) {
     window.areas = window.layers.item(1).getSource();
   }
 
-//  load(function() {
-//    fetch('/client/load').then((resp)=>{
-//      return resp.json();
-//    }).then((resp)=>{
-//      this.ctx.iso = resp.iso;
-//
-//      init_features(resp);
-//
-//      this.loaded();
-//    });
-//  });
+  load(function() {
+    fetch('/client/load').then((resp)=>{
+      return resp.json();
+    }).then((resp)=>{
+      this.ctx.iso = resp.iso;
+      this.ctx.world = resp.world;
+
+      this.loaded();
+   });
+  });
+
+  onload((ctx) => {
+    console.info("Game loaded");
+
+    init_game(ctx);
+    init_features(ctx);
+    init_test();
+  });
 }

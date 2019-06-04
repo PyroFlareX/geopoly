@@ -49,7 +49,6 @@ export const areaLayer = new ol.layer.Vector({
           color: color.rgb(),
           width: 1
         }),
-
         fill: new ol.style.Fill({
           color: bg.rgba()
         }),
@@ -82,7 +81,6 @@ areaLayer.name = 'areas';
 
 areaLayer.click = (feature, key) => {
   let iso = feature.get('iso');
-
 
   if (!match.me && match.can_join) {
     // Claim feature on click

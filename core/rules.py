@@ -1,32 +1,40 @@
 import csv
 from collections import defaultdict
 
+import numpy as np
+
 from core.entities import Area
 
 
-def load_csv_as_dict(filename, mapping={}):
+def load_csv_as_dict(filename, mapping=None):
     items = {}
+    id = mapping['__ID__']
 
     with open('core/content/{}.csv'.format(filename), 'r') as csvfile:
         spamreader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
 
         for row in spamreader:
-            items[row['type']] = {k:(mapping[k](v) if v else None) for k,v in row.items()}
+            items[row[id]] = {k:(mapping[k](v) if v else None) for k,v in row.items() if k != id}
 
     return items
 
 
-mapping = defaultdict(lambda : int)
+mapping = defaultdict(lambda: int)
 mapping.update({
-    'id': str,
-    'prof': str,
-    'name': str,
-    'cost': float,
-    'attr_name': str,
-    'attr_val': float,
+  '__ID__': 'type',
+
+  'id': str,
+  'prof': str,
+  'name': str,
+  'cost': float,
+  'attr_name': str,
+  'attr_val': float,
 })
 
-units = load_csv_as_dict('units', mapping)
+#units = load_csv_as_dict('units', mapping)
+
+
+
 
 # todo: new way of wasting units in battle
 # calculate defensive percentages
@@ -50,26 +58,6 @@ def getUnits(area: Area, area2: Area=None):
         for u in UNITS:
             yield u, units[u], getattr(area, u)
 
-def getEffectivePoint(u):
-    #  calculate effective points by averaging atts & def, and then measuring from the mean?
-    sdown = 3.6
-
-    unit = units[u]
-    points = [unit['atk_i'], unit['atk_c'], unit['atk_a'], unit['def']]
-
-    avg = sum(points) / len(points)
-    mse = 0.5 * sum( (p-avg)**2 for p in points)
-
-    if u == 'inf_skirmish':
-        # special abilities
-        ov = (1.83 * mse) / sdown
-    elif u == 'inf_light':
-        # ranking up
-        ov = 0.055 * getEffectivePoint('inf_heavy')
-    else:
-        ov = 0
-
-    return round(mse / sdown + ov)
 
 
 def getAreaEP(area: Area):
@@ -81,7 +69,20 @@ def getAreaEP(area: Area):
     return ep
 
 
-UNITS = list(units.keys())
+UNITS = [
+    'HERO',
+    'BARD',
+    'FOOT',
+    'PIKE',
+    'LIGHTCAV',
+    'KNIGHT'
+    'ARCHER',
+    'CATA',
+    'BARBAR',
+    'STRONG',
+    'THUG',
+    'DEFENDER',
+]
 
 
 def name2prof(u):

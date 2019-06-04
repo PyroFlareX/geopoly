@@ -3,11 +3,7 @@ from collections import deque
 
 
 
-# todo: itt: turns
-from core.entities import Match
-
-
-def init(match: Match):
+def init(match):
     if match.turns is not None:
         raise Exception("Match has already been started")
 
@@ -23,7 +19,7 @@ def init(match: Match):
     set_first_player(match, match.isos[0])
 
 
-def set_first_player(match: Match, iso):
+def set_first_player(match, iso):
     # find first player and make it the first in isos list
     i = match.isos.index(iso)
     match.isos.rotate(-i)
@@ -37,7 +33,7 @@ def set_first_player(match: Match, iso):
     match.current = next(match.round_iter)
 
 
-def next_turn(match: Match):
+def next_turn(match):
     deserialize(match)
 
     # Get next in round
@@ -59,13 +55,13 @@ def next_turn(match: Match):
     return match.current
 
 
-def reset_round(match: Match):
+def reset_round(match):
     deserialize(match)
 
     set_first_player(match, match.isos[0])
 
 
-def deserialize(match: Match):
+def deserialize(match):
     # deserialize from DB
     if match.current is not None and match.current not in match.isos:
         raise Exception("Current player not in match.isos")

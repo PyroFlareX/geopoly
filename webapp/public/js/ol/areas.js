@@ -30,11 +30,20 @@ export function addArea(area, format) {
   if (areaSource.getFeatureById(area.id))
     return;
 
-  let feature = format.readFeature(area);
+  console.error("!!! setup area fail", area)
 
-  if (!feature.get('units')) feature.set('units', []);
-  if (!feature.get('virgin')) feature.set('virgin', true);
-  if (!feature.get('castle')) feature.set('castle', 0);
+  // let feature = format.readFeature(area);
+  // setupFeature(feature);
+  // areaSource.addFeature(feature);
+}
+
+export function setupFeature(feature) {
+  if (!feature.get('units'))
+    feature.set('units', []);
+  if (!feature.get('virgin'))
+    feature.set('virgin', true);
+  if (!feature.get('castle'))
+    feature.set('castle', 0);
 
   if (!feature.get('cen')) {
     let coords = multipolyCoords(feature.getGeometry());
@@ -42,8 +51,6 @@ export function addArea(area, format) {
 
     feature.set('cen', cen);
   }
-
-  areaSource.addFeature(feature);
 }
 
 let hovered = null;

@@ -9,6 +9,8 @@ from core.services import moves
 from webapp.entities import ApiResponse
 
 
+from core.services import battle
+
 class UnitsController():
     def __init__(self, server):
         self.server = server
