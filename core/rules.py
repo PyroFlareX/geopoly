@@ -21,17 +21,13 @@ def load_csv_as_dict(filename, mapping=None):
 
 mapping = defaultdict(lambda: int)
 mapping.update({
-  '__ID__': 'type',
+    '__ID__': 'type',
 
-  'id': str,
-  'prof': str,
-  'name': str,
-  'cost': float,
-  'attr_name': str,
-  'attr_val': float,
+    'name': str,
+    'special': str,
 })
 
-#units = load_csv_as_dict('units', mapping)
+units_conf = load_csv_as_dict('units', mapping)
 
 
 
@@ -89,3 +85,7 @@ def name2prof(u):
     prof = next(filter(lambda x: units[x]['name'] == u, units.keys()))
 
     return prof
+
+
+def getConf(prof):
+    return units_conf[str(prof)]

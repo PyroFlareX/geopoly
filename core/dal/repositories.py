@@ -1,7 +1,7 @@
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 
-from core.entities import User, Unit, Area, World
+from core.entities import User, Unit, Area, World, Respawn
 
 
 class UserRepository():
@@ -188,4 +188,37 @@ class UnitRepository:
 
     def delete_all(self):
         self.session.query(Unit).delete()
+        self.session.commit()
+
+
+
+class RespawnRepository:
+
+    def __init__(self, db_session):
+        self.session: Session = db_session
+
+    def get(self, did):
+        respawn: Respawn = self.session.query(Respawn).get(did)
+
+        return respawn
+
+    def create(self, respawn: Respawn):
+        self.session.add(respawn)
+        self.session.commit()
+
+    def save(self, respawn: Respawn):
+        self.session.add(respawn)
+        self.session.commit()
+
+    def save_all(self, respawns):
+        for respawn in respawns:
+            self.session.add(respawn)
+        self.session.commit()
+
+    def delete(self, respawn: Respawn):
+        self.session.delete(respawn)
+        self.session.commit()
+
+    def delete_all(self):
+        self.session.query(Respawn).delete()
         self.session.commit()

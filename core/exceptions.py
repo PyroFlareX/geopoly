@@ -8,7 +8,7 @@ class GameEndException(Exception):
         return str(self.reason)
 
 
-class AreaGuardedException(Exception):
+class GuardedAreaException(Exception):
     pass
 
 

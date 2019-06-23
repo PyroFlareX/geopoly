@@ -1,7 +1,7 @@
 from core import settings
 from core.dal.ctx import session
 from core.dal.localstores import MemoryStore, AreaStore, MemoryParentStore
-from core.dal.repositories import UserRepository, UnitRepository, AreaRepository, WorldRepository
+from core.dal.repositories import UserRepository, UnitRepository, AreaRepository, WorldRepository, RespawnRepository
 
 storage = settings.get('server.storage')
 
@@ -12,6 +12,8 @@ units = UnitRepository(db_session=session)
 areas = AreaRepository(db_session=session)
 
 worlds = WorldRepository(db_session=session)
+
+respawns = RespawnRepository(db_session=session)
 
 if storage == 'memory':
     pass

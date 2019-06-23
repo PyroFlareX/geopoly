@@ -211,3 +211,18 @@ class Unit(Base):
 
     def __repr__(self):
         return '{} ({})'.format(self.name, unit_names[self.prof])
+
+
+class Respawn(Base):
+    __tablename__ = 'respawns'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    prof = Column(SmallInteger, nullable=True)
+    aid = Column(SmallInteger)
+    train_left = Column(SmallInteger)
+
+    def __init__(self, **kwargs):
+        self.id = kwargs.get('id')
+        self.prof = kwargs.get('prof')
+        self.aid = kwargs.get('aid')
+        self.train_left = kwargs.get('train_left')

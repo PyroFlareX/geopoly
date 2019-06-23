@@ -1,198 +1,184 @@
-from random import choice
+from core.exceptions import GuardedAreaException
+from core.services import areas, moves
 
-from core import game
-from core.entities import Area
-from core.exceptions import MoveException, AreaGuardedException
-from core.rules import getMilPop
-from core.services import turns, moves
+WID = "W_TEST"
+PID = "P_TEST"
 
 
 class MoveTest():
     def __init__(self, app):
         self.app = app
+        self.app.WID = WID
+        self.app.PID = PID
 
+        areas.conn_graph = {
+            "area1": ["area2", "area3"],
+            "area2": ["area1", "area3"],
+            "area3": ["area1", "area2"],
+        }
 
-    def _getBasePatch(self, area):
-        base_patch = area.toView().copy()
-        try:
-            base_patch.pop('id')
-            base_patch.pop('move_left')
-            base_patch.pop('iso')
-            base_patch.pop('mid')
-        except:
-            pass
-        return base_patch
+    def test_move_fail_empty(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [])
 
-
-    def test_err_exhaust(self):
-        afrom: Area = self.app.readMock('area_move', Area)
-        ato: Area = self.app.readMock('area_empty', Area)
-        move_patch = self._getBasePatch(afrom)
-
-        moves.reset_areas([afrom, ato])
-        afrom.move_left -= 10
+        # to area
+        area2 = self.app._area('area2', 'UK')
+        tounits = self.app._units(area2.id, 'UK', [], 'to')
 
         try:
-            try:
-                game.move_to(afrom, ato, move_patch)
-                assert False
-            except MoveException as e:
-                assert e.reason == "has_moved"
+            assert not moves.bulk_move_to(myunits, area1, area2, WID, PID)
 
-            print("MOVE_EXHAUST: Success")
+            print("MOVE_FAIL: Success")
         except (AssertionError) as e:
-            print("MOVE_EXHAUST: Fail({})".format(e.code if hasattr(e, 'code') else ''))
-
-            print(afrom.toView())
-            print(ato.toView())
-
-            print()
-
+            print("MOVE_FAIL: Fail({})".format(e.code if hasattr(e, 'code') else ''))
         except Exception as e:
-            print("MOVE_EXHAUST: FailNE: {}".format(e))
+            print("MOVE_FAIL: FailNE: {}".format(e))
             raise e
 
-    def test_err_toomany(self):
-        afrom: Area = self.app.readMock('area_move', Area)
-        ato: Area = self.app.readMock('area_empty', Area)
-        move_patch = self._getBasePatch(afrom)
+    def test_move_simple(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [0,1,2,2])
 
-        moves.reset_areas([afrom, ato])
-
-        # just add 1 soldier too much:
-        sol = choice(list(move_patch.keys()))
-        move_patch[sol] += 1
+        # to area
+        area2 = self.app._area('area2', 'UK')
+        tounits = self.app._units(area2.id, 'UK', [], 'to')
 
         try:
-            try:
-                game.move_to(afrom, ato, move_patch)
-                assert False
-            except MoveException as e:
-                assert e.reason == "not_enough_units"
+            assert moves.bulk_move_to(myunits, area1, area2, WID, PID)
 
-            print("MOVE_TOO_MANY: Success")
-        except (AssertionError) as e:
-            print("MOVE_TOO_MANY: Fail({})".format(e.code if hasattr(e, 'code') else ''))
-
-            print(sol, "should be one too many")
-            print(afrom.toView())
-            print(ato.toView())
-
-            print()
-
-        except Exception as e:
-            print("MOVE_TOO_MANY: FailNE: {}".format(e))
-            raise e
-
-    def test_err_nullinput(self):
-        afrom: Area = self.app.readMock('area_move', Area)
-        ato: Area = self.app.readMock('area_empty', Area)
-
-        moves.reset_areas([afrom, ato])
-
-        # Empty move patch:
-        move_view_empty = ato.toView().copy()
-
-        try:
-            try:
-                game.move_to(afrom, ato, move_view_empty)
-                assert False
-            except MoveException as e:
-                assert e.reason == "bad_input"
-
-            print("MOVE_NULLINPUT: Success")
-        except (AssertionError) as e:
-            print("MOVE_NULLINPUT: Fail({})".format(e.code if hasattr(e, 'code') else ''))
-
-            print(afrom.toView())
-            print(ato.toView())
-
-            print()
-
-        except Exception as e:
-            print("MOVE_NULLINPUT: FailNE: {}".format(e))
-            raise e
-
-    def test_err_neighbor(self):
-        afrom: Area = self.app.readMock('area_move', Area)
-        ato: Area = self.app.readMock('area_empty', Area)
-
-        # todo: mock conn.json
-        pass
-        moves.reset_areas([afrom, ato])
-
-        try:
-            pass
-            print("MOVE_ERRORS: Success")
-        except (AssertionError) as e:
-            print("MOVE_ERRORS: Fail({})".format(e.code if hasattr(e, 'code') else ''))
-
-            print(afrom.toView())
-            print(ato.toView())
-
-            print()
-
-        except Exception as e:
-            print("MOVE_ERRORS: FailNE: {}".format(e))
-            raise e
-
-    def test_guarded(self):
-        afrom: Area = self.app.readMock('area_move', Area)
-        ato: Area = self.app.readMock('area_empty', Area)
-
-        move_patch = self._getBasePatch(afrom)
-        moves.reset_areas([afrom, ato])
-
-        # add just 1 guard to target area
-        ato.cav_hussar = 1
-
-        try:
-
-            try:
-                game.move_to(afrom, ato, move_patch)
-                assert False
-            except AreaGuardedException:
-                pass
-
-            print("MOVE_GUARDED: Success")
-
-        except (AssertionError) as e:
-            print("MOVE_GUARDED: Fail({})".format(e.code if hasattr(e, 'code') else ''))
-
-            print(afrom.toView())
-            print(ato.toView())
-
-        except Exception as e:
-            print("MOVE_GUARDED: FailNE: {}".format(e))
-            raise e
-
-    def test_movesuccess(self):
-        afrom: Area = self.app.readMock('area_move', Area)
-        ato: Area = self.app.readMock('area_empty', Area)
-
-        move_patch = self._getBasePatch(afrom)
-        moves.reset_areas([afrom, ato])
-
-        total_pop = getMilPop(afrom)
-
-        try:
-            assert getMilPop(afrom) == total_pop
-            assert getMilPop(ato) == 0
-            assert afrom.move_left == total_pop
-
-            game.move_to(afrom, ato, move_patch)
-
-            assert getMilPop(afrom) == 0
-            assert getMilPop(ato) == total_pop
-            assert afrom.move_left == 0
+            for unit1 in myunits:
+                assert unit1.aid == area2.id
+                #assert unit1.move_left ==
 
             print("MOVE_SIMPLE: Success")
-        except (AssertionError, MoveException, AreaGuardedException) as e:
+        except (AssertionError) as e:
             print("MOVE_SIMPLE: Fail({})".format(e.code if hasattr(e, 'code') else ''))
-
-            print(afrom.toView())
-            print(ato.toView())
-
         except Exception as e:
             print("MOVE_SIMPLE: FailNE: {}".format(e))
+            raise e
+
+    def test_move_simple_fail(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [0,1,2,2])
+
+        # to area
+        area2 = self.app._area('area2', 'UK')
+        tounits = self.app._units(area2.id, 'UK', [1,1,1,1,2,2,2,2,3], 'to')
+
+        try:
+            assert not moves.bulk_move_to(myunits, area1, area2, WID, PID)
+
+            for unit1 in myunits:
+                assert unit1.aid == area1.id
+                #assert unit1.move_left ==
+
+            print("MOVE_SIMPLE_FAIL: Success")
+        except (AssertionError) as e:
+            print("MOVE_SIMPLE_FAIL: Fail({})".format(e.code if hasattr(e, 'code') else ''))
+        except Exception as e:
+            print("MOVE_SIMPLE_FAIL: FailNE: {}".format(e))
+            raise e
+
+
+    def test_move_incastle(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [0,1,2,2])
+
+        # to area
+        area2 = self.app._area('area2', 'UK', castle=3)
+        tounits = self.app._units(area2.id, 'UK', [1,1,1,1,2,2,2,2,3], 'to')
+
+        try:
+            assert moves.bulk_move_to(myunits, area1, area2, WID, PID)
+
+            for unit1 in myunits:
+                assert unit1.aid == area2.id
+            for unit1 in tounits:
+                assert unit1.aid == area2.id
+                #assert unit1.move_left ==
+
+            print("MOVE_INCASTLE: Success")
+        except (AssertionError) as e:
+            print("MOVE_INCASTLE: Fail({})".format(e.code if hasattr(e, 'code') else ''))
+        except Exception as e:
+            print("MOVE_INCASTLE: FailNE: {}".format(e))
+            raise e
+
+    def test_move_incastle_fail(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [0,1,2,2])
+
+        # to area
+        area2 = self.app._area('area2', 'UK', castle=3)
+        tounits = self.app._units(area2.id, 'UK', [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5], 'to')
+
+        try:
+            assert not moves.bulk_move_to(myunits, area1, area2, WID, PID)
+
+            for unit1 in myunits:
+                assert unit1.aid == area1.id
+            for unit2 in tounits:
+                assert unit2.aid == area2.id
+
+            print("MOVE_INCASTLE_FAIL: Success")
+        except (AssertionError) as e:
+            print("MOVE_INCASTLE_FAIL: Fail({})".format(e.code if hasattr(e, 'code') else ''))
+        except Exception as e:
+            print("MOVE_INCASTLE_FAIL: FailNE: {}".format(e))
+            raise e
+
+    def test_move_conquer(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [0,1,2,2])
+
+        # to area
+        area2 = self.app._area('area2', 'IE')
+        tounits = self.app._units(area2.id, 'IE', [], 'to')
+
+        try:
+            assert moves.bulk_move_to(myunits, area1, area2, WID, PID)
+            assert area2.iso == area1.iso
+            for unit1 in myunits:
+                assert unit1.aid == area2.id
+
+            print("MOVE_CONQUER: Success")
+        except (AssertionError) as e:
+            print("MOVE_CONQUER: Fail({})".format(e.code if hasattr(e, 'code') else ''))
+        except Exception as e:
+            print("MOVE_CONQUER: FailNE: {}".format(e))
+            raise e
+
+    def test_move_battle_fail(self):
+        # from area
+        area1 = self.app._area('area1', 'UK')
+        myunits = self.app._units(area1.id, 'UK', [0,1,2,2])
+
+        # to area
+        area2 = self.app._area('area2', 'IE')
+        tounits = self.app._units(area2.id, 'IE', [0,1,2,2], 'to')
+
+        try:
+            try:
+                assert not moves.bulk_move_to(myunits, area1, area2, WID, PID)
+
+            except GuardedAreaException:
+                for unit1 in myunits:
+                    assert unit1.aid == area1.id
+                for unit2 in tounits:
+                    assert unit2.aid == area2.id
+
+                print("MOVE_BATTLE_FAIL: Success")
+                return
+
+            raise AssertionError()
+        except (AssertionError) as e:
+            print("MOVE_BATTLE_FAIL: Fail({})".format(e.code if hasattr(e, 'code') else ''))
+        except Exception as e:
+            print("MOVE_BATTLE_FAIL: FailNE: {}".format(e))
             raise e

@@ -1,4 +1,5 @@
 import json
+import math
 from collections import defaultdict
 from itertools import product
 
@@ -10,16 +11,17 @@ from core import rules
 
 #rules.units
 from core.entities import Area, Unit
-from core.rules import getUnits, getMilPop, UNITS, load_csv_as_dict
+from core.rules import getUnits, getMilPop, UNITS, load_csv_as_dict, units_conf
 
 mapping = defaultdict(lambda: float)
 mapping.update({"__ID__": "prof"})
 dmg = load_csv_as_dict('dmg', mapping=mapping)
 
 
-with open('core/content/units_spc.json') as fh:
-    special = EntityPatch(json.load(fh))
-
+special = {}
+for prof,conf in units_conf.items():
+    special[conf['special']] = prof
+special = EntityPatch(special)
 
 
 def getDmg(a,b):
@@ -84,6 +86,22 @@ def getEffectivePoint(unit):
     return EP
 
 
+def apply_damage(units_fr, fr_dmg):
+    dead_fr = []
+
+    for unit in units_fr:
+        unit.health -= min(unit.health, fr_dmg)
+
+        if unit.health == 0:
+            # unit died
+            dead_fr.append(unit.id)
+
+        if fr_dmg < 1:
+            break
+
+    return dead_fr
+
+
 def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
     unit_fr: Unit; unit_to: Unit
     is_siege = area_to.castle > 0
@@ -96,17 +114,19 @@ def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
 
     report = {
         "is_siege": is_siege,
-        "fr_dmg": {
-            "archers_wall": 0,
+        "fr_str": {
             "berserk": 0,
             "boosted": 0,
 
             "total": 0,
         },
-        "to_dmg": {
-            "archers_wall": 0,
+        "to_str": {
             "berserk": 0,
             "boosted": 0,
+
+            "archers_wall": 0,
+            "defensive": 0,
+            "defenders": 0,
 
             "total": 0,
         }
@@ -121,14 +141,14 @@ def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
             if not is_siege:
                 to_dmg = 1 if unit_fr.prof in (2,3) else 2
             else:
-                report['to_dmg']['defenders'] += to_dmg
+                report['to_str']['defenders'] += to_dmg / len(units_to)
         # attacker's defenders are always useless:
         if special.defender == unit_fr.prof:
             to_dmg = 1 if unit_fr.prof in (2,3) else 2
 
         # siege archers gain extra dmg
         if is_siege and special.ranged == unit_to.prof:
-            report['to_dmg']['archers_wall'] += to_dmg
+            report['to_str']['archers_wall'] += to_dmg / len(units_to)
             to_dmg *= 2.00
 
         # barbar boost:
@@ -136,12 +156,12 @@ def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
             if special.dharok == unit_to.prof:
                 if unit_to.health < 25: to_dmg *= 2
                 elif unit_to.health < 50: to_dmg *= 1.5
-                report['to_dmg']['berserk'] += to_dmg
+                report['to_str']['berserk'] += to_dmg / len(units_to)
 
             if special.dharok == unit_fr.prof:
                 if unit_fr.health < 25: fr_dmg *= 2
                 elif unit_fr.health < 50: fr_dmg *= 1.5
-                report['fr_dmg']['berserk'] += to_dmg
+                report['fr_str']['berserk'] += to_dmg / len(units_fr)
 
         fr_str += fr_dmg
         to_str += to_dmg
@@ -161,14 +181,14 @@ def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
 
     # apply global boosters:
     if fr_booster:
-        report['fr_dmg']['booster'] = fr_str*0.10
+        report['fr_str']['booster'] = fr_str*0.10 / len(units_to)
         fr_str *= 1.10
     if to_booster:
-        report['to_dmg']['booster'] = to_str*0.10
+        report['to_str']['booster'] = to_str*0.10 / len(units_to)
         to_str *= 1.10
 
     if is_siege:
-        report['to_dmg']['defensive'] = to_str*1.15
+        report['to_str']['defensive'] = to_str*0.15 / len(units_to)
         to_str *= 1.15
 
     # todo: apply siege damage
@@ -178,24 +198,22 @@ def simulate_battle(area_fr, area_to, units_fr, units_to, make_report=True):
     # normalize str points:
     fr_str /= len(units_to)
     to_str /= len(units_fr)
+    report['to_str']['total'] = to_str
+    report['fr_str']['total'] = fr_str
+
 
     # check if attacker wins
     winner = cmp(fr_str, to_str)
 
     # calculate relative and absolute losses
-    fr_dmg = getPCas(to_str/fr_str) * len(units_fr)
-    to_dmg = getPCas(fr_str/to_str) * len(units_to)
+    fr_dmg = getPCas(to_str/fr_str) * len(units_fr) * 100
+    to_dmg = getPCas(fr_str/to_str) * len(units_to) * 100
 
+    # calculate casualties health
+    dead_fr = apply_damage(units_fr, fr_dmg)
+    dead_to = apply_damage(units_to, to_dmg)
 
-
-    # calculate rate of deaths, based on defs multiplied by enemy weights
-    units_fr, dead_fr = units_fr[round(fr_dmg):], units_fr[:round(fr_dmg)]
-    units_to, dead_to = units_to[round(to_dmg):], units_to[:round(to_dmg)]
-
-    print(1)
-
-
-    return report
+    return report, (dead_fr, dead_to)
 
     # then apply floating damage as hp intake from next unit
 

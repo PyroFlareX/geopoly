@@ -27,7 +27,7 @@ class UnitsController():
         wid = worlds.list_all()[0].wid
         pid = '210845bf-8cc8-41b0-9049-583f0723e16a'
 
-        resp = moves.bulk_move_to(units, wid, path, UUID(pid))
+        resp = moves.bulk_move_path(units, wid, path, UUID(pid))
 
         return ApiResponse({
             'move': resp

@@ -1,24 +1,17 @@
-import codecs
 import json
-from queue import Queue
 from collections import defaultdict
 
 from core import rules
 from core.entities import Area
 from core.instance import areas
 
-# with open('core/content/areas.geojson', 'r', encoding='utf8') as fh:
-#     l = json.load(fh)
-#     features = {feature['id']: feature for feature in l['features']}
-#
-#     del l
 
+# Area connection graph: for each area id it lists the connected areas
 conn_graph = defaultdict(set)
 with open('core/content/conn.json') as fh:
     for id1, id2 in json.load(fh):
         conn_graph[id1].add(id2)
         conn_graph[id2].add(id1)
-
 conn_graph = dict(conn_graph)
 
 
@@ -30,27 +23,20 @@ def are_neighbors(id1: str, id2: str):
 
     return id2 in conn_graph[id1]
 
-
-def get_path(id1: str, id2: str, max_length: int=float('inf')):
-    disc = set()
-
-     # todo: itt: use an algorithm? :(
+# todo: get path between two ids
 
 
-    print(1)
-
-
-def list_areas_player(pid, radius: int=None):
-    # todo @UNUSED
-    lareas = areas.list_by_player(pid)
-
-    if not radius:
-        # radius = 0 -> we only discover the given player's areas
-        return lareas
-
-    nareas = _discover_areas([area.id for area in lareas], radius=radius)
-
-    return lareas + nareas
+# def list_areas_player(pid, radius: int=None):
+#     # todo @UNUSED
+#     lareas = areas.list_by_player(pid)
+#
+#     if not radius:
+#         # radius = 0 -> we only discover the given player's areas
+#         return lareas
+#
+#     nareas = _discover_areas([area.id for area in lareas], radius=radius)
+#
+#     return lareas + nareas
 
 
 def _discover_areas(area_ids, radius: int=None):
@@ -184,11 +170,11 @@ def load_area(area_id, wid):
     return area
 
 
-def set_training(area_id, wid, prof):
-    area = areas.get(area_id, wid)
+def set_training(area, wid, prof):
+    conf = rules.getConf(prof)
 
-    if prof is not None:
-        area.train_left = rules.units[prof]['train_turns']
+    if prof is not None and conf['train_turns'] > 0:
+        area.train_left = conf['train_turns']
         area.training = prof
     else:
         area.train_left = None
@@ -222,3 +208,6 @@ def is_path_connected(path):
 def get_neighbors(id1: str):
     return conn_graph[id1]
 
+
+def get(area_id):
+    return areas.get(area_id)

@@ -41,8 +41,9 @@ class AreasController():
 
         # todo: get wid from user
         wid = worlds.list_all()[0].wid
+        area = areas.get(area_id)
 
-        areas.set_training(area_id, wid, prof)
+        areas.set_training(area, wid, prof)
 
         return ApiResponse({
         })
