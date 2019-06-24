@@ -82,9 +82,9 @@ UNITS = [
 
 
 def name2prof(u):
-    prof = next(filter(lambda x: units[x]['name'] == u, units.keys()))
+    prof = next(filter(lambda x: units_conf[x]['name'] == u, units_conf.keys()))
 
-    return prof
+    return int(prof)
 
 
 def getConf(prof):

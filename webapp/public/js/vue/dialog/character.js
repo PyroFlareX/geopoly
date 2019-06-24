@@ -71,7 +71,7 @@ export let component = Vue.component('dialog-character', {
     onSubmit: function() {
       let imgurl = this.src_weights.toString().split(';base64,')[1];
 
-      this.$emit('picked', {img_src: this.src_weights, weights:this.weights, name: ''});
+      this.$emit('picked', {img_src: this.src_weights, weights:this.weights, name: this.name});
       this.show = false;
 
       Cookie.set("weights", JSON.stringify(this.weights));

@@ -15,9 +15,6 @@ def generate_connections():
     with codecs.open('../webapp/public/geojson/areas.geojson', encoding='utf8') as fh:
         areasGEOJSON = json.load(fh)
 
-    with open('content/castles.json', 'r') as fh:
-        castles = json.load(fh)
-
     with open('content/extra_conn.json') as fh:
         extra_conn = json.load(fh)
 
@@ -44,16 +41,6 @@ def generate_connections():
         # calculate centroid
         if 'cen' not in feature['properties']:
             feature['properties']['cen'] = [round(geom1.centroid.x),round(geom1.centroid.y)]
-
-        # assign properties
-        if aid in castles['4']:
-            feature['properties']['castle'] = 4
-        elif aid in castles['3']:
-            feature['properties']['castle'] = 3
-        elif aid in castles['2']:
-            feature['properties']['castle'] = 2
-        elif aid in castles['1']:
-            feature['properties']['castle'] = 1
 
         # add connectivity with neighboring areas
         for feature2 in areasGEOJSON['features']:

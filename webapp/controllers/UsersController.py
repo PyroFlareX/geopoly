@@ -44,7 +44,7 @@ class UsersController():
                 user = userManager.authenticateCredentials(password, username=username_or_email)
 
             if user:
-                login.logout()
+                #login.logout()
                 login.setUser(user, remember=remember)
 
                 next = request.args.get("next")

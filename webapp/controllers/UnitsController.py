@@ -34,4 +34,4 @@ class UnitsController():
         })
 
     def get_config(self):
-        return ApiResponse(rules.units)
+        return ApiResponse(rules.units_conf)
