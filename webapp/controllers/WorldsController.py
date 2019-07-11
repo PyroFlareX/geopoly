@@ -9,6 +9,10 @@ from core.instance import worlds, areas, units, users
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
 
+# create initial team
+with open('core/content/team.json') as fh:
+    start_team = json.load(fh)
+
 
 class WorldsController():
     def __init__(self, server):
@@ -46,8 +50,8 @@ class WorldsController():
         area.iso = iso
         area.virgin = False
 
-        # create initial team
-        lunits = create_team(iso=iso,wid=world.wid,pid=user.uid,aid=area.id)
+
+        lunits = create_team(start_team, iso=iso,wid=world.wid,pid=user.uid,aid=area.id)
 
         HERO = 10
         hero = create_unit(iso=iso, wid=world.wid, pid=user.uid, aid=area.id, img_vector=weights, age=age, name=name, prof=HERO)

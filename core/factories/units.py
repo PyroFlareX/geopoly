@@ -1,4 +1,5 @@
 import json
+import uuid
 from random import choice
 
 import numpy as np
@@ -32,18 +33,18 @@ def create_unit(prof, iso, **kwargs):
     return unit
 
 
-with open('core/content/team.json') as fh:
-    start_team = json.load(fh)
-
-
-def create_team(**kwargs):
+def create_team(team, id_temp=None, **kwargs):
     units = []
 
-    for prof_name, num in start_team.items():
-        prof = name2prof(prof_name)
+    for i,prof in enumerate(team):
+        if isinstance(prof, str):
+            prof = name2prof(prof)
 
-        for i in range(num):
+        unit = create_unit(prof=prof, **kwargs)
 
-            units.append(create_unit(prof=prof, **kwargs))
+        if id_temp:
+            unit.id = uuid.UUID(id_temp.format(i))
+
+        units.append(unit)
 
     return units

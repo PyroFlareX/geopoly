@@ -23,7 +23,7 @@ const cache = {};
 
 export const areaLayer = new ol.layer.Vector({
   source: areaSource,
-  maxResolution: 3000,
+  maxResolution: 4000,
 
   style: (feature, res) => {
     const styles = [];

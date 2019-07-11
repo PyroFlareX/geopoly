@@ -33,10 +33,10 @@ class FixtureCommand():
 
         world = worlds.list_all()[0]
 
-        lunits = create_team(wid=world.wid, pid=pid, iso=iso, aid=aid)
-
-        units.delete_all()
-        units.save_all(lunits)
+        #lunits = create_team(wid=world.wid, pid=pid, iso=iso, aid=aid)
+        raise Exception("NOT IMPLEMENTED")
+        #units.delete_all()
+        #units.save_all(lunits)
 
 
     def runAreas(self, *args):

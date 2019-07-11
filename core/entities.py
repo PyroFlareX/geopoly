@@ -120,6 +120,7 @@ class Area(Base):
     iso = Column(String(5))
 
     castle = Column(SmallInteger)
+    gold = Column(SmallInteger)
     virgin = Column(SmallInteger)
     training = Column(SmallInteger)
     train_left = Column(SmallInteger)
@@ -134,7 +135,9 @@ class Area(Base):
         # lvl of castle, if any
         self.castle = kwargs.get('castle', 0)
         # is area untouched (can be claimed)
-        self.virgin = kwargs.get('virgin', 0)
+        self.virgin = kwargs.get('virgin', False)
+        # gold to claim
+        self.gold = kwargs.get('gold', 0)
 
         # type of unit in training
         self.training = kwargs.get('training')

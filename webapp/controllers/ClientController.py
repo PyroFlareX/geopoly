@@ -4,7 +4,7 @@ from flask import render_template, request
 from werkzeug.utils import redirect
 
 from core.instance import units, areas, worlds
-from core.services.areas import load_areas_raw
+#from core.services.areas import load_areas_raw
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
 

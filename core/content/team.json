@@ -1,5 +1,7 @@
-{
-  "BARD": 1,
-  "DEFENDER": 4,
-  "LIGHTCAV": 2
-}
+[
+  "BARD",
+  "DEFENDER",
+  "DEFENDER",
+  "DEFENDER",
+  "LIGHTCAV"
+]

@@ -18,9 +18,9 @@ export const template = `
             <p>
               <i :class="'ra ra-castle-' + area.castle"></i> <strong>
                 <u v-if="area.castle == 1">Tower</u>
-                <u v-if="area.castle == 2">Town</u>
+                <u v-if="area.castle == 2">City</u>
                 <u v-if="area.castle == 3">Castle</u>
-                <u v-if="area.castle == 4">Castle</u>
+                <u v-if="area.castle == 4">Citadel</u>
 
                 (Lvl {{area.castle}})
               </strong>

@@ -11,7 +11,8 @@ obj = MagicMock()
 controllers = loadHandlers(obj, "Controller", "webapp/")
 
 
-def call(controller, action, form_data=None, **kwargs):
+def call(controller_action, form_data=None, **kwargs):
+    controller, action = controller_action.split(':')
     print("  >{}:{} {}".format(controller, action, kwargs))
 
     if form_data:

@@ -2,7 +2,7 @@ from flask import request
 
 from core.instance import worlds
 from core.services import areas
-from core.services.areas import load_areas_raw, load_areas_all_raw
+#from core.services.areas import load_areas_raw, load_areas_all_raw
 from webapp.entities import ApiResponse
 
 

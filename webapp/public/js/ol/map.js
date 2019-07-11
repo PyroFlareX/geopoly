@@ -9,12 +9,13 @@ import {unitLayer} from '/js/ol/layers/units.js';
 //import {eventLayer} from '/js/ol/layers/events.js';
 import {arrowLayer} from '/js/ol/layers/arrows.js';
 
+ol.style.IconImageCache.shared.setSize(512);
 
 export const view = new ol.View({
   center: [0, 0],
-  // minZoom: 3,
-  // maxZoom: 6,
-  zoom: 2,
+  minZoom: 5,
+  maxZoom: 7,
+  zoom: 6,
 });
 
 export const map = new ol.Map({

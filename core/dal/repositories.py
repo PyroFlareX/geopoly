@@ -140,6 +140,10 @@ class AreaRepository:
         self.session.delete(area)
         self.session.commit()
 
+    def delete_world(self, wid):
+        self.session.query(Area).filter(Area.wid == wid).delete()
+        self.session.commit()
+
 
 class UnitRepository:
 
@@ -190,6 +194,9 @@ class UnitRepository:
         self.session.query(Unit).delete()
         self.session.commit()
 
+    def delete_world(self, wid):
+        self.session.query(Unit).filter(Unit.wid == wid).delete()
+        self.session.commit()
 
 
 class RespawnRepository:
