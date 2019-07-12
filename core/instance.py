@@ -1,34 +1,16 @@
-from core import settings
-from core.dal.ctx import session
-from core.dal.localstores import MemoryStore, AreaStore, MemoryParentStore
-from core.dal.repositories import UserRepository, UnitRepository, AreaRepository, WorldRepository, RespawnRepository
+from engine import settings
+from core.ctx import session
 
 storage = settings.get('server.storage')
 
-users = UserRepository(db_session=session)
 
-units = UnitRepository(db_session=session)
+if storage == 'database':
+    from core.repositories import AreaRepository, UserRepository
 
-areas = AreaRepository(db_session=session)
+    areas = AreaRepository(db_session=session)
 
-worlds = WorldRepository(db_session=session)
-
-respawns = RespawnRepository(db_session=session)
-
-if storage == 'memory':
-    pass
-    # Server stores entities in memory
-
-    #players = MemoryStore('pid')
-
-
-    # matches = MemoryStore('mid')
-    # #countries = MemoryStore('cid')
-    # areas = AreaStore('id')
-
+    users = UserRepository(db_session=session)
 elif storage == 'redis':
-    # Server uses redis
     pass
-else:
-    # Server uses database
+elif storage == 'memory':
     pass

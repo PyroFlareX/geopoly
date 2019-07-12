@@ -1,10 +1,6 @@
-import uuid
-
 from flask import render_template, request
 from werkzeug.utils import redirect
 
-from core.instance import units, areas, worlds
-#from core.services.areas import load_areas_raw
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
 
@@ -28,6 +24,8 @@ class ClientController():
         )
 
     def new(self):
+        """Creation of a new user"""
+
         user = getUser()
         if user.wid:
             return redirect('/')
@@ -44,30 +42,3 @@ class ClientController():
             debug=True,
             err=request.args.get('err')
         )
-
-    def get_load(self):
-        # Todo: dont fake player :(
-        user = getUser()
-
-        if not user.wid or not user.iso:
-            return ApiResponse({})
-
-        world = worlds.list_all()[0]
-
-        lunits = units.list_by_player(pid=user.uid)
-
-        area_ids = set()
-        vunits = []
-
-        for unit in lunits:
-            vunits.append(unit.toView())
-            area_ids.add(unit.aid)
-
-        #geojson_areas = load_areas_raw(area_ids, wid=world.wid, discover_fog=True)
-
-        return ApiResponse({
-            "world": world.toView(),
-            "iso": user.iso,
-            "units": vunits,
-            "areas": [],
-        })

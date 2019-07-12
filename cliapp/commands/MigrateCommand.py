@@ -2,7 +2,8 @@ import os
 
 from sqlalchemy import text
 
-from core.dal.ctx import session, db_type
+from core.ctx import session, db_type, db_engine
+from core.entities import Base
 
 
 class MigrateCommand():
@@ -15,19 +16,29 @@ class MigrateCommand():
             }
         }
 
-
     def run(self, *args):
         base = 'cliapp/migrations/'+db_type+'/'
+        files = os.listdir(base)
 
         conn = session.connection()
 
-        for f in os.listdir(base):
+        # SQLAlchemy migration
+        print("Applying SQLAlchemy migrations...")
+        Base.metadata.create_all(db_engine)
+
+        # SQL-based migrations
+        for f in files:
             print('Applying migration {}...'.format(f))
+            self.runMigration(conn, f)
 
-            with open(os.path.join(base,f), 'r') as sql_file:
-                sql = text(sql_file.read())
+    def runMigration(self, conn, f):
+        base = 'cliapp/migrations/'+db_type+'/'
 
-            result = conn.execute(sql)
+        with open(os.path.join(base, f), 'r') as sql_file:
+            sql = text(sql_file.read())
+
+        result = conn.execute(sql)
 
         session.commit()
         conn.close()
+

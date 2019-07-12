@@ -1,8 +1,8 @@
 import sys
-from cliapp.cli import LaurenCommandLineInterface
+from cliapp.cli import GeopolyCommandLineInterface
 
 
-app = LaurenCommandLineInterface()
+app = GeopolyCommandLineInterface()
 
 if len(sys.argv) > 1:
     app.run(sys.argv)
