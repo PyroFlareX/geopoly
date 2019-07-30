@@ -2,8 +2,8 @@ import os
 
 from sqlalchemy import text
 
-from core.ctx import session, db_type, db_engine
-from core.entities import Base
+from game.ctx import session, db_type, db_engine
+from game.entities import Base
 
 
 class MigrateCommand():

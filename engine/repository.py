@@ -14,9 +14,10 @@ class Entity(object):
 
 
 class Repository:
+    T = None
+
     def __init__(self, db_session):
         self.session: Session = db_session
-        self.T = None
 
     def count(self):
         return self.session.query(self.T).count()

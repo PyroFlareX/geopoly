@@ -1,8 +1,8 @@
 from unittest import mock
 
-from core.entities import Construction, Town
-from core.helpers.iterators import get_building
-from core.services import Building
+from game.entities import Construction, Town
+from game.helpers.iterators import get_building
+from game.services import Building
 
 
 FAKE_TIME_INCREMENT = 0

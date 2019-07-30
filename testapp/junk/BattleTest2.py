@@ -1,8 +1,8 @@
 from itertools import product
 
-from core.entities import Area
-from core.rules import UNITS
-from core.services.battle import getAttPoint, simulate_battle
+from game.entities import Area
+from game.rules import UNITS
+from game.services.battle import getAttPoint, simulate_battle
 
 
 def printMatrix(A):

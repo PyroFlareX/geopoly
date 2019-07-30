@@ -1,10 +1,10 @@
 from random import choice
 
-from core import game
-from core.entities import Area
-from core.exceptions import MoveException, AreaGuardedException
-from core.rules import getMilPop
-from core.services import turns, moves
+from game import game
+from game.entities import Area
+from game.exceptions import MoveException, AreaGuardedException
+from game.rules import getMilPop
+from game.services import turns, moves
 
 
 class MoveTest():

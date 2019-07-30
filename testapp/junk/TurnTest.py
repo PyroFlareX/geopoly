@@ -1,4 +1,4 @@
-from core.services import turns
+from game.services import turns
 
 class TurnTest():
     def __init__(self, app):

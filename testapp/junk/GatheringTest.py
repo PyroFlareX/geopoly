@@ -1,7 +1,7 @@
 import numpy as np
 
-from core.entities import Town
-from core.services import Gathering
+from game.entities import Town
+from game.services import Gathering
 
 
 class GatheringTest():

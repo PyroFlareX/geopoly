@@ -4,9 +4,9 @@ from unittest.mock import MagicMock
 import numpy as np
 from eme.tests import TestApp
 
-from core.entities import Area
-from core.factories.units import create_unit
-from core.services import moves
+from game.entities import Area
+from game.factories.units import create_unit
+from game.services import moves
 
 np.set_printoptions(precision=2)
 np.set_printoptions(suppress=True)

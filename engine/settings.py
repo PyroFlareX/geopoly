@@ -4,7 +4,7 @@ from eme.entities import loadConfig
 
 
 def load():
-    conf = loadConfig('core/content/config.ini')
+    conf = loadConfig('game/content/config.ini')
 
     for okey, oval in conf.items():
         for key, val in oval.items():
@@ -21,7 +21,7 @@ def load():
     return conf
 
 
-def get(opts, cast=None):
+def get(opts, cast=None, default=None):
     if '.' not in opts:
 
         if cast is not None:
@@ -32,7 +32,7 @@ def get(opts, cast=None):
     main, opt = opts.split('.')
 
     if main not in _conf:
-        return None
+        return default
 
     val = _conf[main].get(opt)
 
@@ -42,7 +42,10 @@ def get(opts, cast=None):
         elif cast is float or cast is int:
             return 0
 
-        return None
+        return default
+
+    if val is None:
+        return default
 
     if cast is not None:
         return cast(val)
@@ -54,7 +57,7 @@ def load_csv(filename, mapping=None, encoding='ascii', ignore_duplicates=False):
     id = mapping['__ID__']
     duplicates = set()
 
-    with open('core/content/{}.csv'.format(filename), 'r', encoding=encoding) as csvfile:
+    with open('game/content/{}.csv'.format(filename), 'r', encoding=encoding) as csvfile:
         spamreader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
 
         for row in spamreader:
