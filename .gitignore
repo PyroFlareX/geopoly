@@ -1,5 +1,6 @@
 # Geopoly
 engine/
+!engine/content/modules.json
 webapp/public/engine/
 webapp/public/js/vendor/
 
