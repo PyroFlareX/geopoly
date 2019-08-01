@@ -1,1 +1,1 @@
-{"game": "Medwars", "modules": ["auth", "turns", "geomap", "worlds"]}
+{"game": "Medwars", "modules": ["auth", "turns", "geomap", "worlds", "building"]}
