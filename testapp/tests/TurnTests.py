@@ -1,7 +1,7 @@
 import unittest
 
-from modules.turns.core.service import TurnBox
-from modules.turns.manual.entities import World
+from engine.modules.turns.service import TurnBox
+from game.entities import World
 
 
 class TestStringMethods(unittest.TestCase):

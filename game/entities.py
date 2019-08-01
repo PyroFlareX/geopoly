@@ -68,8 +68,8 @@ class World(Base):
         self.name = kwargs.get('name')
         self.max_players = kwargs.get('max_players')
         self.turn_time = kwargs.get('turn_time')
-        self.turns = kwargs.get('turns')
-        self.rounds = kwargs.get('rounds')
+        self.turns = kwargs.get('turns', 0)
+        self.rounds = kwargs.get('rounds', 0)
         self.current = kwargs.get('current')
         self.max_rounds = kwargs.get('max_rounds')
 
@@ -125,24 +125,24 @@ class Country(Base):
     iso = Column(String(3), primary_key=True)
     wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
 
-    gold = Column(SmallInteger)
-    pop = Column(SmallInteger)
+    gold = Column(SmallInteger, nullable=False)
+    pop = Column(SmallInteger, nullable=False)
 
-    emperor = Column(Boolean)
-    shields = Column(SmallInteger)
-    conquers = Column(SmallInteger)
+    emperor = Column(Boolean, default=True, nullable=False)
+    shields = Column(SmallInteger, nullable=False)
+    conquers = Column(SmallInteger, nullable=False)
 
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
 
         self.iso = kwargs.get('iso')
         self.wid = kwargs.get('wid')
-        self.gold = kwargs.get('gold')
-        self.pop = kwargs.get('pop')
+        self.gold = kwargs.get('gold', 0)
+        self.pop = kwargs.get('pop', 0)
 
-        self.emperor = kwargs.get('emperor')
-        self.shields = kwargs.get('shields')
-        self.conquers = kwargs.get('conquers')
+        self.emperor = kwargs.get('emperor', False)
+        self.shields = kwargs.get('shields', 0)
+        self.conquers = kwargs.get('conquers', 0)
 
     def to_dict(self):
         return {
