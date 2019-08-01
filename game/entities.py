@@ -94,7 +94,9 @@ class Area(Base):
 
     iso = Column(String(5))
 
-    building = Column(SmallInteger)
+    unit = Column(String(3))
+    build = Column(String(6))
+    tile = Column(String(6))
 
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
@@ -102,12 +104,54 @@ class Area(Base):
         self.wid = kwargs.get('wid')
         self.iso = kwargs.get('iso')
 
-        self.building = kwargs.get('building')
+        self.build = kwargs.get('build')
+        self.tile = kwargs.get('tile')
+        self.unit = kwargs.get('unit')
 
     def to_dict(self):
         return {
             "id": self.id,
             "iso": self.iso,
             "wid": self.wid,
-            "building": self.building,
+            "build": self.build,
+            "tile": self.tile,
+            "unit": self.unit,
+        }
+
+
+class Country(Base):
+    __tablename__ = 'countries'
+
+    iso = Column(String(3), primary_key=True)
+    wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+
+    gold = Column(SmallInteger)
+    pop = Column(SmallInteger)
+
+    emperor = Column(Boolean)
+    shields = Column(SmallInteger)
+    conquers = Column(SmallInteger)
+
+    def __init__(self, **kwargs):
+        self.id = kwargs.get('id')
+
+        self.iso = kwargs.get('iso')
+        self.wid = kwargs.get('wid')
+        self.gold = kwargs.get('gold')
+        self.pop = kwargs.get('pop')
+
+        self.emperor = kwargs.get('emperor')
+        self.shields = kwargs.get('shields')
+        self.conquers = kwargs.get('conquers')
+
+    def to_dict(self):
+        return {
+            "iso": self.iso,
+            "wid": self.wid,
+            "gold": self.gold,
+            "pop": self.pop,
+
+            "emperor": self.emperor,
+            "shields": self.shields,
+            "conquers": self.conquers,
         }
