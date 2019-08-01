@@ -1,9 +1,13 @@
 # Geopoly
+engine/
+webapp/public/engine/
+webapp/public/js/vendor/
+
+# EME
 _dev/assets/
 webapp/logs.txt
 generator/logs.txt
 serverapp/logs.txt
-webapp/public/vendor/
 
 # IDE
 .idea/

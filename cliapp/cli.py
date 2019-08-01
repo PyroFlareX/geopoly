@@ -1,7 +1,7 @@
 from eme.cli import CommandLineInterface
 
 
-class LaurenCommandLineInterface(CommandLineInterface):
+class GeopolyCommandLineInterface(CommandLineInterface):
 
    def __init__(self):
       super().__init__()

@@ -4,7 +4,7 @@ from flask import Response
 from flask_login import UserMixin
 from eme.entities import EntityJSONEncoder
 
-from core.entities import User
+from game.entities import User
 
 
 class ApiResponse(Response):

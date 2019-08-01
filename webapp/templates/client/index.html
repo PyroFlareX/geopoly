@@ -8,9 +8,6 @@
 
   <!-- Turf.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.1.5/turf.min.js"></script>
-
-  <!-- TensorFlow.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
 {% endblock %}
 
 {% block content %}
@@ -19,12 +16,12 @@
   <div id="app-gui"></div>
 
   <script type="module">
-    import {template} from "/js/vue/game-gui.vue.js";
+    import {template} from "/js/gui/templates/client-gui.vue.js";
     $("#app-gui").innerHTML = template;
   </script>
   <script type="module">
+    import {gui} from '/engine/gui.js';
     import {init_app} from '/js/main.js';
-    import {gui} from '/js/vue/gui.js';
 
     // declare variables from backend
 
@@ -32,6 +29,6 @@
     window.gui = gui;
 
     // start app
-    init_app({{ debug|tojson }}, '{{ ws_address }}', {{ get_user().toView()|tojson }}, '');
+    init_app({{ debug|tojson }}, '{{ ws_address }}', {{ get_user().to_dict()|tojson }}, '');
   </script>
 {% endblock %}

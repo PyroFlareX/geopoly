@@ -1,44 +1,53 @@
-import {map, view} from '/js/ol/map.js';
-import {init_game, init_features} from '/js/ol/gfx.js';
+import {map, view} from '/engine/map.js';
+import {load, onload} from '/engine/loader.js';
 
-import {load, onload} from '/js/game/loader.js';
-import {client} from '/js/game/client.js';
-import {rules,countries,units, match} from '/js/game/store.js';
+import {watercolorLayer} from '/engine/layers/watercolor.js';
+//import {borderLayer} from '/engine/layers/borders.js';
+import {arrowLayer} from '/engine/layers/arrows.js';
 
-import {AreasController} from '/js/game/controllers/areas.js';
-import {UnitsController} from '/js/game/controllers/units.js';
-import {GameController} from '/js/game/controllers/game.js';
+import {areaLayer} from '/js/layers/areas.js';
+import {world} from '/js/store.js';
 
-import {init_test} from '/js/test.js';
+map.getLayers().extend([
+  //osmLayer,
+  watercolorLayer,
+  //outlineLayer,
+
+  areaLayer,
+  //borderLayer,
+
+  arrowLayer,
+  // eventLayer,
+  // unitLayer,
+]);
+
+
+// todo: set up colors?
 
 
 export function init_app(debug, ws_address, user, token) {
   view.setCenter([1475042.8063459413, 6077055.881901362]);
   view.setZoom(6);
 
-  client.controllers = {};
 
-  client.controllers.Areas = new AreasController(client);
-  client.controllers.Units = new UnitsController(client);
-  client.controllers.Game = new GameController(client);
-
-  match.wid = user.wid;
-  match.me = user.iso;
-  match.pid = user.uid;
+  if (user && user.wid) {
+    world.wid = user.wid;
+    world.me = user.iso;
+    world.pid = user.uid;
+  }
 
   if (debug) {
-    window.store = {
-      units: units,
-      countries: countries,
-    };
-    window.match = match;
+    // window.store = {
+    //   countries: countries,
+    // };
+    window.world = world;
     window.map = map;
-    window.client = client;
+    //window.client = client;
 
     window.layers = map.getLayers();
     window.areas = window.layers.item(1).getSource();
   }
-
+  
   load(function() {
     fetch('/client/load').then((resp)=>{
       return resp.json();
@@ -53,8 +62,31 @@ export function init_app(debug, ws_address, user, token) {
   onload((ctx) => {
     console.info("Game loaded");
 
-    init_game(ctx);
-    init_features(ctx);
-    init_test();
+    // init_game(ctx);
+    // init_features(ctx);
+    // init_test();
   });
+
 }
+
+
+export function init_features(ctx) {
+  const format = new ol.format.GeoJSON();
+  const format2 = {'type': 'json'};
+
+//  for (let feature of areaSource.getFeatures()) {
+//    setupFeature(feature);
+//  }
+
+//  // add areas:
+//  if (ctx.areas)
+//  for (let area of ctx.areas) {
+//    addArea(area, format);
+//  }
+//
+//  // Set up units
+//  if (ctx.units)
+//  for (let unit of ctx.units) {
+//    addUnit(unit, format2);
+//  }
+};

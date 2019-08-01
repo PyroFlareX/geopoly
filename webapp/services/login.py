@@ -2,8 +2,8 @@ import uuid
 
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 
-from core.entities import User
-from core.instance import users
+from game.entities import User
+from game.instance import users
 from webapp.entities import UserAuth
 
 # guestManager = GuestManager()
@@ -20,10 +20,19 @@ def init_login(server, conf):
 
 @loginManager.user_loader
 def load_user(uid):
+    if uid is None:
+        return None
+    if uid == 'None':
+        raise Exception("Very interesting UID provided")
+
     user = users.get(uid)
 
     if not user:
         user = User(uid=uuid.UUID(uid), username=None)
+
+    if user.uid == 'None':
+
+        raise Exception("ahusdjfsda asdk e ags sd gsrgsthr")
 
     return UserAuth(user)
 
@@ -46,9 +55,12 @@ def forceAnonLogin(uid):
 
 
 def setUser(user, remember=True):
+    assert not user.uid == 'None'
     if not isinstance(user, UserAuth):
+        assert not user.uid == 'None'
         user = UserAuth(user)
-
+        assert not user.uid == 'None'
+    assert not user.uid == 'None'
     login_user(user, remember=remember)
 
 

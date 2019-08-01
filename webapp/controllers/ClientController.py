@@ -1,10 +1,8 @@
-import uuid
-
 from flask import render_template, request
 from werkzeug.utils import redirect
 
-from core.instance import units, areas, worlds
-#from core.services.areas import load_areas_raw
+from engine.modules.worlds import service
+from game.instance import worlds, users
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
 
@@ -18,6 +16,9 @@ class ClientController():
         #ws_address = self.server.conf['websocket']['address']
         user = getUser()
 
+        if user.uid == 'None':
+            raise Exception("hifga i eeeeeeeeeeeeeeeeeeeee")
+
         if not user.wid:
             return redirect('/client/welcome')
 
@@ -27,15 +28,14 @@ class ClientController():
             err=request.args.get('err')
         )
 
-    def new(self):
+    def load(self):
         user = getUser()
-        if user.wid:
-            return redirect('/')
 
-        return render_template('/client/new.html',
-            debug=True,
-            err=request.args.get('err')
-        )
+        world = worlds.get(user.wid)
+
+        return ApiResponse({
+            "world": world.to_dict()
+        })
 
     def welcome(self):
         user = getUser()
@@ -45,29 +45,21 @@ class ClientController():
             err=request.args.get('err')
         )
 
-    def get_load(self):
-        # Todo: dont fake player :(
+    def new(self):
+        """creates fake match"""
+
         user = getUser()
+        if user.wid:
+            return redirect('/')
 
-        if not user.wid or not user.iso:
-            return ApiResponse({})
+        world = worlds.get_first()
+        if not world:
+            world = service.create(name="Test")
 
-        world = worlds.list_all()[0]
+        service.join(user, world, "UK")
 
-        lunits = units.list_by_player(pid=user.uid)
+        users.set_world(user.uid, world.wid, user.iso)
+        worlds.save(world)
 
-        area_ids = set()
-        vunits = []
+        return redirect('/')
 
-        for unit in lunits:
-            vunits.append(unit.toView())
-            area_ids.add(unit.aid)
-
-        #geojson_areas = load_areas_raw(area_ids, wid=world.wid, discover_fog=True)
-
-        return ApiResponse({
-            "world": world.toView(),
-            "iso": user.iso,
-            "units": vunits,
-            "areas": [],
-        })
