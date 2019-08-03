@@ -91,18 +91,21 @@ class Area(Base):
 
     id = Column(String(8), primary_key=True)
     wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
-
     iso = Column(String(5))
+
+    exhaust = Column(SmallInteger)
 
     unit = Column(String(3))
     build = Column(String(6))
     tile = Column(String(6))
 
+
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
-
         self.wid = kwargs.get('wid')
         self.iso = kwargs.get('iso')
+
+        self.exhaust = kwargs.get('exhaust')
 
         self.build = kwargs.get('build')
         self.tile = kwargs.get('tile')
@@ -113,6 +116,9 @@ class Area(Base):
             "id": self.id,
             "iso": self.iso,
             "wid": self.wid,
+
+            "exhaust": self.exhaust,
+
             "build": self.build,
             "tile": self.tile,
             "unit": self.unit,
