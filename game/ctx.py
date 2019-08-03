@@ -14,12 +14,12 @@ elif db_type == 'sqlite':
 
 Session = sessionmaker(bind=db_engine)
 
-session = Session()
+db_session = Session()
 
 
 def get_session(force=False):
     if force:
-        session.close()
+        db_session.close()
 
 
-    return session
+    return db_session

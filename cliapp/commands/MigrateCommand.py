@@ -2,7 +2,7 @@ import os
 
 from sqlalchemy import text
 
-from game.ctx import session, db_type, db_engine
+from game.ctx import db_session, db_type, db_engine
 from game.entities import Base
 
 
@@ -20,7 +20,7 @@ class MigrateCommand():
         base = 'cliapp/migrations/'+db_type+'/'
         files = os.listdir(base)
 
-        conn = session.connection()
+        conn = db_session.connection()
 
         # SQLAlchemy migration
         print("Applying SQLAlchemy migrations...")
@@ -39,6 +39,6 @@ class MigrateCommand():
 
         result = conn.execute(sql)
 
-        session.commit()
+        db_session.commit()
         conn.close()
 

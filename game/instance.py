@@ -1,17 +1,19 @@
 from engine import settings
-from game.ctx import session
+from game.ctx import db_session
 
 storage = settings.get('server.storage')
 
 
 if storage == 'database':
-    from game.repositories import AreaRepository, UserRepository, WorldRepository
+    from game.repositories import AreaRepository, UserRepository, WorldRepository, CountryRepository
 
-    areas = AreaRepository(db_session=session)
+    users = UserRepository(db_session=db_session)
 
-    users = UserRepository(db_session=session)
+    worlds = WorldRepository(db_session=db_session)
 
-    worlds = WorldRepository(db_session=session)
+    countries = CountryRepository(db_session=db_session)
+
+    areas = AreaRepository(db_session=db_session)
 
 elif storage == 'redis':
     pass
