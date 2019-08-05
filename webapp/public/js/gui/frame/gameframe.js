@@ -1,10 +1,10 @@
 import {SRNG} from '/js/vendor/srng.js';
+import {world} from '/engine/modules/worlds/world.js';
 import {openRandom} from '/engine/gfx/jumpto.js';
 import {getColor, colors} from '/engine/colors.js';
 
 import {template} from "/js/gui/frame/gameframe.vue.js"
 
-import {world} from '/js/store.js';
 import {client} from '/js/client.js';
 
 

@@ -3,7 +3,6 @@ from werkzeug.utils import redirect
 
 from engine.modules.worlds import service
 from game.instance import worlds, users
-from webapp.entities import ApiResponse
 from webapp.services.login import getUser
 
 
@@ -21,21 +20,14 @@ class ClientController():
 
         if not user.wid:
             return redirect('/client/welcome')
+        world = worlds.get(user.wid)
 
         return render_template('/client/index.html',
             #ws_address=ws_address,
+            world=world,
             debug=True,
             err=request.args.get('err')
         )
-
-    def load(self):
-        user = getUser()
-
-        world = worlds.get(user.wid)
-
-        return ApiResponse({
-            "world": world.to_dict()
-        })
 
     def welcome(self):
         user = getUser()

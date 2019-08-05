@@ -52,6 +52,7 @@ class World(Base):
     # Worlds module
     wid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(20))
+    map = Column(String(20))
     max_players = Column(SmallInteger)
 
     # Turns module
@@ -66,6 +67,7 @@ class World(Base):
 
         self.wid = kwargs.get('wid')
         self.name = kwargs.get('name')
+        self.map = kwargs.get('map')
         self.max_players = kwargs.get('max_players')
         self.turn_time = kwargs.get('turn_time')
         self.turns = kwargs.get('turns', 0)
@@ -77,6 +79,7 @@ class World(Base):
         return {
             "wid": self.wid,
             "name": self.name,
+            "map": self.map,
             "max_players": self.max_players,
             "turn_time": self.turn_time,
             "turns": self.turns,

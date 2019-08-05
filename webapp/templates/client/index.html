@@ -15,7 +15,13 @@
 
   <div id="app-gui"></div>
 
+  <script>
+    // declare variables from backend
+    window.world_map = '{{ world.map }}';
+  </script>
+
   <script type="module">
+    // import gui frame
     import {template} from "/js/gui/templates/client-gui.vue.js";
     $("#app-gui").innerHTML = template;
   </script>
@@ -24,11 +30,9 @@
     import {init_app} from '/js/main.js';
 
     // declare variables from backend
-
-    // declare variables from backend
     window.gui = gui;
 
     // start app
-    init_app({{ debug|tojson }}, '{{ ws_address }}', {{ get_user().to_dict()|tojson }}, '');
+    init_app({{ debug|tojson }}, '{{ ws_address }}', {{ get_user().to_dict()|tojson }}, '', {{ world.to_dict()|tojson }});
   </script>
 {% endblock %}
