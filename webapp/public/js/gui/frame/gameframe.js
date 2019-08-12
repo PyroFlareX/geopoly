@@ -15,9 +15,7 @@ export let component = Vue.component('game-frame', {
     return {
       iso: "AA",
       world: world,
-      username: "",
 
-      team: null,
       updates: 0,
     }
   },
@@ -50,6 +48,7 @@ export let component = Vue.component('game-frame', {
 
     season: function() {
       let m = this.world.turns % 12 + 1;
+      console.log("season update")
 
       if (m <= 2 || m == 12)
         return 'Winter';
@@ -63,7 +62,7 @@ export let component = Vue.component('game-frame', {
     },
 
     gameyear: function() {
-      const start_year = 1348;
+      let start_year = 1821;
       let dy = Math.floor(this.world.turns / 12);
 
       return start_year + dy;

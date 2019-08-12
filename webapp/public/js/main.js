@@ -2,10 +2,11 @@ import {map, view} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
 import {setup_feature} from '/engine/modules/geomap/conn.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
+import {borderLayer, borderOutLayer, borderInLayer,  settings} from '/engine/modules/borders/layer.js';
+import {init_borders} from '/engine/modules/borders/main.js';
 
 import {watercolorLayer} from '/engine/layers/watercolor.js';
 import {arrowLayer} from '/engine/layers/arrows.js';
-//import {borderLayer} from '/engine/layers/borders.js';
 
 import {client} from '/js/client.js';
 import {areaLayer, areaSource} from '/js/layers/areas.js';
@@ -17,7 +18,10 @@ map.getLayers().extend([
   //outlineLayer,
 
   areaLayer,
-  //borderLayer,
+  
+  borderLayer,
+  borderOutLayer,
+  borderInLayer,
 
   arrowLayer,
   // eventLayer,
@@ -62,8 +66,19 @@ onload((ctx) => {
     feature.setProperties(area);
 
     // geoconn setup
-    setup_feature(feature);    
+    setup_feature(feature);
   }
+
+  // use country colors
+  //settings.layers = 
+  settings.color = null;
+  settings.width = 2;
+  
+  init_borders({
+    source: areaSource,
+    inner_stroke: false,
+  });
+
 
   console.log("Game loaded.")
 });

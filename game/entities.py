@@ -138,6 +138,7 @@ class Country(Base):
     pop = Column(SmallInteger, nullable=False)
     order = Column(SmallInteger, nullable=False)
     ai = Column(SmallInteger)
+    color = Column(String(7))
 
     emperor = Column(Boolean, default=True, nullable=False)
     shields = Column(SmallInteger, nullable=False)
@@ -152,6 +153,7 @@ class Country(Base):
         self.pop = kwargs.get('pop', 0)
         self.order = kwargs.get('order', 0)
         self.ai = kwargs.get('ai', 0)
+        self.color = kwargs.get('color', "black")
 
         self.emperor = kwargs.get('emperor', False)
         self.shields = kwargs.get('shields', 0)
@@ -164,6 +166,7 @@ class Country(Base):
             "gold": self.gold,
             "pop": self.pop,
             "order": self.order,
+            "color": self.color,
             "ai": self.ai,
 
             "emperor": self.emperor,

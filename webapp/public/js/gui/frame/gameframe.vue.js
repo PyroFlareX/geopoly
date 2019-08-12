@@ -1,5 +1,5 @@
 export const template = `
-  <div>
+  <div v-if="world && world.me" >
     <div v-if="world.me" class="gui-corner-left-wrapper">
       <div class="gui-corner-left" @click="onClickFlag">
         <div class="glass"></div>
@@ -40,19 +40,6 @@ export const template = `
       <div title="" @click="exit" class="gui-corner-icon tilt-90">
         <i class="ra icon-ra ra-icon-exit"></i>
       </div>
-    </div>
-
-
-    <div class="units-bar" v-if="team">
-      <div class="d-flex flex-row">
-        <div @click="open_infobar('unit', unit)" class="pointer unit-box text-center p-2" :style="unit_background(unit)" v-for="unit in team" >
-
-
-          <img class="img-fluid" :src="src_unit(unit)" style="min-height:75px" />
-
-          <i :class="'ra ra-lg ra-unit-' + units[unit.get('prof')].name.lower()" style="position: absolute; top: 70px"></i>
-        </div>
-      </div>      
     </div>
 
   </div>
