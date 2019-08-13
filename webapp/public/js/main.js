@@ -1,15 +1,17 @@
 import {map, view} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
+import {gui} from '/engine/gui.js';
+
 import {setup_feature} from '/engine/modules/geomap/conn.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
-import {borderLayer, borderOutLayer, borderInLayer,  settings} from '/engine/modules/borders/layer.js';
-import {init_borders} from '/engine/modules/borders/main.js';
+import {init_borders, add_border_layer} from '/engine/modules/borders/borders.js';
 
 import {watercolorLayer} from '/engine/layers/watercolor.js';
 import {arrowLayer} from '/engine/layers/arrows.js';
+import {areaLayer, areaSource} from '/js/layers/areas.js';
 
 import {client} from '/js/client.js';
-import {areaLayer, areaSource} from '/js/layers/areas.js';
+import {init_chat} from '/js/chat.js';
 
 
 map.getLayers().extend([
@@ -19,9 +21,15 @@ map.getLayers().extend([
 
   areaLayer,
   
-  borderLayer,
-  borderOutLayer,
-  borderInLayer,
+  add_border_layer('border-stroke', {
+   width: 4
+  }),
+  // add_border_layer('border-fill', {
+    
+  // }),
+  // add_border_layer('border-instroke', {
+    
+  // }),
 
   arrowLayer,
   // eventLayer,
@@ -36,6 +44,19 @@ export function init_app(debug, ws_address, user, token, world) {
   view.setCenter([1475042.8063459413, 6077055.881901362]);
   view.setZoom(6);
   
+  client.ws.connect(ws_address, ()=>{
+
+    // init WS auth
+    client.ws.request("Users:guest", {
+      wid: user.wid,
+      uid: user.uid,
+      iso: user.iso,
+      username: user.username,
+    }, ()=>{
+      //...
+    });
+  });
+
   if (debug) {
     window.client = client;
 
@@ -68,17 +89,13 @@ onload((ctx) => {
     // geoconn setup
     setup_feature(feature);
   }
-
-  // use country colors
-  //settings.layers = 
-  settings.color = null;
-  settings.width = 2;
   
   init_borders({
     source: areaSource,
-    inner_stroke: false,
   });
 
+  // init WS global chat
+  init_chat(gui.$refs['global-chat']);
 
   console.log("Game loaded.")
 });

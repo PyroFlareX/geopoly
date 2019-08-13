@@ -14,7 +14,7 @@ class GeopolyServer(WebsocketApp):
         self.onlineMatches = defaultdict(set)
         self.onlineHall = set()
 
-        self.threads = loadHandlers(self, "Thread", prefix=conf.get('groups_folder'))
+        self.threads = loadHandlers(self, "Thread", prefix=conf['websocket']['groups_folder'])
 
         super().__init__(conf)
 
@@ -28,31 +28,30 @@ class GeopolyServer(WebsocketApp):
         self.serveforever()
 
     def client_left(self, client):
-        if client.user and client.user.mid:
-            if client in self.onlineMatches[client.user.mid]:
-                self.onlineMatches[client.user.mid].remove(client)
+        if client.user and client.user.wid:
+            if client in self.onlineMatches[client.user.wid]:
+                self.onlineMatches[client.user.wid].remove(client)
 
             elif client in self.onlineHall:
                 self.onlineHall.remove(client)
 
         super().client_connected(client)
 
-    def sendToMatch(self, mid: str, rws: dict):
+    def send_to_match(self, mid: str, rws: dict):
         clients = self.onlineMatches.get(mid)
 
         if clients:
             for client in clients:
                 self.send(rws, client)
 
-    def sendToHall(self, rws: dict):
+    def send_to_hall(self, rws: dict):
 
         for client in self.onlineHall:
             self.send(rws, client)
 
-    def getUsersAt(self, mid: str):
+    def get_client_at(self, mid: str):
         for client in self.onlineMatches[mid]:
-            if client.user:
-                yield client.user
+            yield client
 
 
 if __name__ == "__main__":

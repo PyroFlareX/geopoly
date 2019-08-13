@@ -12,7 +12,7 @@ class ClientController():
         self.group = "Client"
 
     def index(self):
-        #ws_address = self.server.conf['websocket']['address']
+        ws_address = self.server.conf['websocket']['address']
         user = getUser()
 
         if user.uid == 'None':
@@ -23,7 +23,7 @@ class ClientController():
         world = worlds.get(user.wid)
 
         return render_template('/client/index.html',
-            #ws_address=ws_address,
+            ws_address=ws_address,
             world=world,
             debug=True,
             err=request.args.get('err')

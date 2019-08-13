@@ -1,14 +1,13 @@
 from eme.websocket import WSClient
+from game.entities import User
 
-from core.entities import User
 
+class UserWSGuest(User):
+    def __init__(self, client: WSClient=None, **kwargs):
+        User.__init__(self, **kwargs)
 
-class UserAuthWS(User):
-    def __init__(self, user: User, client: WSClient=None):
-        User.__init__(self, **user.__dict__)
-
-        self.id = self.uid
+        self.id = kwargs.get('uid')
         self.client = client
 
     def __repr__(self):
-        return "%s (%s)" % (self.email, self.uid)
+        return "%s (%s)" % (self.username, self.uid)

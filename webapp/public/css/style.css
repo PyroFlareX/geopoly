@@ -254,8 +254,44 @@
   font-size: 16px;
 }
 
+/* CHAT frame */
+#game-global-chat {
+    border-radius: 10px;
+    border-right: 1px solid white;
+    border-top: 2px solid black;
+
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background: rgba(0,0,0,0.4);
+    padding: 5px;
+
+    width: 520px;
+    height: 260px;
+}
+#game-global-chat .chat-messages-wrapper {
+}
+#game-global-chat .chat-messages {
+  height:200px;
+  color: white;
+}
+#game-global-chat .chat-user {
+  
+}
+#game-global-chat .chat-send-btn {
+
+}
+#game-global-chat .chat-input {
+  background: transparent;
+  color: white;
+}
+.chat-messages .chat-emoji {
+  max-width: 40px;
+  max-height: 40px;
+}
+
 /* GUI frame */
-.units-bar {
+/*.units-bar {
   position: fixed;
   height: 100px;
   width: 100%;
@@ -299,7 +335,7 @@
 }
 .character-profile.pointer:hover {
   border-color: orange;
-}
+}*/
 
 /* GUI game frame Corners */
 .gui-corner-left {
