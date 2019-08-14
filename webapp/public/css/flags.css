@@ -1,5 +1,4 @@
-
-.flag{width:240px; height:160px;background: url(flags.png)}
+.flag {width:240px; height:160px;background: url(flags.png)}
 .flag-lg{zoom:1.55;-moz-transform:scale(1.55);-moz-transform-origin: 0 0;}
 .flag-md{zoom:0.5;-moz-transform:scale(0.5);-moz-transform-origin: 0 0;}
 .flag-sm{zoom:0.25;-moz-transform:scale(0.25);-moz-transform-origin: 0 0;}
@@ -7,21 +6,7 @@
 
 
 .flag-AA{background-position: -0px -0px}
-.flag-AT{background-position: -240px -0px}
-.flag-BE{background-position: -480px -0px}
-.flag-BG{background-position: -720px -0px}
-.flag-CH{background-position: -960px -0px}
-.flag-DE{background-position: -0px -160px}
-.flag-DK{background-position: -240px -160px}
-.flag-EL{background-position: -480px -160px}
-.flag-ES{background-position: -720px -160px}
-.flag-FR{background-position: -960px -160px}
-.flag-IT{background-position: -0px -320px}
-.flag-NL{background-position: -240px -320px}
-.flag-PT{background-position: -480px -320px}
-.flag-RO{background-position: -720px -320px}
-.flag-RS{background-position: -960px -320px}
-.flag-RU{background-position: -0px -480px}
-.flag-SE{background-position: -240px -480px}
-.flag-TR{background-position: -480px -480px}
-.flag-UK{background-position: -720px -480px}
+.flag-UK{background-position: -240px -0px}
+.flag-FR{background-position: -480px -0px}
+.flag-DE{background-position: -720px -0px}
+.flag-HU{background-position: -960px -0px}

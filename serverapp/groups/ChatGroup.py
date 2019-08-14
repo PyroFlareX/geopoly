@@ -3,7 +3,5 @@ from game.entities import User
 
 
 class ChatGroup(ChatGroupBase):
-
-
     # cheat are propagated to controller!
     pass

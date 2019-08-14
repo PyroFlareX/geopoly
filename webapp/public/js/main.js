@@ -1,5 +1,6 @@
 import {map, view} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
+import {init_flags} from '/engine/flags.js';
 import {gui} from '/engine/gui.js';
 
 import {setup_feature} from '/engine/modules/geomap/conn.js';
@@ -39,35 +40,24 @@ map.getLayers().extend([
 
 // todo: set up colors?
 
+export function init_app(conf, user, token, world) {
+  init_flags(conf.flags);
 
-export function init_app(debug, ws_address, user, token, world) {
-  view.setCenter([1475042.8063459413, 6077055.881901362]);
-  view.setZoom(6);
+  view.setCenter([parseFloat(conf.client.center[0]), parseFloat(conf.client.center[1])]);
+  view.setZoom(parseInt(conf.client.zoom));
   
-  client.ws.connect(ws_address, ()=>{
-
-    // init WS auth
-    client.ws.request("Users:guest", {
-      wid: user.wid,
-      uid: user.uid,
-      iso: user.iso,
-      username: user.username,
-    }, ()=>{
-      //...
-    });
-  });
-
-  if (debug) {
-    window.client = client;
-
+  if (conf.client.debug) {
     window.layers = map.getLayers();
     window.areas = window.layers.item(1).getSource();
   }
 
+  client.init_game_client(conf.client, user);
+
   set_user(user);
   load_world(world, function(resp){
     // save info coming from WorldController
-    this.ctx.debug = debug;
+    this.ctx.conf = conf;
+    this.ctx.debug = conf.client.debug;
     this.ctx.areas = resp.areas;
   });
 }
@@ -90,12 +80,18 @@ onload((ctx) => {
     setup_feature(feature);
   }
   
-  init_borders({
-    source: areaSource,
-  });
+  if (ctx.conf.borders.enabled) {
+    ctx.conf.borders.source = areaSource;
+    init_borders(ctx.conf.borders);
+  }
 
-  // init WS global chat
-  init_chat(gui.$refs['global-chat']);
+  if (ctx.conf.chat.enabled) {
+    // init WS global chat
+    init_chat(gui.$refs['global-chat'], ctx.conf.chat);
+  } else {
+    // hide chat
+    gui.$refs['global-chat'].show = false;
+  }
 
   console.log("Game loaded.")
 });

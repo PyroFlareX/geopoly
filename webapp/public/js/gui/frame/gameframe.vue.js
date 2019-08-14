@@ -3,8 +3,14 @@ export const template = `
     <div v-if="world.me" class="gui-corner-left-wrapper">
       <div class="gui-corner-left" @click="onClickFlag">
         <div class="glass"></div>
-        <div class="flag-wrap">
+
+        <!-- use this for coats of arms: -->
+        <!--<div class="flag-wrap">
           <div class="flag-shield" :style="herald(world.me)"></div>
+        </div>-->
+
+        <div class="flag-wrap">
+          <div :class="'flag flag-'+world.me"></div>
         </div>
       </div>
     </div>

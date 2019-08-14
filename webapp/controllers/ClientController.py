@@ -1,6 +1,8 @@
+from eme.entities import loadConfig
 from flask import render_template, request
 from werkzeug.utils import redirect
 
+from engine import settings
 from engine.modules.worlds import service
 from game.instance import worlds, users
 from webapp.services.login import getUser
@@ -12,7 +14,6 @@ class ClientController():
         self.group = "Client"
 
     def index(self):
-        ws_address = self.server.conf['websocket']['address']
         user = getUser()
 
         if user.uid == 'None':
@@ -23,9 +24,8 @@ class ClientController():
         world = worlds.get(user.wid)
 
         return render_template('/client/index.html',
-            ws_address=ws_address,
+            conf=settings._conf,
             world=world,
-            debug=True,
             err=request.args.get('err')
         )
 
