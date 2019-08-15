@@ -195,126 +195,116 @@
  * Generated content below - do not modify
  **/
 
-.ra-action-garrison:before {
+.ra-build-barr:before {
   content: "\e900";
 }
-.ra-action-team:before {
+.ra-build-cita:before {
   content: "\e901";
 }
-.ra-castle-1:before {
+.ra-build-house:before {
   content: "\e902";
 }
-.ra-castle-2:before {
+.ra-icon-tribute .path1:before {
   content: "\e903";
+  color: rgb(46, 78, 10);
 }
-.ra-castle-3:before {
+.ra-icon-tribute .path2:before {
   content: "\e904";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-castle-4:before {
+.ra-icon-tribute .path3:before {
   content: "\e905";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-admin:before {
+.ra-icon-tribute .path4:before {
   content: "\e906";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-duke:before {
+.ra-icon-tribute .path5:before {
   content: "\e907";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-emperor:before {
+.ra-icon-tribute .path6:before {
   content: "\e908";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-emperor2:before {
+.ra-icon-tribute .path7:before {
   content: "\e909";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-hochmeister:before {
+.ra-icon-tribute .path8:before {
   content: "\e90a";
+  margin-left: -1em;
+  color: rgb(255, 185, 69);
 }
-.ra-head-khan:before {
+.ra-icon-tribute .path9:before {
   content: "\e90b";
+  margin-left: -1em;
+  color: rgb(255, 185, 69);
 }
-.ra-head-king:before {
+.ra-icon-tribute .path10:before {
   content: "\e90c";
+  margin-left: -1em;
+  color: rgb(255, 185, 69);
 }
-.ra-head-lord:before {
+.ra-icon-tribute .path11:before {
   content: "\e90d";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-pope:before {
+.ra-icon-tribute .path12:before {
   content: "\e90e";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-head-prince:before {
+.ra-icon-tribute .path13:before {
   content: "\e90f";
+  margin-left: -1em;
+  color: rgb(255, 185, 69);
 }
-.ra-head-sultan:before {
+.ra-icon-tribute .path14:before {
   content: "\e910";
+  margin-left: -1em;
+  color: rgb(46, 78, 10);
 }
-.ra-icon-arrow-left:before {
+.ra-res-emerald:before {
   content: "\e911";
+  color: #49de20;
 }
-.ra-icon-arrow-right:before {
+.ra-res-gold:before {
   content: "\e912";
+  color: #2e4e0a;
 }
-.ra-icon-chat:before {
+.ra-res-pop:before {
   content: "\e913";
 }
-.ra-icon-conquer:before {
+.ra-tile-bridge:before {
   content: "\e914";
 }
-.ra-icon-health:before {
+.ra-tile-city:before {
   content: "\e915";
 }
-.ra-icon-info:before {
+.ra-tile-forest:before {
   content: "\e916";
 }
-.ra-icon-king:before {
+.ra-tile-mount:before {
   content: "\e917";
 }
-.ra-icon-mute:before {
+.ra-tile-river:before {
   content: "\e918";
 }
-.ra-icon-none:before {
+.ra-unit-art:before {
   content: "\e919";
 }
-.ra-icon-player:before {
+.ra-unit-cav:before {
   content: "\e91a";
 }
-.ra-icon-settings:before {
+.ra-unit-inf:before {
   content: "\e91b";
-}
-.ra-icon-unmute:before {
-  content: "\e91c";
-}
-.ra-unit-archer:before {
-  content: "\e91d";
-}
-.ra-unit-barbar:before {
-  content: "\e91e";
-}
-.ra-unit-bard:before {
-  content: "\e91f";
-}
-.ra-unit-cata:before {
-  content: "\e920";
-}
-.ra-unit-defender:before {
-  content: "\e921";
-}
-.ra-unit-foot:before {
-  content: "\e922";
-}
-.ra-unit-hero:before {
-  content: "\e923";
-}
-.ra-unit-knight:before {
-  content: "\e924";
-}
-.ra-unit-lightcav:before {
-  content: "\e925";
-}
-.ra-unit-pike:before {
-  content: "\e926";
-}
-.ra-unit-strong:before {
-  content: "\e927";
-}
-.ra-unit-thug:before {
-  content: "\e928";
 }

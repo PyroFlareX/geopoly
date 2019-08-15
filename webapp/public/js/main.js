@@ -6,6 +6,7 @@ import {gui} from '/engine/gui.js';
 import {setup_feature} from '/engine/modules/geomap/conn.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
 import {init_borders, add_border_layer} from '/engine/modules/borders/borders.js';
+import {init_building} from '/engine/modules/building/building.js';
 
 import {watercolorLayer} from '/engine/layers/watercolor.js';
 import {arrowLayer} from '/engine/layers/arrows.js';
@@ -90,8 +91,11 @@ onload((ctx) => {
     init_chat(gui.$refs['global-chat'], ctx.conf.chat);
   } else {
     // hide chat
-    gui.$refs['global-chat'].show = false;
+    if (gui.$refs['global-chat'])
+      gui.$refs['global-chat'].show = false;
   }
+
+  init_building(ctx.conf.building);
 
   console.log("Game loaded.")
 });

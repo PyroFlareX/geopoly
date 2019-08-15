@@ -114,6 +114,8 @@ areaLayer.click = (feature, key) => {
   }
 
   if (!key) {
+    // @temporal
+    // feature.getId(), 
     // Select and move units standing on area
     //onSelectUnits(feature);
 
@@ -141,22 +143,26 @@ areaLayer.keypress = (feature, key) => {
     openRandom();
   }
   else {
-    let infobar;
     switch(key) {
       case 'Q':
-        infobar = 'area';
+        // todo: move unit
       break;
-    }
-
-    if (gui.opened && gui.opened == infobar+'_'+feature.get('id')) {
-      gui.infobar('close');
-    } else {
-      // if (key != 'Q' && world.me != ) {
-        
-      // }
-      onCancelSelection();
-      
-      gui.infobar(infobar, feature);
+      case 'W':
+        console.log(gui.opened)
+        if (gui.opened && gui.opened == 'buy-units-'+feature.get('id')) {
+          gui.infobar('close');
+        }
+        gui.infobar("buy-units", feature.getProperties(), world);
+      break;
+      case 'E':
+        if (gui.opened && gui.opened == 'buy-builds-'+feature.get('id')) {
+          gui.infobar('close');
+        }
+        gui.infobar("buy-builds", feature.getProperties(), world);
+      break;
+      case 'R':
+        // reserved
+      break;
     }
   }
 };
