@@ -44,7 +44,7 @@
     "give_pop": 1,
     "give_gold": 10,
     
-    "requires": {"tile": "city"},
+    "requires": {"tile": "city", "build": null},
 
     "slot": "build"
   },

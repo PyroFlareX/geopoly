@@ -1,7 +1,11 @@
 import {load, onload} from '/engine/loader.js';
 import {getColor, getMapBlend, getHighlight, colors} from '/engine/colors.js';
-import {openRandom} from '/engine/gfx/jumpto.js';
 import {world, countries} from '/engine/modules/worlds/world.js';
+import {openRandom} from '/engine/gfx/jumpto.js';
+import {show_arrow, set_arrow, hide_arrow} from '/engine/gfx/arrows.js';
+
+import {client} from '/js/client.js';
+import {validate_move} from '/js/game/moves.js';
 
 /**
  * Area layer
@@ -100,6 +104,11 @@ export const areaLayer = new ol.layer.Vector({
 });
 areaLayer.name = 'areas';
 
+export const move = {
+  selected: null,
+
+  disable_tooltip: false,
+};
 
 areaLayer.click = (feature, key) => {
   let iso = feature.get('iso');
@@ -113,13 +122,62 @@ areaLayer.click = (feature, key) => {
     return;
   }
 
-  if (!key) {
-    // @temporal
-    // feature.getId(), 
-    // Select and move units standing on area
-    //onSelectUnits(feature);
+  if (move.selected) {
+    // move-arrow click: ending
+    if (gui.opened == 'move-info' && !move.disable_tooltip) {
+      gui.infobar("close");
+    }
 
-    // select area / castle too:
+    if (validate_move(move.selected, feature)) {
+      client.ws.request('Areas:move', {
+        from_id: move.selected.getId(),
+        to_id: feature.getId()
+      });
+    } else {
+      console.log("TODO: flash: can't move there");
+    }
+
+    hide_arrow();
+    move.selected = null;
+  }
+
+  if (!key) {
+    // https://www.youtube.com/watch?v=1KC2-EZ1ee0
+
+    if (world.me == iso) {
+      // selecting my owned area
+      const nam = gui.opened ? gui.opened.substr(0,9) : null;
+
+      // remember last selected infobar:
+      if (nam == 'buy-units')
+        gui.infobar("buy-units", feature.getProperties(), world);
+      else if (nam == 'buy-build')
+        gui.infobar("buy-builds", feature.getProperties(), world);
+      else if (nam == 'area-info')
+        gui.infobar("area-info", feature.getProperties(), world);
+      else {
+        // smart-guess of what you want to do
+
+        if (feature.get('unit')) {
+          // area has unit, start&stopmoving
+          if (!move.disable_tooltip)
+            gui.infobar("move-info", feature.getProperties());
+
+          show_arrow(feature);
+          move.selected = feature;
+
+        } else if (feature.get('tile') == 'city') {
+          // unit-less city, open unit dialog
+          gui.infobar("buy-units", feature.getProperties(), world);
+        } else {
+          // empty area, open build dialog
+          gui.infobar("buy-builds", feature.getProperties(), world);
+        }
+      }
+    } else {
+      // we click on other's area: open area info
+      gui.infobar("area-info", feature.getProperties(), world);
+    }
   } else if (key == 'CTRL') {
     // todo: later: info popover, instead of console log
 
@@ -145,10 +203,12 @@ areaLayer.keypress = (feature, key) => {
   else {
     switch(key) {
       case 'Q':
-        // todo: move unit
+        if (gui.opened && gui.opened == 'area-info-'+feature.get('id')) {
+          gui.infobar('close');
+        }
+        gui.infobar("area-info", feature.getProperties(), world);
       break;
       case 'W':
-        console.log(gui.opened)
         if (gui.opened && gui.opened == 'buy-units-'+feature.get('id')) {
           gui.infobar('close');
         }
@@ -177,7 +237,25 @@ areaLayer.hover = (feature) => {
   hovered = feature;
   $("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";
 
-  //onHoverUnits(feature);
+
+  if (move.selected) {
+    //  validate if can move
+    if (validate_move(move.selected, feature)) {
+      // change move arrow & tooltip gui
+      set_arrow(feature);
+
+      if (gui.opened == 'move-info') {
+        gui.opened_comp.set_to(feature);
+      }
+    } else {
+      // hide arrow & tooltip gui
+      hide_arrow();
+
+      if (gui.opened == 'move-info') {
+        gui.opened_comp.set_to(null);
+      }
+    }
+  }
 };
 
 areaLayer.hover_out = () => {
@@ -187,9 +265,13 @@ areaLayer.hover_out = () => {
   }
 
   $("#app-map").style.cursor = "";
-  
-  //hideHoverArrow();
+
+  hide_arrow();
+
+  if (gui.opened == 'move-info' && gui.opened_comp)
+    gui.opened_comp.set_to(null);
 };
+
 
 load(function() {
   var listenerKey = areaSource.on('change', (e) => {

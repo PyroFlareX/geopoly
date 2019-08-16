@@ -3,7 +3,7 @@ import {load, onload} from '/engine/loader.js';
 import {init_flags} from '/engine/flags.js';
 import {gui} from '/engine/gui.js';
 
-import {setup_feature} from '/engine/modules/geomap/conn.js';
+import {setup_features} from '/engine/modules/geomap/setup.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
 import {init_borders, add_border_layer} from '/engine/modules/borders/borders.js';
 import {init_building} from '/engine/modules/building/building.js';
@@ -76,10 +76,10 @@ onload((ctx) => {
 
     // add properties
     feature.setProperties(area);
-
-    // geoconn setup
-    setup_feature(feature);
   }
+
+  // geoconn setup
+  setup_features(areaSource);
   
   if (ctx.conf.borders.enabled) {
     ctx.conf.borders.source = areaSource;

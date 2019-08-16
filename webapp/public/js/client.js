@@ -1,23 +1,29 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
-import {SoloHandler} from '/js/solo/handler.js';
+import {offline_request} from '/js/solo/handler.js';
 
-import {AreasController} from '/js/controllers/areas.js';
-import {WorldsController} from '/js/controllers/worlds.js';
+// import {AreasController} from '/js/controllers/areas.js';
+// import {WorldsController} from '/js/controllers/worlds.js';
+// import {AreasGroup} from '/js/groups/areas.js';
+// import {WorldsGroup} from '/js/groups/worlds.js';
 
 export const client = {
   controllers: {
-    Areas: new AreasController(),
-    Worlds: new WorldsController(),
+    // Areas: new AreasController(),
+    // Worlds: new WorldsController(),
   },
 
-  ws: null,
+  groups: {
+    //Areas: new AreasGroup(),
+    //Worlds: new WorldsGroup(),    
+  },
 
+  ws: ws_client,
 
   init_game_client: function(conf, user) {
     this.conf = conf;
 
     if (conf.websocket) {
-      this.ws = ws_client;
+      this.ws.groups = this.groups;
 
       this.ws.connect(conf.ws_address, ()=>{
 
@@ -32,7 +38,7 @@ export const client = {
         });
       });
     } else {
-      this.ws = new SoloHandler();
+      this.ws.request = offline_request;
     }
 
     if (conf.debug) {

@@ -1,12 +1,23 @@
+import {ws_client} from '/engine/modules/websocket/wsclient.js';
 
-export class SoloHandler {
+let cli = ws_client;
 
-  request(route, params) {
-    route = route.replace(":", "_");
+export function offline_request(route, params) {
+  const resp = {
+    data: JSON.stringify({
+      route: route,
+      params: params
+    })
+  };
 
-    if (this[route])
-      this[route](params);
+  switch(route) {
 
-    console.info(route, 'called with', params);
+    case 'Areas:move': cli.onmessage(resp); break;
+
+    
+
+    default: console.info(route, 'called with', params); break;
+
   }
+
 }
