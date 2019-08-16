@@ -7,12 +7,21 @@
 }
 
 
-/* BRAND & Texts */
-.font-brand {
-    font-family: 'Cinzel Decorative', cursive;
-    font-weight: normal;
+/* Custom styles */
+.ra-shadow {
+  text-shadow: 0px 0px 4px #000;
 }
 
+.font-brand {
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: normal;
+}
+.font-oldie {
+  font-family: "Opera Lyrics";
+  font-weight: normal;
+}
+
+/* BRAND & Texts */
 .geopoly {
     font-size: 128px;
     margin-bottom: 0px;

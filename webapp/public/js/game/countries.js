@@ -29,6 +29,7 @@ export function apply_capture(iso, iso2) {
 
   if (country2.shields > 0)
     country2.shields -= 1;
+  country.shields += 1;
 }
 
 export function apply_kill(iso2) {

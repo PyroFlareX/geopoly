@@ -221,7 +221,7 @@ areaLayer.keypress = (feature, key) => {
         gui.infobar("buy-builds", feature.getProperties(), world);
       break;
       case 'R':
-        // reserved
+        gui.infobar("countries");
       break;
     }
   }

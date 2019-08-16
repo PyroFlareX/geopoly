@@ -1,32 +1,23 @@
 
 export class WorldsController {
 
-  request_end_turn() {
-    console.log("request_end_turn");
-    // this.client.request('Game:end_turn', {
+  // end_turn({match}) {
+  //   console.info("%cTurn "+(match.turns-1)+" ended", "color: blue");
 
-    // }).then(() => {
+  //   //const is_new_round = set_turn(match);
 
-    // });
-  }
+  //   if (is_new_round) {
+  //     reset_moves();
+  //     console.info("%cRound "+(match.rounds-1)+" ended", "color: white; background: blue");
+  //   }
+  // }
 
-  end_turn({match}) {
-    console.info("%cTurn "+(match.turns-1)+" ended", "color: blue");
+  // end_game({reason}) {
+  //   // todo: use dialog (winner / loser / draw)
+  //   console.info("%cGame ended: "+reason, "color: white; background: blue");
 
-    //const is_new_round = set_turn(match);
-
-    if (is_new_round) {
-      reset_moves();
-      console.info("%cRound "+(match.rounds-1)+" ended", "color: white; background: blue");
-    }
-  }
-
-  end_game({reason}) {
-    // todo: use dialog (winner / loser / draw)
-    console.info("%cGame ended: "+reason, "color: white; background: blue");
-
-    alert("Match has ended. Reason: " + reason);
-  }
+  //   alert("Match has ended. Reason: " + reason);
+  // }
 
   // request_find(iso, name, age, weights) {
   //   let formData = new FormData();

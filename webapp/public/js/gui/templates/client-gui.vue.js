@@ -5,6 +5,7 @@ import {component as areaBuy1} from '/js/gui/infobar/buy-builds.js';
 import {component as areaBuy2} from '/js/gui/infobar/buy-units.js';
 //import {component as areaInfo} from '/js/gui/infobar/area-info.js';
 import {component as moveInfo} from '/js/gui/infobar/move-info.js';
+import {component as countriesInfo} from '/js/gui/infobar/countries.js';
 
 import {component as playersDialog} from '/engine/dialog/players.js';
 import {component as settingsDialog} from '/js/gui/dialog/settings.js';
@@ -32,6 +33,7 @@ export const template = `
   <infobar-move-info ref="infobar-move-info"></infobar-move-info>
   <infobar-buy-builds ref="infobar-buy-builds"></infobar-buy-builds>
   <infobar-buy-units ref="infobar-buy-units"></infobar-buy-units>
+  <infobar-countries ref="infobar-countries"></infobar-countries>
 
 `;
 /*

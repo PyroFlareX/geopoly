@@ -28,7 +28,7 @@ export let component = Vue.component('game-frame', {
     onClickSeason: function(e) {
       // end turn papa
 
-      client.controllers.Worlds.request_end_turn();
+      client.groups.Worlds.request_end_turn();
     },
 
     exit: function() {
@@ -36,7 +36,7 @@ export let component = Vue.component('game-frame', {
         let resp = confirm("Are you sure you want to leave the world?");
         
         if (resp)
-          client.controllers.Worlds.request_leave();
+          client.groups.Worlds.request_leave();
       } else {
         Cookie.delete('mid');
         window.location = '/';        

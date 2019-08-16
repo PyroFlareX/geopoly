@@ -1,11 +1,8 @@
 import uuid
-from enum import Enum
 
-from eme.entities import EntityPatch
-from sqlalchemy import Column, Float, ForeignKey, Integer, String, Boolean, SmallInteger, JSON
+from sqlalchemy import Column, Integer, String, Boolean, SmallInteger
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.hybrid import hybrid_property
 
 Base = declarative_base()
 
@@ -25,6 +22,9 @@ class User(Base):
     token = Column(String(128), nullable=True)
     password = Column(String(128))
 
+    elo = Column(SmallInteger)
+    division = Column(SmallInteger)
+
     def __init__(self, **kwargs):
         self.uid = kwargs.get('uid')
 
@@ -37,12 +37,18 @@ class User(Base):
         self.token = kwargs.get('token')
         self.password = kwargs.get('password')
 
+        self.elo = kwargs.get('elo')
+        self.division = kwargs.get('division')
+
     def to_dict(self):
         return {
             "uid": self.uid,
             "username": self.username,
             "iso": self.iso,
             "wid": self.wid,
+
+            "elo": self.elo,
+            "division": self.division,
         }
 
 
@@ -102,7 +108,6 @@ class Area(Base):
     build = Column(String(6))
     tile = Column(String(6))
 
-
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
         self.wid = kwargs.get('wid')
@@ -133,6 +138,7 @@ class Country(Base):
 
     iso = Column(String(3), primary_key=True)
     wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+    name = Column(String(40), nullable=False)
 
     gold = Column(SmallInteger, nullable=False)
     pop = Column(SmallInteger, nullable=False)
@@ -148,6 +154,7 @@ class Country(Base):
         self.id = kwargs.get('id')
 
         self.iso = kwargs.get('iso')
+        self.name = kwargs.get('name')
         self.wid = kwargs.get('wid')
         self.gold = kwargs.get('gold', 0)
         self.pop = kwargs.get('pop', 0)
@@ -162,6 +169,7 @@ class Country(Base):
     def to_dict(self):
         return {
             "iso": self.iso,
+            "name": self.name,
             "wid": self.wid,
             "gold": self.gold,
             "pop": self.pop,
