@@ -1,16 +1,16 @@
 from unittest import TestCase, mock
 
 from game.entities import World, Country
-from game.services import game
-from game.services.game import TurnException
+from game.services import turns
+from game.services.turns import TurnException
 
 players = [
     'P1', 'P2', 'P3', 'P4'
 ]
 
 
-@mock.patch('game.services.game.db_areas')
-@mock.patch('game.services.game.db_countries')
+@mock.patch('game.services.turns.db_areas')
+@mock.patch('game.services.turns.db_countries')
 class RoundTests(TestCase):
     def _set_up(self):
         world = World(current='P4')
@@ -26,7 +26,7 @@ class RoundTests(TestCase):
     def test_simple_round(self, mock_countries, mock_areas):
         world, countries, curr = self._set_up()
 
-        resp = game.end_turn(world, curr, countries)
+        resp = turns.end_turn(world, curr, countries)
 
         self.assertIsNotNone(resp)
 
@@ -50,7 +50,7 @@ class RoundTests(TestCase):
         countries[1].shields -= 1
         countries[2].shields -= 1
 
-        resp = game.end_turn(world, curr, countries)
+        resp = turns.end_turn(world, curr, countries)
 
         # check calls
         mock_areas.set_decrement_exhaust.assert_called()
@@ -69,7 +69,7 @@ class RoundTests(TestCase):
         countries[2].conquers = 1
         countries[1].shields -= 1
 
-        resp = game.end_turn(world, curr, countries)
+        resp = turns.end_turn(world, curr, countries)
 
         # check calls
         mock_areas.set_decrement_exhaust.assert_called()
@@ -88,7 +88,7 @@ class RoundTests(TestCase):
         curr = countries[1]
 
         with self.assertRaises(TurnException) as context:
-            resp = game.end_turn(world, curr, countries)
+            resp = turns.end_turn(world, curr, countries)
         self.assertEqual(context.exception.reason, 'not_your_turn')
 
     def test_few_players_fail(self, mock_countries, mock_areas):
@@ -99,7 +99,7 @@ class RoundTests(TestCase):
         curr = countries[0]
 
         with self.assertRaises(TurnException) as context:
-            resp = game.end_turn(world, curr, countries)
+            resp = turns.end_turn(world, curr, countries)
         self.assertEqual(context.exception.reason, 'small_party')
 
     def test_elimination(self, mock_countries, mock_areas):

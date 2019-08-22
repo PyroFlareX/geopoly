@@ -13,9 +13,9 @@ class WorldController():
         user = getUser()
 
         world = worlds.get(user.wid)
-        _countries = countries.list_in_world(user.wid)
-        players = users.list_in_world(user.wid)
-        _areas = areas.list_in_world(user.wid)
+        _countries = countries.list_all(user.wid)
+        players = users.list_all(user.wid)
+        _areas = areas.list_all(user.wid)
 
         return ApiResponse({
             "world": world.to_dict(),

@@ -1,8 +1,9 @@
 import uuid
 
-from sqlalchemy import Column, Integer, String, Boolean, SmallInteger
+from sqlalchemy import Column, Integer, String, Boolean, SmallInteger, ForeignKey, ForeignKeyConstraint
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -40,12 +41,18 @@ class User(Base):
         self.elo = kwargs.get('elo')
         self.division = kwargs.get('division')
 
+        # data conversion
+        if isinstance(self.wid, str):
+            self.wid = uuid.UUID(self.wid)
+        if isinstance(self.uid, str):
+            self.uid = uuid.UUID(self.uid)
+
     def to_dict(self):
         return {
             "uid": self.uid,
             "username": self.username,
             "iso": self.iso,
-            "wid": self.wid,
+            "wid": str(self.wid),
 
             "elo": self.elo,
             "division": self.division,
@@ -65,8 +72,11 @@ class World(Base):
     turn_time = Column(SmallInteger)
     turns = Column(SmallInteger)
     rounds = Column(SmallInteger)
-    current = Column(SmallInteger)
+    current = Column(String(3))
     max_rounds = Column(SmallInteger)
+
+    countries = relationship("Country", cascade="delete")
+    areas = relationship("Area", cascade="delete")
 
     def __init__(self, **kwargs):
         super().__init__()
@@ -81,9 +91,12 @@ class World(Base):
         self.current = kwargs.get('current')
         self.max_rounds = kwargs.get('max_rounds')
 
+        if isinstance(self.wid, str):
+            self.wid = uuid.UUID(self.wid)
+
     def to_dict(self):
         return {
-            "wid": self.wid,
+            "wid": str(self.wid),
             "name": self.name,
             "map": self.map,
             "max_players": self.max_players,
@@ -95,49 +108,11 @@ class World(Base):
         }
 
 
-class Area(Base):
-    __tablename__ = 'areas'
-
-    id = Column(String(8), primary_key=True)
-    wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
-    iso = Column(String(5))
-
-    exhaust = Column(SmallInteger)
-
-    unit = Column(String(3))
-    build = Column(String(6))
-    tile = Column(String(6))
-
-    def __init__(self, **kwargs):
-        self.id = kwargs.get('id')
-        self.wid = kwargs.get('wid')
-        self.iso = kwargs.get('iso')
-
-        self.exhaust = kwargs.get('exhaust')
-
-        self.build = kwargs.get('build')
-        self.tile = kwargs.get('tile')
-        self.unit = kwargs.get('unit')
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "iso": self.iso,
-            "wid": self.wid,
-
-            "exhaust": self.exhaust,
-
-            "build": self.build,
-            "tile": self.tile,
-            "unit": self.unit,
-        }
-
-
 class Country(Base):
     __tablename__ = 'countries'
 
     iso = Column(String(3), primary_key=True)
-    wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+    wid = Column(postgresql.UUID(as_uuid=True), ForeignKey(World.wid), primary_key=True)
     name = Column(String(40), nullable=False)
 
     gold = Column(SmallInteger, nullable=False)
@@ -149,6 +124,11 @@ class Country(Base):
     emperor = Column(Boolean, default=True, nullable=False)
     shields = Column(SmallInteger, nullable=False)
     conquers = Column(SmallInteger, nullable=False)
+
+    areas = relationship("Area")
+
+    world = relationship("World", back_populates="countries")
+
 
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
@@ -166,11 +146,14 @@ class Country(Base):
         self.shields = kwargs.get('shields', 0)
         self.conquers = kwargs.get('conquers', 0)
 
+        if isinstance(self.wid, str):
+            self.wid = uuid.UUID(self.wid)
+
     def to_dict(self):
         return {
             "iso": self.iso,
             "name": self.name,
-            "wid": self.wid,
+            "wid": str(self.wid),
             "gold": self.gold,
             "pop": self.pop,
             "order": self.order,
@@ -180,4 +163,50 @@ class Country(Base):
             "emperor": self.emperor,
             "shields": self.shields,
             "conquers": self.conquers,
+        }
+
+
+class Area(Base):
+    __tablename__ = 'areas'
+
+    id = Column(String(8), primary_key=True)
+    wid = Column(postgresql.UUID(as_uuid=True), ForeignKey(World.wid), primary_key=True)
+    iso = Column(String(5))
+
+    exhaust = Column(SmallInteger)
+
+    unit = Column(String(3))
+    build = Column(String(6))
+    tile = Column(String(6))
+
+    country = relationship("Country", back_populates="areas")
+    world = relationship("World", back_populates="areas")
+
+    __table_args__ = (ForeignKeyConstraint((iso, wid), [Country.iso, Country.wid]), {})
+
+    def __init__(self, **kwargs):
+        self.id = kwargs.get('id')
+        self.wid = kwargs.get('wid')
+        self.iso = kwargs.get('iso')
+
+        self.exhaust = kwargs.get('exhaust')
+
+        self.build = kwargs.get('build')
+        self.tile = kwargs.get('tile')
+        self.unit = kwargs.get('unit')
+
+        if isinstance(self.wid, str):
+            self.wid = uuid.UUID(self.wid)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "iso": self.iso,
+            "wid": str(self.wid),
+
+            "exhaust": self.exhaust,
+
+            "build": self.build,
+            "tile": self.tile,
+            "unit": self.unit,
         }

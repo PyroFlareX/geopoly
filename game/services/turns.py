@@ -5,7 +5,7 @@ from engine.modules.turns.service import TurnBox
 
 from game.entities import World, User, Country
 from game.instance import countries as db_countries, areas as db_areas
-from game.views import RoundEvents
+from game.views import RoundEventsView
 
 
 class TurnException(Exception):
@@ -46,7 +46,7 @@ def end_turn(world: World, curr: Country, countries):
 
 
 def _end_round(world, countries, isos, tb):
-    events = RoundEvents()
+    events = RoundEventsView()
 
     # reset exhausts
     db_areas.set_decrement_exhaust(world.wid)

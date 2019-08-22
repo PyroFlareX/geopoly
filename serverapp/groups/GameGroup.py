@@ -1,44 +1,129 @@
-from game.entities import User
-from game.instance import worlds, countries
-from game.services import game
+from engine.modules.building import service as building
+
+from game.entities import User, Area, World
+from game.instance import worlds, countries, areas, users
+from game.services import movement, turns, endgame
 
 
 class GameGroup:
 
     def __init__(self, server):
         self.server = server
-        self.group = 'Game'
+        self.name = 'Game'
 
-    def end_turn(self, user: User):
+    def _accessControl(self, user, area_id=None):
         if user.wid is None:
-            return {"err": "not_in_match"}
+            return {"err": "not_in_match"}, None, None, None
 
         world = worlds.get(user.wid)
-        world_countries = countries.list_in_world(world.wid)
-        country = next(c for c in world_countries if c.iso == user.iso)
 
-        # if len(match.isos) < 2:
-        #     return {
-        #         "err": "waiting_for_players"
-        #     }
+        if world.current != user.iso:
+            return {"err": "not_your_turn"}, None, None, None
+
+        country = countries.get(user.iso, user.wid)
+
+        if area_id is not None:
+            area: Area = areas.get(area_id, user.wid)
+
+            if area.iso != country.iso:
+                return {"err": "not_your_area"}, None, None, None
+        else:
+            area = None
+
+        return None, world, country, area
+
+    def buy(self, area_id, item_id, user: User):
+        error, world, country, area = self._accessControl(user, area_id)
+        if error: return error
 
         try:
-            if game.end_turn(world, country, world_countries):
-                worlds.save(world)
+            building.buy_item(area, country, item_id)
+        except building.BuyException as e:
+            return {"err": e.reason}
 
+        areas.save(area)
+        countries.save(country)
 
-                self.server.sendToMatch(match.mid, {
-                    "route": "Game:end_turn",
-                    "match": match.toView()
-                })
-            else:
-                # it's not your turn
-                pass
-        except GameEndException as e:
-            # game has ended, finalize stuff
-            matches.delete(match)
+        self.server.send_to_world(user.wid, {
+            "route": self.name+":buy",
 
-            self.server.sendToMatch(match.mid, {
-                "route": "Game:end_game",
-                "reason": e.reason
-            })
+            "iso": country.iso,
+            "area_id": area_id,
+            "item_id": item_id,
+
+            "cost": building.get_cost(item_id)
+        })
+
+    def move(self, area_id, from_id, user: User):
+        error, world, country, area1 = self._accessControl(user, area_id)
+        if error: return error
+
+        area2: Area = areas.get(area_id, user.wid)
+        is_kill = bool(area2.unit)
+
+        try:
+            is_conquer = movement.move_to(area1, area2)
+        except movement.MoveException as e:
+            return {"err": e.reason}
+
+        # todo: itt is_conquer -> handle shit properly
+
+        areas.save(area1)
+        areas.save(area2)
+
+        self.server.send_to_world(user.wid, {
+            "route": self.name+":move",
+
+            "iso": user.iso,
+            "area_id": area_id,
+            "from_id": from_id,
+
+            "events": {
+                "conquer": is_conquer,
+                "kill": is_kill
+            }
+        })
+
+    def end_turn(self, user: User):
+        error, world, country, area = self._accessControl(user)
+        if error: return error
+
+        world: World = worlds.get(user.wid)
+        world_countries = countries.list_all(world.wid)
+        country = next(c for c in world_countries if c.iso == user.iso)
+
+        # if len(world.isos) < 2:
+        #     return {"err": "waiting_for_players"}
+
+        try:
+            events = turns.end_turn(world, country, world_countries)
+        except turns.TurnException as e:
+            return {"err": e.reason}
+
+        self.server.send_to_world(user.wid, {
+            "route": self.name+":end_turn",
+            "iso": user.iso,
+            "events": events.to_dict()
+        })
+
+        winner = endgame.check_endgame(world)
+        if winner:
+            # Game has ended, finalize it
+            print("TODO: ENDGAME")
+            return;
+
+            players = users.list_all(world.wid)
+
+            #endgame.finalize_world(world, winner, players)
+
+            # self.server.send_to_world(user.wid, {
+            #     "route": self.name + ":end_game",
+            #     "winner": winner
+            # })
+
+            users.save_all(players)
+
+            # delete match
+            worlds.delete(world)
+            countries.delete_all(world.wid)
+            areas.delete_all(world.wid)

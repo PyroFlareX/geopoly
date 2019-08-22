@@ -18,9 +18,19 @@ Session = sessionmaker(bind=db_engine)
 db_session = Session()
 
 
+def set_session(sess):
+    global db_session
+
+    db_session.close()
+    db_session = sess
+
+
 def get_session(force=False):
     if force:
+        global db_session
+
         db_session.close()
+        db_session = Session()
 
     return db_session
 

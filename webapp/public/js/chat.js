@@ -1,4 +1,11 @@
 
+function burnchat(text) {
+  // will be presented with burning text in the chat
+
+  return function() {
+
+  }
+}
 
 export function init_chat(chat, conf) {
   /**
@@ -24,28 +31,56 @@ export function init_chat(chat, conf) {
   };
 
   chat.actions = {
-    // every player's nickname turns into your mum gay, exept for the player
-    "obey appa": ()=>{},
-    // will turn the different unit types into their equivalents from the Desperate Housewives universe
-    "wisteria lane": ()=>{},
-    // will turn the different unit types into their equivalents from Baltimore
-    "omar comin": ()=>{},
-    // ??
-    "keyborp": ()=>{},
-    // will be presented with burning text in the chat
-    //"geopoly/juhi/obo/tajter/szabesz/eme/bme/geogine/": ()=>{},
-    // makes the screen shake and surrenders
-    "ilyesadam bazmeg": ()=>{},
-    // kicks you out of the game
-    "surrender": ()=>{},
+  // ----- COMMANDS -----:
+    "geopoly": burnchat("geopoly"),
+    "geogine": burnchat("geogine"),
+    "doors": burnchat("doors"),
+    "obo": burnchat("obo"),
+    "ooh wah-ah-ah-ah": burnchat("ooh wah-ah-ah-ah"),
+    "eme": burnchat("eme"),
+    "wisteria lane": ()=>{
+      // will turn the different unit types into their equivalents from the Desperate Housewives universe
+    },
+    "and now my order is in YOUR court": () =>{
+      //plays judge eric andre music
+    },
+    "ilyesadam bazmeg": ()=>{
+      // will be presented with burning text in the chat
+      // makes the screen shake and surrenders
 
-    // OFFLINE MODE CHEATS:
-    //remove 50 percent units of any selected country
-    "killallboomers": ()=>{},
-    //gives you double infantry
-    "flame": ()=>{},
-    //gives you 250 money
-    "cody ko": ()=>{},
+      return burnchat("ilyesadam bazmeg");
+    },
+    "surrender": ()=>{
+      // kicks you out of the game
+    },
+    "draw": ()=>{
+      // ends game in draw in offline mode
+      // in online mode, a draw is offered to the other users
+
+      // draws will not count as ranked matches and gained XP is halved
+    },
+
+  // ----- OFFLINE MODE CHEATS -----:
+    "reset": ()=>{
+      // resets the world
+      // in online mode, a reset is offered to the other users
+    },
+    "obey appa": ()=>{
+      // forces current user to quit its turn
+      return burnchat("obey appa");
+    },
+    "killallboomers": ()=>{
+      // kills infantry, cavalry, artillery of all other players
+    },
+    "i wanna be tracer": ()=>{
+      // gives you cavalry at all city tiles
+    },
+    "kids with guns": ()=>{
+      // gives you artillery at all city tiles
+    },
+    "flame was a god": ()=>{
+      // gives you infantry at all city tiles
+    },
   };
 
   chat.config = conf;

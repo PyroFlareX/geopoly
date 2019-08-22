@@ -35,9 +35,9 @@ class GeopolyServer(WebsocketApp):
             elif client in self.onlineHall:
                 self.onlineHall.remove(client)
 
-        super().client_connected(client)
+        super().client_left(client)
 
-    def send_to_match(self, mid: str, rws: dict):
+    def send_to_world(self, mid: str, rws: dict):
         clients = self.onlineMatches.get(mid)
 
         if clients:
