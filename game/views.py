@@ -13,7 +13,6 @@ class RoundEventsView:
 
     def to_dict(self):
         return {
-            "wid": self.wid,
             "round": self.round,
             "payday": self.payday,
             "emperor": self.emperor,

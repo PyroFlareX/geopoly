@@ -101,5 +101,21 @@
 
     "exhaust": 1,
     "slot": "tile"
+  },
+  "forest": {
+    "name": "forest",
+    "cost_gold": 99999,
+    "cost_pop": 99999,
+
+    "exhaust": 1,
+    "slot": "tile"
+  },
+  "mount": {
+    "name": "mount",
+    "cost_gold": 99999,
+    "cost_pop": 99999,
+
+    "exhaust": 2,
+    "slot": "tile"
   }
 }

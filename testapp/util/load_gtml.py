@@ -16,7 +16,13 @@ def load_gtml(filename):
                 continue
             if line[0] == '>':
                 status = line[1:-1]
+
+                if status == 'STOP_TEST':
+                    l_calls.append((status,None))
+                    break
+
                 continue
+
             if status == 'COUNTRIES':
                 iso,gold,shield,conquers = line.split()
                 l_countries.append(Country(iso=iso, gold=int(gold), shields=int(shield),conquers=int(conquers)))
@@ -43,9 +49,14 @@ def load_gtml(filename):
                 l_areas.append(ff)
             elif status == 'CALLS':
                 method,params,iso,exps = line.split()
+
                 params = params.split(',')
 
-                exp_js = list(map(json.loads, exps.split('|')))
+                try:
+                    exp_js = list(map(json.loads, exps.split('|')))
+                except:
+
+                    raise Exception("Failed to parse call: {}".format(exps))
 
                 if method == 'BUY':
                     call = ('Game:buy', {'area_id': params[0], 'item_id': params[1]}, iso)

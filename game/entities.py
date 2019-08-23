@@ -58,6 +58,9 @@ class User(Base):
             "division": self.division,
         }
 
+    def __repr__(self):
+        return "{}({})".format(self.iso, self.username)
+
 
 class World(Base):
     __tablename__ = 'worlds'

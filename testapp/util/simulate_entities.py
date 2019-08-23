@@ -1,14 +1,15 @@
+import sys
 from unittest.mock import MagicMock
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from cliapp.commands.MigrateCommand import MigrateCommand
-from game.ctx import db_session, config, set_session
+from game.ctx import config, set_session
 from game.instance import worlds, countries, areas, users
-from game.entities import Country, Area, World, User
+from game.entities import World, User
 from engine.modules.geomap import service
-from testapp.unmocked.load_gtml import load_gtml
+from testapp.util.load_gtml import load_gtml
 from testapp.webmock import mock_ws
 
 WID = '00000000-0000-1000-a000-000000000000'
@@ -54,11 +55,14 @@ def _set_up_game(l_countries, adict):
     world = World(current='P1', wid=WID)
     l_users = []
 
+    i = 1
     for country in l_countries:
         country.name = 'Country '+country.iso
         country.wid = world.wid
+        country.order = i
 
         l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='Person '+country.iso, wid=world.wid, elo=1100, division=1))
+        i += 1
 
     conn_graph = {}
     l_areas = {}
@@ -107,6 +111,12 @@ def _execute(calls, resp_format='list'):
 
 
     for call, expects in calls:
+        if call == 'STOP_TEST':
+            _calls.append((call, None))
+            _returns.append(None)
+            _expects.append(None)
+            break
+
         route, params, u_iso = call
         user = _get_user(u_iso)
 

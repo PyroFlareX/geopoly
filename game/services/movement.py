@@ -21,7 +21,7 @@ def _is_invalid_move(area1: Area, area2: Area):
         return 'invalid_params'
     if area1.exhaust:
         # unit is exhausted. it needs more turns
-        return False
+        return 'cant_move_more'
 
     conf = items[area1.unit]
 

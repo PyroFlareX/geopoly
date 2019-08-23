@@ -11,7 +11,7 @@ from game.instance import countries, worlds, areas, users
 
 
 def check_endgame(world):
-    in_game_isos = countries.list_playing(world.wid)
+    in_game_isos = countries.list_still_playing(world.wid)
 
     winner = None
 

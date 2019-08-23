@@ -1,8 +1,7 @@
-from engine.modules.building import service as building
 
 from game.entities import User, Area, World
 from game.instance import worlds, countries, areas, users
-from game.services import movement, turns, endgame
+from game.services import movement, building, turns, endgame
 
 
 class GameGroup:
@@ -38,7 +37,7 @@ class GameGroup:
 
         try:
             building.buy_item(area, country, item_id)
-        except building.BuyException as e:
+        except building.service.BuyException as e:
             return {"err": e.reason}
 
         areas.save(area)
@@ -54,11 +53,11 @@ class GameGroup:
             "cost": building.get_cost(item_id)
         })
 
-    def move(self, area_id, from_id, user: User):
+    def move(self, area_id, to_id, user: User):
         error, world, country, area1 = self._accessControl(user, area_id)
         if error: return error
 
-        area2: Area = areas.get(area_id, user.wid)
+        area2: Area = areas.get(to_id, user.wid)
         is_kill = bool(area2.unit)
 
         try:
@@ -76,7 +75,7 @@ class GameGroup:
 
             "iso": user.iso,
             "area_id": area_id,
-            "from_id": from_id,
+            "to_id": to_id,
 
             "events": {
                 "conquer": is_conquer,
@@ -96,14 +95,14 @@ class GameGroup:
         #     return {"err": "waiting_for_players"}
 
         try:
-            events = turns.end_turn(world, country, world_countries)
+            round_end_events = turns.end_turn(world, country, world_countries)
         except turns.TurnException as e:
             return {"err": e.reason}
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":end_turn",
             "iso": user.iso,
-            "events": events.to_dict()
+            "round_end": round_end_events.to_dict() if round_end_events else None
         })
 
         winner = endgame.check_endgame(world)
