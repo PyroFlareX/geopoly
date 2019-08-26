@@ -48,46 +48,59 @@ def end_turn(world: World, curr: Country, countries):
 def _end_round(world, countries, isos, tb):
     events = RoundEventsView()
 
-    # reset exhausts
-    db_areas.set_decrement_exhaust(world.wid)
-
     # re-calculate pop difference
-    pops = db_countries.set_pop(world.wid)
+    pops = db_countries.calculate_pop(world.wid)
+
+    # apply shield changes
+    shield_changes = db_countries.calculate_shields(world.wid)
 
     # check elimination condition
-    events.eliminated = list(filter(lambda c: c.shields == 0, countries))
-    events.killed = db_areas.list_empty(world.wid)
     events.wid = world.wid
     events.round = world.rounds
+    still_playing = db_countries.list_still_playing(world.wid)
+    events.eliminated = set(isos) - set(still_playing)
 
     # check end game condition
-    rip = set(events.eliminated + events.killed)
-    if len(rip) >= len(isos) - 1:
+    if len(still_playing) <= 1:
         # todo: @later
         print("TODO: check end game")
 
     # determine if we had a top conqueror
-    best: Country
-    best, second_best = heapq.nlargest(2, countries, key=lambda c: c.conquers)
+    conquered = lambda c: shield_changes[c.iso][1]
+    best, runnerup = heapq.nlargest(2, countries, key=conquered)
 
-    if best.conquers > 0:
+    if conquered(best) > 0:
         # at least one player conquered, so we have payday
-        events.payday = db_countries.set_payday(world.wid)
-        for country in countries:
-            country.emperor = False
+        events.payday = db_countries.calculate_payday(world.wid)
 
-            # update loaded entity models:
-            country.gold += events.payday[country.iso]
-            country.pop = pops[country.iso]
+        if conquered(best) > conquered(runnerup):
+            # there is no tie in the number of conquers
+            # the frontrunner becomes the emperor.
+            ex_emperor: Country = next(filter(lambda c: c.emperor, countries))
 
-        # check emperor condition
-        if best.conquers > second_best.conquers:
-            # we have a top player in conquers, it becomes the new emperor
+            ex_emperor.emperor = False
             best.emperor = True
             best.gold += 20
-            events.emperor = best.iso
+            events.ex_emperor = ex_emperor
+            events.emperor = best
 
             # new turn starts from the new emperor!
             tb.start(best.iso)
+
+    # reset areas
+    db_areas.set_decrement_exhaust(world.wid)
+    db_areas.set_reset_iso2(world.wid)
+
+    # Update countries' model with DB changes
+    # (in case the calling method wants to use the country objects)
+    # for country in countries:
+    #     if country.iso != best.iso:
+    #         country.emperor = False
+    #
+    #     # update loaded entity models (we're not saving these here, though):
+    #     country.gold += events.payday[country.iso]
+    #     country.pop = pops[country.iso]
+    #     country.conquers += conquered(country)
+
 
     return events

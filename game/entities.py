@@ -14,7 +14,7 @@ class User(Base):
     uid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     created_at = Column(Integer, nullable=True)
 
-    iso = Column(String(5))
+    iso = Column(String(3))
     wid = Column(postgresql.UUID(as_uuid=True))
 
     username = Column(String(32))
@@ -174,7 +174,8 @@ class Area(Base):
 
     id = Column(String(8), primary_key=True)
     wid = Column(postgresql.UUID(as_uuid=True), ForeignKey(World.wid), primary_key=True)
-    iso = Column(String(5))
+    iso = Column(String(3))
+    iso2 = Column(String(3), nullable=True)
 
     exhaust = Column(SmallInteger)
 
@@ -191,6 +192,7 @@ class Area(Base):
         self.id = kwargs.get('id')
         self.wid = kwargs.get('wid')
         self.iso = kwargs.get('iso')
+        self.iso2 = kwargs.get('iso2')
 
         self.exhaust = kwargs.get('exhaust')
 
@@ -205,6 +207,7 @@ class Area(Base):
         return {
             "id": self.id,
             "iso": self.iso,
+            "iso2": self.iso2,
             "wid": str(self.wid),
 
             "exhaust": self.exhaust,

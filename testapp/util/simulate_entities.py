@@ -74,6 +74,7 @@ def _set_up_game(l_countries, adict):
             area = adict[x][y]
             area.id = cid(x, y)
             area.wid = world.wid
+            area.iso2 = area.iso
 
             if area.build in ('barr','house','cita'):
                 area.tile = 'city'
@@ -93,11 +94,17 @@ def _set_up_game(l_countries, adict):
     areas.save_all(l_areas.values())
     users.save_all(l_users)
 
-    # reset country pop field
-    countries.set_pop(WID)
+    # reset entities
+    countries.calculate_pop(WID)
 
     return world, l_users, l_countries, l_areas
 
+
+def _load_map():
+    a = areas.list_all(WID)
+    c = countries.list_all(WID)
+
+    return c, a
 
 def _finish():
     _delete_all()

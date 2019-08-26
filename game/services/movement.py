@@ -74,6 +74,10 @@ def move_to(area1: Area, area2: Area):
 
         # todo: do we need to exhaust when normal move?
 
+    if is_conquer:
+        # conquer area
+        area2.iso = area1.iso
+
     return is_conquer
 
 
@@ -104,3 +108,4 @@ def move_bulk(area_moves_dict):
             conquer_dict[area2.iso] -= 1
 
     return conquer_dict
+

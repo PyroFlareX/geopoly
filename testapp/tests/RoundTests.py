@@ -33,9 +33,9 @@ class RoundTests(TestCase):
         # check calls
         mock_areas.set_decrement_exhaust.assert_called()
         mock_areas.list_empty.assert_called()
-        mock_countries.set_pop.assert_called()
+        mock_countries.calculate_pop.assert_called()
 
-        mock_countries.set_payday.assert_not_called()
+        mock_countries.calculate_payday.assert_not_called()
 
         self.assertEqual(len(resp.eliminated), 0)
         self.assertEqual(len(resp.killed), 0)
@@ -55,8 +55,8 @@ class RoundTests(TestCase):
         # check calls
         mock_areas.set_decrement_exhaust.assert_called()
         mock_areas.list_empty.assert_called()
-        mock_countries.set_pop.assert_called()
-        mock_countries.set_payday.assert_called()
+        mock_countries.calculate_pop.assert_called()
+        mock_countries.calculate_payday.assert_called()
 
         self.assertEqual(len(resp.eliminated), 0)
         self.assertEqual(len(resp.killed), 0)
@@ -74,8 +74,8 @@ class RoundTests(TestCase):
         # check calls
         mock_areas.set_decrement_exhaust.assert_called()
         mock_areas.list_empty.assert_called()
-        mock_countries.set_pop.assert_called()
-        mock_countries.set_payday.assert_called()
+        mock_countries.calculate_pop.assert_called()
+        mock_countries.calculate_payday.assert_called()
 
         self.assertEqual(len(resp.eliminated), 0)
         self.assertEqual(len(resp.killed), 0)

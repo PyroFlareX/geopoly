@@ -7,17 +7,17 @@ class RoundEventsView:
 
         self.payday = kwargs.get('payday')
         self.emperor = kwargs.get('emperor')
+        self.ex_emperor = kwargs.get('ex_emperor')
 
-        self.killed = kwargs.get('killed')
         self.eliminated = kwargs.get('eliminated')
 
     def to_dict(self):
         return {
             "round": self.round,
             "payday": self.payday,
-            "emperor": self.emperor,
-            "killed": self.killed,
-            "eliminated": self.eliminated,
+            "emperor": self.emperor.iso if self.emperor else None,
+            "ex_emperor": self.ex_emperor.iso if self.ex_emperor else None,
+            "eliminated": list(self.eliminated),
         }
 
 

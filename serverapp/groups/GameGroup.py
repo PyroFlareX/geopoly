@@ -65,8 +65,6 @@ class GameGroup:
         except movement.MoveException as e:
             return {"err": e.reason}
 
-        # todo: itt is_conquer -> handle shit properly
-
         areas.save(area1)
         areas.save(area2)
 
@@ -98,6 +96,14 @@ class GameGroup:
             round_end_events = turns.end_turn(world, country, world_countries)
         except turns.TurnException as e:
             return {"err": e.reason}
+
+        if round_end_events is not None:
+            # save emperor and previous emperor countries
+            if round_end_events.ex_emperor:
+                countries.save(round_end_events.ex_emperor)
+
+            if round_end_events.emperor:
+                countries.save(round_end_events.emperor)
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":end_turn",

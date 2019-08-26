@@ -24,8 +24,8 @@ def load_gtml(filename):
                 continue
 
             if status == 'COUNTRIES':
-                iso,gold,shield,conquers = line.split()
-                l_countries.append(Country(iso=iso, gold=int(gold), shields=int(shield),conquers=int(conquers)))
+                iso,gold,shield = line.split()
+                l_countries.append(Country(iso=iso, gold=int(gold), shields=int(shield)))
             elif status == 'AREAS':
                 ff = []
 

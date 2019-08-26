@@ -28,6 +28,15 @@ export function init_chat(chat, conf) {
     'sync dab': 'sync_dab.gif',
     'lookin': 'eyes.gif',
     'ramsay': 'slap.gif',
+    'wowzors': 'wowzors.png',
+    'sorrihihi': 'sorry_hihi.png',
+    'triggered': 'triggered.png',
+    'trump': 'trump.gif',
+    'snek': 'snek.png',
+    'mummy': 'mummy.png',
+    'miaow': 'miaow.png',
+    'headbop': 'headbop.gif',
+    'hipson': 'hopsin.png',
   };
 
   chat.actions = {
