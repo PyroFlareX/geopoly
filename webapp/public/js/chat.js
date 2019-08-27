@@ -73,6 +73,12 @@ export function init_chat(chat, conf) {
     "reset": ()=>{
       // resets the world
       // in online mode, a reset is offered to the other users
+
+      fetch('dev/reset').then((resp)=>{
+        return resp.json();
+      }).then((resp)=>{
+        window.location = '/';
+      });
     },
     "obey appa": ()=>{
       // forces current user to quit its turn
@@ -92,6 +98,10 @@ export function init_chat(chat, conf) {
     },
   };
 
-  chat.config = conf;
-  chat.sub();
+  try {
+    chat.config = conf;
+    chat.sub();    
+  } catch(e) {
+    console.error("Chat module failed: ", e);
+  }
 }

@@ -45,3 +45,11 @@ def start_world(world):
 
     worlds.save(world)
 
+
+def reset_world(world):
+
+    areas.delete_all(world.wid)
+    countries.delete_all(world.wid)
+
+    start_world(world)
+
