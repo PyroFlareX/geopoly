@@ -218,4 +218,18 @@ class Area(Base):
         }
 
     def __repr__(self):
-        return "{}({}){}".format(self.iso, self.build if self.build else (self.tile if self.tile else ''), self.unit if self.unit else '')
+        ff = []
+        if self.iso: ff.append(self.iso)
+        else: ff.append('')
+
+        if self.build:
+            ff.append(self.build)
+        elif self.tile:
+            ff.append(self.tile)
+        elif self.unit:
+            ff.append('')
+            ff.append(self.unit)
+        else:
+            pass
+
+        return "{}({})".format(self.id, ','.join(ff))

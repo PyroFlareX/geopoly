@@ -4,7 +4,7 @@
            P3   900   7
            P4   900   2
 
->AREAS
+>TEST_AREAS
 # iso, build/tile, unit
 # 0           1            2             3
   P1,barr     P1           P2,house      P2

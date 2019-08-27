@@ -1,4 +1,6 @@
 import json
+import re
+import sys
 
 from game.entities import Country, Area
 
@@ -10,7 +12,9 @@ def load_gtml(filename):
 
     f_countries = []
 
-    with open('testapp/content/'+filename) as fh:
+    area_pattern = re.compile(r"(?P<id>\w+)\((?P<iso>\w*),?(?P<buildtile>\w*),?(?P<unit>\w*)\)")
+
+    with open(filename) as fh:
         status = None
 
         for line in fh:
@@ -42,6 +46,26 @@ def load_gtml(filename):
 
                 l_countries.append(cc)
             elif status == 'AREAS':
+                match = area_pattern.findall(line)
+
+                for (aid, iso, btile, unit) in match:
+                    area = Area(id=aid)
+
+                    if iso:
+                        area.iso = iso
+
+                    if btile in ('barr','house','cita'):
+                        area.build = btile
+                        area.tile = 'city'
+                    else:
+                        area.tile = btile
+
+                    if unit:
+                        area.unit = unit
+
+                    l_areas.append(area)
+
+            elif status == 'TEST_AREAS':
                 ff = []
 
                 sareas = line.split()
@@ -62,7 +86,7 @@ def load_gtml(filename):
 
                     ff.append(area)
                 l_areas.append(ff)
-            elif status == 'CALLS':
+            elif status == 'TEST_CALLS':
                 method,params,iso,exps = line.split()
 
                 params = params.split(',')

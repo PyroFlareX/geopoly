@@ -1,4 +1,3 @@
-import sys
 from unittest.mock import MagicMock
 
 from sqlalchemy import create_engine
@@ -9,7 +8,7 @@ from game.ctx import config, set_session
 from game.instance import worlds, countries, areas, users
 from game.entities import World, User
 from engine.modules.geomap import service
-from testapp.util.load_gtml import load_gtml
+from game.util.load_gtml import load_gtml
 from testapp.webmock import mock_ws
 
 WID = '00000000-0000-1000-a000-000000000000'
@@ -55,14 +54,12 @@ def _set_up_game(l_countries, adict):
     world = World(current='P1', wid=WID)
     l_users = []
 
-    i = 1
-    for country in l_countries:
+    for i,country in enumerate(l_countries):
         country.name = 'Country '+country.iso
         country.wid = world.wid
-        country.order = i
+        country.order = i+1
 
         l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='Person '+country.iso, wid=world.wid, elo=1100, division=1))
-        i += 1
 
     conn_graph = {}
     l_areas = {}
