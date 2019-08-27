@@ -111,24 +111,24 @@ class GameGroup:
             "round_end": round_end_events.to_dict() if round_end_events else None
         })
 
-        winner = endgame.check_endgame(world)
-        if winner:
-            # Game has ended, finalize it
-            print("TODO: ENDGAME")
-            return;
-
-            players = users.list_all(world.wid)
-
-            #endgame.finalize_world(world, winner, players)
-
-            # self.server.send_to_world(user.wid, {
-            #     "route": self.name + ":end_game",
-            #     "winner": winner
-            # })
-
-            users.save_all(players)
-
-            # delete match
-            worlds.delete(world)
-            countries.delete_all(world.wid)
-            areas.delete_all(world.wid)
+        # winner = endgame.check_endgame(world)
+        # if winner:
+        #     # Game has ended, finalize it
+        #     print("TODO: ENDGAME")
+        #     return;
+        #
+        #     players = users.list_all(world.wid)
+        #
+        #     #endgame.finalize_world(world, winner, players)
+        #
+        #     # self.server.send_to_world(user.wid, {
+        #     #     "route": self.name + ":end_game",
+        #     #     "winner": winner
+        #     # })
+        #
+        #     users.save_all(players)
+        #
+        #     # delete match
+        #     worlds.delete(world)
+        #     countries.delete_all(world.wid)
+        #     areas.delete_all(world.wid)

@@ -216,3 +216,6 @@ class Area(Base):
             "tile": self.tile,
             "unit": self.unit,
         }
+
+    def __repr__(self):
+        return "{}({}){}".format(self.iso, self.build if self.build else (self.tile if self.tile else ''), self.unit if self.unit else '')

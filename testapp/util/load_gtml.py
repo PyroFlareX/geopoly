@@ -8,6 +8,8 @@ def load_gtml(filename):
     l_areas = []
     l_calls = []
 
+    f_countries = []
+
     with open('testapp/content/'+filename) as fh:
         status = None
 
@@ -20,12 +22,25 @@ def load_gtml(filename):
                 if status == 'STOP_TEST':
                     l_calls.append((status,None))
                     break
+                elif status[:9] == 'COUNTRIES':
+                    f_countries = status[10:].split()
+                    status = 'COUNTRIES'
 
                 continue
 
             if status == 'COUNTRIES':
-                iso,gold,shield = line.split()
-                l_countries.append(Country(iso=iso, gold=int(gold), shields=int(shield)))
+                attrs = line.split()
+                cc = Country()
+
+                for val,attr in zip(attrs, f_countries):
+                    if attr in ('iso','name','color'):
+                        setattr(cc, attr, val)
+                    elif attr in ('emperor', 'ai'):
+                        setattr(cc, attr, bool(val))
+                    else:
+                        setattr(cc, attr, int(val))
+
+                l_countries.append(cc)
             elif status == 'AREAS':
                 ff = []
 
