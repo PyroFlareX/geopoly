@@ -4,7 +4,7 @@ export const template = `
     <div class="gui-flash">
       <div :class="'flag flag-inline flag-xs flag-'+iso"></div> 
 
-      <p :class="'text-'+theme">{{ text }}</p>
+      <span :class="'text-'+theme">{{ text }}</span>
     </div>
   </div>
 </div>

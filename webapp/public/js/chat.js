@@ -1,3 +1,4 @@
+import {ws_client} from '/engine/modules/websocket/wsclient.js';
 
 function burnchat(text) {
   // will be presented with burning text in the chat
@@ -46,7 +47,7 @@ export function init_chat(chat, conf) {
     "doors": burnchat("doors"),
     "obo": burnchat("obo"),
     "ooh wah-ah-ah-ah": burnchat("ooh wah-ah-ah-ah"),
-    "eme": burnchat("eme"),
+    "obey appa": burnchat("obeey appa"),
     "wisteria lane": ()=>{
       // will turn the different unit types into their equivalents from the Desperate Housewives universe
     },
@@ -61,6 +62,9 @@ export function init_chat(chat, conf) {
     },
     "surrender": ()=>{
       // kicks you out of the game
+
+      ws_client.request("Game:surrender", {});
+      window.location = '/';
     },
     "draw": ()=>{
       // ends game in draw in offline mode
@@ -70,19 +74,21 @@ export function init_chat(chat, conf) {
     },
 
   // ----- OFFLINE MODE CHEATS -----:
+    "okcs": ()=>{
+      // forces current player to end turn
+      fetch("dev/force_turn", {})
+      .then((resp)=>{ return resp.json() })
+      .then(ws_client.onmessage.bind(ws_client));
+    },
     "reset": ()=>{
       // resets the world
       // in online mode, a reset is offered to the other users
 
-      fetch('dev/reset').then((resp)=>{
-        return resp.json();
-      }).then((resp)=>{
+      fetch('dev/reset')
+      .then((resp)=>{ return resp.json() })
+      .then((resp)=>{
         window.location = '/';
       });
-    },
-    "obey appa": ()=>{
-      // forces current user to quit its turn
-      return burnchat("obey appa");
     },
     "killallboomers": ()=>{
       // kills infantry, cavalry, artillery of all other players
@@ -93,7 +99,7 @@ export function init_chat(chat, conf) {
     "kids with guns": ()=>{
       // gives you artillery at all city tiles
     },
-    "flame was a god": ()=>{
+    "flame": ()=>{
       // gives you infantry at all city tiles
     },
   };

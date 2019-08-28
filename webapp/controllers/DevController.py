@@ -1,7 +1,8 @@
 from flask import request
 
-from game.entities import World
+from game.entities import World, Country
 from game.instance import countries, areas, worlds, users
+from game.services import turns
 from game.services.startgame import create_world_entities, start_world, reset_world
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
@@ -27,6 +28,30 @@ class DevController():
 
         })
 
+    def force_turn(self):
+        user = getUser()
+        world = worlds.get(user.wid)
+
+        country: Country = countries.get(world.current, world.wid)
+        world_countries = countries.list_all(world.wid)
+
+        try:
+            round_end_events = turns.end_turn(world, country, world_countries)
+        except turns.TurnException as e:
+            return {"err": e.reason}
+
+        worlds.save(world)
+
+        return ApiResponse({
+            "route": "Game:end_turn",
+            "iso": country.iso,
+            "turn_end": {
+                "turns": world.turns,
+                "current": world.current,
+            },
+            "round_end": round_end_events.to_dict() if round_end_events else None
+        })
+
     def new_world(self):
         user = getUser()
 
@@ -36,7 +61,7 @@ class DevController():
         world = World(name="Test world", map='map_hu', max_rounds=None)
         worlds.save(world)
 
-        start_world(world)
+        start_world(world, AI=True)
 
         user.wid = world.wid
         users.save(world)

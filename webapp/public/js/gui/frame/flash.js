@@ -1,4 +1,4 @@
-import {template} from "/js/vue/frame/flash.vue.js"
+import {template} from "/js/gui/frame/flash.vue.js"
 
 
 // Game GUI's main frame

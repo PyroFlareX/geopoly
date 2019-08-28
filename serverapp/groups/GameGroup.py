@@ -1,5 +1,5 @@
 
-from game.entities import User, Area, World
+from game.entities import User, Area, World, Country
 from game.instance import worlds, countries, areas, users
 from game.services import movement, building, turns, endgame
 
@@ -35,6 +35,9 @@ class GameGroup:
         error, world, country, area = self._accessControl(user, area_id)
         if error: return error
 
+        if world.has_moved:
+            return {"err": "cant_buy_after_move"}
+
         try:
             building.buy_item(area, country, item_id)
         except building.service.BuyException as e:
@@ -65,6 +68,10 @@ class GameGroup:
         except movement.MoveException as e:
             return {"err": e.reason}
 
+        if not world.has_moved:
+            world.has_moved = True
+            worlds.save(world)
+
         areas.save(area1)
         areas.save(area2)
 
@@ -82,10 +89,9 @@ class GameGroup:
         })
 
     def end_turn(self, user: User):
-        error, world, country, area = self._accessControl(user)
+        error, world, country, _ = self._accessControl(user)
         if error: return error
 
-        world: World = worlds.get(user.wid)
         world_countries = countries.list_all(world.wid)
         country = next(c for c in world_countries if c.iso == user.iso)
 
@@ -105,9 +111,15 @@ class GameGroup:
             if round_end_events.emperor:
                 countries.save(round_end_events.emperor)
 
+        worlds.save(world)
+
         self.server.send_to_world(user.wid, {
             "route": self.name+":end_turn",
             "iso": user.iso,
+            "turn_end": {
+                "turns": world.turns,
+                "current": world.current,
+            },
             "round_end": round_end_events.to_dict() if round_end_events else None
         })
 
@@ -132,3 +144,19 @@ class GameGroup:
         #     worlds.delete(world)
         #     countries.delete_all(world.wid)
         #     areas.delete_all(world.wid)
+
+    def surrender(self, user: User):
+        world = worlds.get(user.wid)
+
+        country: Country = countries.get(user.iso, user.wid)
+        country.shields = 0
+
+        countries.save(country)
+
+        if world.current == country.iso:
+            return self.end_turn(user)
+
+        self.server.send_to_world(user.wid, {
+            "route": self.name+":surrender",
+            "iso": user.iso
+        })

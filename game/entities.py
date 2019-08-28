@@ -78,6 +78,8 @@ class World(Base):
     current = Column(String(3))
     max_rounds = Column(SmallInteger)
 
+    has_moved = Column(Boolean, nullable=False, default=False)
+
     countries = relationship("Country", cascade="delete")
     areas = relationship("Area", cascade="delete")
 
@@ -87,6 +89,7 @@ class World(Base):
         self.wid = kwargs.get('wid')
         self.name = kwargs.get('name')
         self.map = kwargs.get('map')
+        self.has_moved = kwargs.get('has_moved')
         self.max_players = kwargs.get('max_players')
         self.turn_time = kwargs.get('turn_time')
         self.turns = kwargs.get('turns', 0)
@@ -103,6 +106,7 @@ class World(Base):
             "name": self.name,
             "map": self.map,
             "max_players": self.max_players,
+            "has_moved": self.has_moved,
             "turn_time": self.turn_time,
             "turns": self.turns,
             "rounds": self.rounds,
@@ -121,7 +125,7 @@ class Country(Base):
     gold = Column(SmallInteger, nullable=False)
     pop = Column(SmallInteger, nullable=False)
     order = Column(SmallInteger, nullable=False)
-    ai = Column(SmallInteger)
+    ai = Column(Boolean, default=False, nullable=False)
     color = Column(String(7))
 
     emperor = Column(Boolean, default=True, nullable=False)

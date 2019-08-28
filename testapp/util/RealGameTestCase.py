@@ -34,7 +34,6 @@ def test_dict_country(country):
 
 class RealGameTestCase(unittest.TestCase):
 
-
     def _assert_calls(self, calls, resps, expects):
 
         for (route, params), responses, expects in zip(calls, resps, expects):
@@ -58,7 +57,6 @@ class RealGameTestCase(unittest.TestCase):
                         MSG += '\nInstead we got response:\n\n'
                         for _key in lset:
                             MSG += '  {:<8}:    {:<16}\n'.format(_key, str(resp_obs.get(_key)))
-
 
                 if resp_exp != resp_obs:
                     self.fail(MSG)

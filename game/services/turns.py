@@ -32,15 +32,19 @@ def end_turn(world: World, curr: Country, countries):
         raise TurnException("small_party")
 
     tb = TurnBox(world, isos)
-    #tb.start()
 
     next_iso = tb.next()
     if next_iso == curr.iso:
         raise TurnException("small_party")
 
+    world.has_moved = False
+
     if next_iso is None:
-        # round ends
-        return _end_round(world, countries, isos, tb)
+        # round ends, restart turn
+        resp = _end_round(world, countries, isos, tb)
+        tb.start(resp.emperor)
+
+        return resp
 
     return None
 
@@ -49,10 +53,10 @@ def _end_round(world, countries, isos, tb):
     events = RoundEventsView()
 
     # re-calculate pop difference
-    pops = db_countries.calculate_pop(world.wid)
+    pops = db_countries.calculate_pop(world.wid, commit=False)
 
     # apply shield changes
-    shield_changes = db_countries.calculate_shields(world.wid)
+    shield_changes = db_countries.calculate_shields(world.wid, commit=False)
 
     # check elimination condition
     events.wid = world.wid
@@ -66,12 +70,16 @@ def _end_round(world, countries, isos, tb):
         print("TODO: check end game")
 
     # determine if we had a top conqueror
-    conquered = lambda c: shield_changes[c.iso][1]
+    conquered = lambda c: shield_changes.get(c.iso, (None, 0))[1]
     best, runnerup = heapq.nlargest(2, countries, key=conquered)
 
     if conquered(best) > 0:
         # at least one player conquered, so we have payday
-        events.payday = db_countries.calculate_payday(world.wid)
+        events.payday = db_countries.calculate_payday(world.wid, commit=False)
+
+        # todo: itt: emperor starts
+        # todO: itt: restart if no emperor
+        # todo: itt: why does turn still fail in full stack?
 
         if conquered(best) > conquered(runnerup):
             # there is no tie in the number of conquers
@@ -88,8 +96,11 @@ def _end_round(world, countries, isos, tb):
             tb.start(best.iso)
 
     # reset areas
-    db_areas.set_decrement_exhaust(world.wid)
-    db_areas.set_reset_iso2(world.wid)
+    db_areas.set_decrement_exhaust(world.wid, commit=False)
+    db_areas.set_reset_iso2(world.wid, commit=False)
+
+    # commit all changes at once
+    db_countries.session.commit()
 
     # Update countries' model with DB changes
     # (in case the calling method wants to use the country objects)

@@ -11,6 +11,7 @@ import {component as playersDialog} from '/engine/dialog/players.js';
 import {component as settingsDialog} from '/js/gui/dialog/settings.js';
 
 import {component as frame} from '/js/gui/frame/gameframe.js';
+import {component as flash} from '/js/gui/frame/flash.js';
 
 
 Vue.mixin({
@@ -25,6 +26,8 @@ Vue.mixin({
 
 export const template = `
   <game-frame ref="frame"></game-frame>
+  <flash ref="flash"></flash>
+
   <chat-gui room-id="global" id="game-global-chat" ref="global-chat"></chat-gui>
 
   <dialog-settings ref="dialog-settings"></dialog-settings>

@@ -6,7 +6,7 @@ from game.instance import countries, areas, worlds
 from game.util.load_gtml import load_gtml
 
 
-def create_world_entities(world: World, orders=None):
+def create_world_entities(world: World, orders=None, AI=False):
     l_countries, l_areas, _ = load_gtml("game/maps/{}.gtml".format(world.map))
 
     world.max_players = len(l_countries)
@@ -17,6 +17,7 @@ def create_world_entities(world: World, orders=None):
 
     for i,country in enumerate(l_countries):
         country.wid = world.wid
+        country.ai = AI and i > 0
 
         if orders is None:
             country.order = i
@@ -35,8 +36,8 @@ def create_world_entities(world: World, orders=None):
     return l_countries, l_areas
 
 
-def start_world(world):
-    l_countries, l_areas = create_world_entities(world)
+def start_world(world, AI=False):
+    l_countries, l_areas = create_world_entities(world, AI=AI)
 
     countries.save_all(l_countries)
     areas.save_all(l_areas)

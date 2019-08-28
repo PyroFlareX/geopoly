@@ -4,7 +4,7 @@ import {offline_request} from '/js/solo/handler.js';
 // import {AreasController} from '/js/controllers/areas.js';
 // import {WorldsController} from '/js/controllers/worlds.js';
 // import {AreasGroup} from '/js/groups/areas.js';
-import {WorldsGroup} from '/js/groups/worlds.js';
+//import {WorldsGroup} from '/js/groups/worlds.js';
 
 export const client = {
   controllers: {
@@ -14,7 +14,7 @@ export const client = {
 
   groups: {
     //Areas: new AreasGroup(),
-    Worlds: new WorldsGroup(ws_client),    
+   //Worlds: new WorldsGroup(ws_client),    
   },
 
   ws: ws_client,

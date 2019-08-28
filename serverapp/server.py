@@ -27,10 +27,24 @@ class GeopolyServer(WebsocketApp):
         # start websocket server
         self.serveforever()
 
+    def client_enter_world(self, client):
+        if client in self.onlineHall:
+            self.onlineHall.remove(client)
+
+        self.onlineMatches[str(client.user.wid)].add(client)
+
+    def client_connected(self, client):
+        if client.user and client.user.wid:
+            self.client_enter_world(client)
+        else:
+            self.onlineHall.add(client)
+
+        super().client_connected(client)
+
     def client_left(self, client):
         if client.user and client.user.wid:
-            if client in self.onlineMatches[client.user.wid]:
-                self.onlineMatches[client.user.wid].remove(client)
+            if client in self.onlineMatches[str(client.user.wid)]:
+                self.onlineMatches[str(client.user.wid)].remove(client)
 
             elif client in self.onlineHall:
                 self.onlineHall.remove(client)
@@ -38,7 +52,7 @@ class GeopolyServer(WebsocketApp):
         super().client_left(client)
 
     def send_to_world(self, mid: str, rws: dict):
-        clients = self.onlineMatches.get(mid)
+        clients = self.onlineMatches.get(str(mid))
 
         if clients:
             for client in clients:
@@ -50,7 +64,7 @@ class GeopolyServer(WebsocketApp):
             self.send(rws, client)
 
     def get_client_at(self, mid: str):
-        for client in self.onlineMatches[mid]:
+        for client in self.onlineMatches[str(mid)]:
             yield client
 
 

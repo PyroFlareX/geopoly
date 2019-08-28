@@ -5,7 +5,7 @@ import {getColor, colors} from '/engine/colors.js';
 
 import {template} from "/js/gui/frame/gameframe.vue.js"
 
-import {client} from '/js/client.js';
+import {end_turn} from '/js/game/turns.js';
 
 
 // Game GUI's main frame
@@ -26,9 +26,7 @@ export let component = Vue.component('game-frame', {
     },
 
     onClickSeason: function(e) {
-      // end turn papa
-
-      client.groups.Worlds.request_end_turn();
+      end_turn();
     },
 
     exit: function() {
@@ -36,7 +34,7 @@ export let component = Vue.component('game-frame', {
         let resp = confirm("Are you sure you want to leave the world?");
         
         if (resp)
-          client.groups.Worlds.request_leave();
+          leave_world();
       } else {
         Cookie.delete('mid');
         window.location = '/';        

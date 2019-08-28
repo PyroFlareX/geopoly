@@ -37,7 +37,7 @@ def _delete_all():
         worlds.delete(w)
         areas.delete_all(WID)
         countries.delete_all(WID)
-        users.delete_all()
+        users.delete_all(WID)
 
 
 def _set_up_gtml(filename):
