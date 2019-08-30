@@ -1,8 +1,9 @@
 import math
-
+from engine.modules.worlds import service
 from engine.modules.turns.service import TurnBox
-from game.entities import World, Country, Area
-from game.instance import countries, areas, worlds
+
+from game.entities import World, Country, Area, User
+from game.instance import countries, areas, worlds, users
 from game.util.load_gtml import load_gtml
 
 
@@ -53,4 +54,69 @@ def reset_world(world):
     countries.delete_all(world.wid)
 
     start_world(world)
+
+
+def create_world():
+    default_map = 'map_hu'
+
+    world = service.create(map=default_map)
+
+    l_countries, _, _ = load_gtml("game/maps/{}.gtml".format(world.map), skip=('AREAS', 'TEST_CALLS'))
+
+    return world, l_countries
+
+
+def join_world(user: User, world: World, players, iso=None):
+    l_countries, _, _ = load_gtml("game/maps/{}.gtml".format(world.map), skip=('AREAS', 'TEST_CALLS'))
+    isos = [c.iso for c in l_countries]
+
+    if user.wid and user.wid != world.wid:
+        return False
+
+    if world.rounds:
+        # game has already started
+        return False
+
+    # attempt reconnect
+    if user.iso:
+        if user.wid == world.wid and user.iso in players:
+            if players[user.iso]['username'] == user.username:
+                # reconnect was successful
+                return True
+
+        # someone took our place or we had bad credentials in the first place
+        user.wid = None
+        user.iso = None
+        users.set_world(user.uid, None, None)
+        return False
+    else:
+        # otherwise, we are connecting
+
+        if len(players) == world.max_players:
+            return False
+
+        if iso:
+            # see if selected iso is valid
+            if iso not in isos:
+                return False
+
+            if iso in players and players[iso]['username'] != user.username:
+                return False
+
+            user.iso = iso
+        else:
+            # find the first empty slot
+            for iso in isos:
+                if iso not in players:
+                    user.iso = iso
+                    break
+
+        if not user.iso:
+            # couldn't find an iso
+            return False
+
+        user.wid = world.wid
+        users.set_world(user.uid, user.wid, user.iso)
+
+        return True
 

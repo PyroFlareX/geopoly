@@ -68,3 +68,22 @@ class DevController():
 
 
         return 'New world created: {}'.format(world.wid)
+
+    def new(self):
+        """creates fake match"""
+
+        user = getUser()
+        if user.wid:
+            return redirect('/')
+
+        world = worlds.get_first()
+        if not world:
+            world = service.create(name="Test")
+
+        ##service.join(user, world, "UK")
+
+        users.set_world(user.uid, world.wid, user.iso)
+        worlds.save(world)
+
+        return redirect('/')
+

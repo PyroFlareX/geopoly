@@ -1,136 +1,84 @@
-from game.entities import User
+from game.entities import User, World
+from game.instance import worlds, users
+from game.services.startgame import create_world, join_world, set_map
 
 
 class WorldsGroup:
 
     def __init__(self, server):
         self.server = server
-        self.group = 'Matches'
+        self.group = 'Worlds'
 
-    def list(self, user: User):
-        if user.mid:
-            return
+    def list(self, user):
+        l_worlds = []
 
-        lmatches = matches.get_all(raw=True)
+        for world in worlds.list_all():
+            dd = world.to_dict()
+
+            clients = self.server.onlineMatches[str(world.wid)]
+            dd['players'] = [c.user.iso for c in clients]
+            l_worlds.append(dd)
 
         return {
-            "matches": lmatches
+            "worlds": l_worlds
         }
 
-    def create(self, map, max_players, max_rounds, user):
-        match = create_match(map=map, max_players=max_players, max_rounds=max_rounds)
+    def join(self, wid, user, iso=None):
+        world = worlds.get(wid)
 
-        matches.create(match)
+        clients = self.server.onlineMatches[str(world.wid)]
+        players = {c.user.iso: c.user.to_dict() for c in clients}
 
-        self.server.sendToHall({
-            "route": "Matches:create",
-            "msid": user.client.msid,
+        if world is None:
+            return
 
-            "match": match.toView()
+        if not join_world(user, world, players, iso=iso):
+            return
+
+        self.server.client_enter_world(user.client)
+
+        self.server.send_to_world(world.wid, {
+            "route": "Worlds:joined",
+            "user": user.to_dict(),
         })
 
-    def join(self, aid, did, mid, iso, username, user):
-        """
-        User joins match
-        """
-        match = matches.get(mid)
-        deck = self.deckManager.get(user.uid, did)
-        area = areas.get(mid, aid)
+        dd = world.to_dict()
+        dd['players'] = players
 
-        try:
-            # todo: handle reconnect
+        return {
+            "world": dd,
+            "user": user.to_dict(),
+        }
 
-            # join to match
-            claim.join_match(match, iso, user, username)
+    def create(self, user):
+        world, l_countries = create_world()
 
-            # add deck
-            claim.add_units(area, deck, iso)
-        except JoinException as e:
-            return {
-                "err": e.reason
-            }
 
-        # Remove from hall and add to match
-        self.server.onlineHall.remove(user.client)
-        self.server.onlineMatches[mid].add(user.client)
 
-        matches.save(match)
-        areas.save(area)
+        #return self.join(world.wid, user)
 
-        # save user too (either creates a new guest user, or saves the state of logged in user)
-        users.save(user)
+    def edit(self, patch: dict, user):
+        # edit map + max_players
+        # + deny if too many players
+        world = worlds.get(user.wid)
 
-        self.server.sendToMatch(mid, {
-            "route": "Matches:join",
-            "msid": user.client.msid,
-
-            "match": match.toView(),
-            "area": area.toView(),
-
-            "mid": mid,
-            "iso": iso,
-            "username": username,
-        })
+        if set_map(world, patch['map']):
+            self.server.send_to_world(world.wid, {
+                "route": "Worlds:edit",
+                "patch": patch,
+            })
 
     def leave(self, user):
-        """
-        User leaves match
-        """
-        mid = user.mid
-        iso = user.iso
+        world = worlds.get(user.wid)
 
-        match = matches.get(user.mid)
-
-        try:
-            # leave match
-            claim.leave_match(match, user)
-        except JoinException as e:
-            return {
-                "err": e.reason
-            }
-
-        if match.current == iso:
-            # if user has just left, let the turn be handled
-            try:
-                end_turn(match, iso)
-
-                self.server.sendToMatch(match.mid, {
-                    "route": "Game:end_turn",
-                    "match": match.toView()
-                })
-
-            except GameEndException as e:
-                # game has ended, finalize stuff
-                matches.delete(match)
-
-                self.server.sendToMatch(match.mid, {
-                    "route": "Game:end_game",
-                    "reason": e.reason
-                })
-
-        # Add to hall and remove from match
-        self.server.onlineHall.add(user.client)
-        self.server.onlineMatches[user.mid].remove(user.client)
-
-        matches.save(match)
-
-        self.server.sendToMatch(mid, {
-            "route": "Matches:leave",
-
-            "mid": mid,
-            "iso": iso,
-            "uid": user.uid,
+        self.server.send_to_world(world.wid, {
+            "route": "Worlds:left",
+            "iso": user.iso,
         })
 
-    def start(self, mid, user):
-        match = matches.get(mid)
+        self.server.client_leave_world(user.client)
+        user.wid = None
+        user.iso = None
+        users.set_world(user.uid, None, None)
 
-        # start match
-        turns.init(match)
-        moves.reset_map(match)
-
-        matches.save(match)
-
-        self.server.sendToMatch(mid, {
-            "match": match.toView()
-        })
+        return {}

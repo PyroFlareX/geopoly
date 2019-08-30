@@ -1,11 +1,6 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {offline_request} from '/js/solo/handler.js';
 
-// import {AreasController} from '/js/controllers/areas.js';
-// import {WorldsController} from '/js/controllers/worlds.js';
-// import {AreasGroup} from '/js/groups/areas.js';
-//import {WorldsGroup} from '/js/groups/worlds.js';
-
 export const client = {
   controllers: {
     // Areas: new AreasController(),
@@ -19,7 +14,7 @@ export const client = {
 
   ws: ws_client,
 
-  init_game_client: function(conf, user) {
+  init_game_client: function(conf, user, cb) {
     this.conf = conf;
 
     if (conf.websocket) {
@@ -33,9 +28,7 @@ export const client = {
           uid: user.uid,
           iso: user.iso,
           username: user.username,
-        }, ()=>{
-          //...
-        });
+        }).then(cb||(()=>{}));
       });
     } else {
       this.ws.request = offline_request;

@@ -1,13 +1,17 @@
+from flask import render_template, request
+from werkzeug.utils import redirect
+
+from engine import settings
 from game.instance import worlds, users, countries, areas
 
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
 
 
-class WorldController():
+class WorldsController():
     def __init__(self, server):
         self.server = server
-        self.group = "World"
+        self.group = "Worlds"
 
     def load(self):
         user = getUser()
@@ -23,3 +27,14 @@ class WorldController():
             "areas": _areas,
             "player_names": {player.iso: player.username for player in players},
         })
+
+    def index(self):
+        user = getUser()
+
+        if user.username is None:
+            return redirect('/')
+
+        if user.uid == 'None':
+            raise Exception("hifga iiii Volume II")
+
+        return render_template('/worlds/index.html', conf=settings._conf)

@@ -5,7 +5,7 @@ import sys
 from game.entities import Country, Area
 
 
-def load_gtml(filename):
+def load_gtml(filename, skip=[]):
     l_countries = []
     l_areas = []
     l_calls = []
@@ -30,6 +30,9 @@ def load_gtml(filename):
                     f_countries = status[10:].split()
                     status = 'COUNTRIES'
 
+                continue
+
+            if status in skip:
                 continue
 
             if status == 'COUNTRIES':

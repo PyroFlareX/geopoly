@@ -52,7 +52,7 @@ class User(Base):
             "uid": self.uid,
             "username": self.username,
             "iso": self.iso,
-            "wid": str(self.wid),
+            "wid": str(self.wid) if self.wid else None,
 
             "elo": self.elo,
             "division": self.division,

@@ -13,7 +13,6 @@ class RealGameSimulation(RealGameTestCase):
         self._assert_calls(*_execute(calls, resp_format='list'))
         self._assert_map(c, a)
 
-        print(1)
         #a, c, calls = load_gtml('real_match/round2.gtml')
         #a, c, calls = load_gtml('real_match/round3.gtml')
 
