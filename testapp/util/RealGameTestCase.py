@@ -50,7 +50,7 @@ class RealGameTestCase(unittest.TestCase):
                 if 'err' not in resp_exp and 'err' in resp_obs:
                     MSG += '  {}:    {}'.format('err', resp_obs['err'])
                 else:
-                    MSG += self._form_dict_cmp(resp_obs, resp_exp)
+                    MSG += self._form_dict_cmp(resp_exp, resp_obs)
 
                     lset = set(resp_obs.keys()) - set(resp_exp.keys())
                     if lset:

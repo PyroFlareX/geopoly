@@ -17,7 +17,7 @@ class RoundEventsView:
             "payday": self.payday,
             "emperor": self.emperor.iso if self.emperor else None,
             "ex_emperor": self.ex_emperor.iso if self.ex_emperor else None,
-            "eliminated": list(self.eliminated),
+            "eliminated": sorted(list(self.eliminated)),
         }
 
 

@@ -1,3 +1,4 @@
+from collections import OrderedDict
 
 from game.entities import User, Area, World, Country
 from game.instance import worlds, countries, areas, users
@@ -10,7 +11,7 @@ class GameGroup:
         self.server = server
         self.name = 'Game'
 
-    def _accessControl(self, user, area_id=None):
+    def _accessControl(self, user, area_id=None, leave_country=False):
         if user.wid is None:
             return {"err": "not_in_match"}, None, None, None
 
@@ -19,12 +20,15 @@ class GameGroup:
         if world.current != user.iso:
             return {"err": "not_your_turn"}, None, None, None
 
-        country = countries.get(user.iso, user.wid)
+        if leave_country:
+            country = None
+        else:
+            country = countries.get(user.iso, user.wid)
 
         if area_id is not None:
             area: Area = areas.get(area_id, user.wid)
 
-            if area.iso != country.iso:
+            if area.iso != user.iso:
                 return {"err": "not_your_area"}, None, None, None
         else:
             area = None
@@ -89,27 +93,39 @@ class GameGroup:
         })
 
     def end_turn(self, user: User):
-        error, world, country, _ = self._accessControl(user)
+        error, world, curr_country, _ = self._accessControl(user)
         if error: return error
 
         world_countries = countries.list_all(world.wid)
-        country = next(c for c in world_countries if c.iso == user.iso)
+        world_countries = OrderedDict((c.iso, c) for c in world_countries)
 
         # if len(world.isos) < 2:
         #     return {"err": "waiting_for_players"}
 
         try:
-            round_end_events = turns.end_turn(world, country, world_countries)
+            round_end_events = turns.end_turn(world, curr_country, world_countries)
         except turns.TurnException as e:
             return {"err": e.reason}
 
         if round_end_events is not None:
+            countries_to_save = []
+
+            # save countries that have been eliminated by conquer
+            for iso in round_end_events.eliminated:
+                country = world_countries[iso]
+
+                if country.shields > 0:
+                    country.shields = 0
+                    countries_to_save.append(country)
+
             # save emperor and previous emperor countries
             if round_end_events.ex_emperor:
-                countries.save(round_end_events.ex_emperor)
+                countries_to_save.append(round_end_events.ex_emperor)
 
             if round_end_events.emperor:
-                countries.save(round_end_events.emperor)
+                countries_to_save.append(round_end_events.emperor)
+
+            countries.save_all(countries_to_save)
 
         worlds.save(world)
 

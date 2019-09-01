@@ -120,3 +120,8 @@ def join_world(user: User, world: World, players, iso=None):
 
         return True
 
+
+def set_map(world, map_id):
+    world.map = map_id
+
+    worlds.save(world)

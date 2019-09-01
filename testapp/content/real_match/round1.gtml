@@ -20,13 +20,10 @@
   END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":4,"current":"P1"},"round_end":{"round":1,"payday":{"P1":10,"P2":30},"emperor":null,"ex_emperor":null,"eliminated":["P3"]}}
 
 
-#>STOP_TEST
-
-
 >COUNTRIES iso  gold  shields  pop
            P1   840   2        1
            P2   910   2        1
-           P3   900   6        0
+           P3   900   0        0
            P4   900   1        -1
 # TODO: maybe set eliminated country's shield to 0?
 

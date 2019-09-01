@@ -16,24 +16,28 @@ class TurnException(Exception):
         return str(self.reason)
 
 
-def end_turn(world: World, curr: Country, countries):
+def end_turn(world: World, curr: Country, countries: dict):
     """
     :param world: game world
     :param curr: the country that ends the turn
     :param countries: all countries in the world, in order of turn
     :return:
     """
-    isos = [country.iso for country in countries]
 
     if world.current != curr.iso:
         raise TurnException("not_your_turn")
 
-    if len(isos) <= 1:
+    if len(countries) <= 1:
         raise TurnException("small_party")
 
-    tb = TurnBox(world, isos)
+    tb = TurnBox(world, list(countries.keys()))
 
     next_iso = tb.next()
+    while countries.get(next_iso) is not None and countries[next_iso].shields <= 0:
+        # skip over eliminated countries (but keep the turn number)
+        next_iso = tb.next()
+        world.turns -= 1
+
     if next_iso == curr.iso:
         raise TurnException("small_party")
 
@@ -41,15 +45,22 @@ def end_turn(world: World, curr: Country, countries):
 
     if next_iso is None:
         # round ends, restart turn
-        resp = _end_round(world, countries, isos, tb)
-        tb.start(resp.emperor)
+        resp = _end_round(world, countries.values(), countries, tb)
+
+        if resp.emperor:
+            # new round starts counting from the new emperor
+            tb.start(resp.emperor.iso)
+        else:
+            # otherwise, we continue as usual
+            tb.start()
+
 
         return resp
 
     return None
 
 
-def _end_round(world, countries, isos, tb):
+def _end_round(world, countries_list, isos, tb):
     events = RoundEventsView()
 
     # re-calculate pop difference
@@ -71,7 +82,7 @@ def _end_round(world, countries, isos, tb):
 
     # determine if we had a top conqueror
     conquered = lambda c: shield_changes.get(c.iso, (None, 0))[1]
-    best, runnerup = heapq.nlargest(2, countries, key=conquered)
+    best, runnerup = heapq.nlargest(2, countries_list, key=conquered)
 
     if conquered(best) > 0:
         # at least one player conquered, so we have payday
@@ -84,9 +95,13 @@ def _end_round(world, countries, isos, tb):
         if conquered(best) > conquered(runnerup):
             # there is no tie in the number of conquers
             # the frontrunner becomes the emperor.
-            ex_emperor: Country = next(filter(lambda c: c.emperor, countries))
+            try:
+                ex_emperor: Country = next(filter(lambda c: c.emperor, countries_list))
+                ex_emperor.emperor = False
+            except StopIteration:
+                # there was no ex emperor
+                ex_emperor = None
 
-            ex_emperor.emperor = False
             best.emperor = True
             best.gold += 20
             events.ex_emperor = ex_emperor
@@ -104,14 +119,20 @@ def _end_round(world, countries, isos, tb):
 
     # Update countries' model with DB changes
     # (in case the calling method wants to use the country objects)
-    # for country in countries:
-    #     if country.iso != best.iso:
-    #         country.emperor = False
-    #
+    # for country in countries_list:
     #     # update loaded entity models (we're not saving these here, though):
-    #     country.gold += events.payday[country.iso]
-    #     country.pop = pops[country.iso]
-    #     country.conquers += conquered(country)
+    #     #country.gold += events.payday.get(country.iso, 1)
+    #     #country.pop = pops[country.iso]
+    #
+    #     sh_loss, sh_gain = shield_changes.get(country.iso, (0, 0))
+    #     country.shields += sh_gain
+    #     country.shields -= sh_loss
+    #
+    #     # this is done in the controller instead:
+    #     # if country.iso in events.eliminated:
+    #     #     country.shields = 0
+    #
+    #     #country.conquers += conquered(country)
 
 
     return events

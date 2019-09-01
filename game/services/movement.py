@@ -31,7 +31,7 @@ def _is_invalid_move(area1: Area, area2: Area):
             # can't attack self
             return 'not_enemy'
 
-        if area2.tile in ('forest', 'mount') and area1.unit == 'cav':
+        if area2.tile == 'forest' and area1.unit == 'cav':
             # Cavalry can't attack into forest
             return 'cant_attack_cavalry'
 
@@ -59,6 +59,7 @@ def move_to(area1: Area, area2: Area):
 
     # unit is killed
     area2.unit = None
+    area2.exhaust = 1
 
     # cannons do not move position when they attack
     if not is_cannon_fire:
@@ -70,9 +71,7 @@ def move_to(area1: Area, area2: Area):
     if area2.tile:
         # exhaust unit, can't move next round
         conf = items[area2.tile]
-        area2.exhaust = conf.get('exhaust', None)
-
-        # todo: do we need to exhaust when normal move?
+        area2.exhaust = conf.get('exhaust', 1)
 
     if is_conquer:
         # conquer area

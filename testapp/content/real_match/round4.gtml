@@ -1,0 +1,27 @@
+>TEST_CALLS
+# command,  params,     iso,    resps
+  BUY       a22,cav     P1      {"route":"Game:buy","iso":"P1","area_id":"a22","item_id":"cav","cost":{"gold":70,"pop":1}}
+  MOVE      a12,a02     P1      {"route":"Game:move","iso":"P1","area_id":"a12","to_id":"a02","events":{"conquer":true,"kill":false}}
+  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":12,"current":"P2"},"round_end":null}
+
+# todo: itt: why would P2 be eliminated?
+  END        ,          P2      {"route":"Game:end_turn","iso":"P2","turn_end":{"turns":14,"current":"P1"},"round_end":{"round":4,"payday":{"P1":30,"P2":10},"emperor":"P1","ex_emperor":"P1","eliminated":["P2","P3","P4"]}}
+
+
+
+
+# TODO: maybe set eliminated country's shield to 0?
+>COUNTRIES iso  gold  shields  pop   emperor
+           P1   810   4        2     true
+           P2   940   0        0     false
+           P3   900   0        0     false
+           P4   900   0        0     false
+
+
+>TEST_AREAS
+# iso, build/tile, unit
+# 0           1            2             3
+  P1,barr     P1           P1,house,cav  P2
+  P1,city     P1           P1            P2,house
+  P3          P1,city      P1,house,cav  P2,,inf
+  P3          P3           P4            P1,mount,cav

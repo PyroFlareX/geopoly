@@ -9,11 +9,26 @@ class RealGameSimulation(RealGameTestCase):
         c, a, calls = load_gtml('testapp/content/real_match/init.gtml')
         _set_up_game(c, a)
 
+        print("\nROUND 1")
         c, a, calls = load_gtml('testapp/content/real_match/round1.gtml')
         self._assert_calls(*_execute(calls, resp_format='list'))
         self._assert_map(c, a)
 
-        #a, c, calls = load_gtml('real_match/round2.gtml')
-        #a, c, calls = load_gtml('real_match/round3.gtml')
+        print("\nROUND 2")
+        c, a, calls = load_gtml('testapp/content/real_match/round2.gtml')
+        self._assert_calls(*_execute(calls, resp_format='list'))
+        self._assert_map(c, a)
+
+        print("\nROUND 3")
+        c, a, calls = load_gtml('testapp/content/real_match/round3.gtml')
+        self._assert_calls(*_execute(calls, resp_format='list'))
+        self._assert_map(c, a)
+
+        print("\nROUND 4")
+        c, a, calls = load_gtml('testapp/content/real_match/round4.gtml')
+        self._assert_calls(*_execute(calls, resp_format='list'))
+        self._assert_map(c, a)
+
+        # todo: assert victory & endgame & match history
 
         _finish()

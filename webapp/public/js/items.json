@@ -99,7 +99,7 @@
     "cost_pop": 0,
     "requires": {"tile": null, "build": null},
 
-    "exhaust": 1,
+    "exhaust": 2,
     "slot": "tile"
   },
   "forest": {
@@ -107,7 +107,7 @@
     "cost_gold": 99999,
     "cost_pop": 99999,
 
-    "exhaust": 1,
+    "exhaust": 2,
     "slot": "tile"
   },
   "mount": {
@@ -115,7 +115,7 @@
     "cost_gold": 99999,
     "cost_pop": 99999,
 
-    "exhaust": 2,
+    "exhaust": 3,
     "slot": "tile"
   }
 }
