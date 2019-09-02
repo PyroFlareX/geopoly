@@ -5,7 +5,7 @@ storage = settings.get('server.storage')
 
 
 if storage == 'database':
-    from game.repositories import AreaRepository, UserRepository, WorldRepository, CountryRepository
+    from game.repositories import AreaRepository, UserRepository, WorldRepository, CountryRepository, HistoryRepository, ResultRepository
 
     users = UserRepository(db_session=db_session)
 
@@ -14,6 +14,11 @@ if storage == 'database':
     countries = CountryRepository(db_session=db_session)
 
     areas = AreaRepository(db_session=db_session)
+
+
+    histories = HistoryRepository(db_session=db_session)
+
+    matchresults = ResultRepository(db_session=db_session)
 
 elif storage == 'redis':
     pass

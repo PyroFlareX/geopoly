@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from cliapp.commands.MigrateCommand import MigrateCommand
 from game.ctx import config, set_session
-from game.instance import worlds, countries, areas, users
+from game.instance import worlds, countries, areas, users, matchresults, histories
 from game.entities import World, User
 from engine.modules.geomap import service
 from game.util.load_gtml import load_gtml
@@ -31,13 +31,17 @@ def _migrate_and_reset():
 
 
 def _delete_all():
-    w = worlds.get(WID)
+    users.delete_all(WID)
 
+    w = worlds.get(WID)
     if w is not None:
         worlds.delete(w)
-        areas.delete_all(WID)
-        countries.delete_all(WID)
-        users.delete_all(WID)
+        #areas.delete_all(WID)
+        #countries.delete_all(WID)
+
+    h = histories.get(WID)
+    if h is not None:
+        histories.delete(h)
 
 
 def _set_up_gtml(filename):
@@ -47,11 +51,9 @@ def _set_up_gtml(filename):
 
 
 def _set_up_game(l_countries, adict):
-    #_fake_db()
-    _migrate_and_reset()
+    _delete_all()
 
-
-    world = World(current='P1', wid=WID)
+    world = World(current='P1', wid=WID, map='autotest_map')
     l_users = []
 
     for i,country in enumerate(l_countries):

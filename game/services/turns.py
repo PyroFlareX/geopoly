@@ -1,4 +1,3 @@
-"""Main entry point of game"""
 import heapq
 
 from engine.modules.turns.service import TurnBox
@@ -11,6 +10,15 @@ from game.views import RoundEventsView
 class TurnException(Exception):
     def __init__(self, reason):
         self.reason = reason
+
+    def __str__(self):
+        return str(self.reason)
+
+
+class EndGameException(Exception):
+    def __init__(self, reason, events):
+        self.reason = reason
+        self.events = events
 
     def __str__(self):
         return str(self.reason)
@@ -75,11 +83,6 @@ def _end_round(world, countries_list, isos, tb):
     still_playing = db_countries.list_still_playing(world.wid)
     events.eliminated = set(isos) - set(still_playing)
 
-    # check end game condition
-    if len(still_playing) <= 1:
-        # todo: @later
-        print("TODO: check end game")
-
     # determine if we had a top conqueror
     conquered = lambda c: shield_changes.get(c.iso, (None, 0))[1]
     best, runnerup = heapq.nlargest(2, countries_list, key=conquered)
@@ -87,10 +90,6 @@ def _end_round(world, countries_list, isos, tb):
     if conquered(best) > 0:
         # at least one player conquered, so we have payday
         events.payday = db_countries.calculate_payday(world.wid, commit=False)
-
-        # todo: itt: emperor starts
-        # todO: itt: restart if no emperor
-        # todo: itt: why does turn still fail in full stack?
 
         if conquered(best) > conquered(runnerup):
             # there is no tie in the number of conquers
@@ -134,5 +133,11 @@ def _end_round(world, countries_list, isos, tb):
     #
     #     #country.conquers += conquered(country)
 
+    # check end game condition
+    if len(still_playing) <= 1:
+        if len(still_playing) == 1:
+            raise EndGameException(still_playing[0], events)
+        else:
+            raise EndGameException('-1', events)
 
     return events

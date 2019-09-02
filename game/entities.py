@@ -1,6 +1,7 @@
+import datetime
 import uuid
 
-from sqlalchemy import Column, Integer, String, Boolean, SmallInteger, ForeignKey, ForeignKeyConstraint
+from sqlalchemy import Column, Integer, String, Boolean, SmallInteger, ForeignKey, ForeignKeyConstraint, Date, DateTime
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -237,3 +238,105 @@ class Area(Base):
             pass
 
         return "{}({})".format(self.id, ','.join(ff))
+
+
+class MatchHistory(Base):
+    __tablename__ = 'histories'
+
+    wid = Column(postgresql.UUID(as_uuid=True), primary_key=True)
+    map = Column(String(20))
+    rounds = Column(SmallInteger)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    results = relationship("MatchResult")
+
+    def __init__(self, **kwargs):
+        self.wid = kwargs.get('wid')
+
+        self.map = kwargs.get('map', 0)
+        self.rounds = kwargs.get('rounds', 0)
+        self.created_at = kwargs.get('created_at')
+
+    def to_dict(self):
+        return {
+            "wid": self.wid,
+            "map": self.map,
+            "rounds": self.rounds,
+            "created_at": self.created_at,
+        }
+
+
+class MatchResult(Base):
+    __tablename__ = 'histories_users'
+    id = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    # ForeignKey(User.uid),
+    history_id = Column(postgresql.UUID(as_uuid=True), ForeignKey(MatchHistory.wid), default=uuid.uuid4)
+    uid = Column(postgresql.UUID(as_uuid=True), default=uuid.uuid4, nullable=True)
+
+    iso = Column(String(3))
+    div = Column(SmallInteger)
+    order = Column(SmallInteger)
+
+    result = Column(SmallInteger)
+    shields = Column(SmallInteger)
+    areas = Column(SmallInteger)
+    cities = Column(SmallInteger)
+    gold = Column(SmallInteger)
+    inf = Column(SmallInteger)
+    cav = Column(SmallInteger)
+    art = Column(SmallInteger)
+    barr = Column(SmallInteger)
+    house = Column(SmallInteger)
+    cita = Column(SmallInteger)
+
+    # todo @later:
+    #kills = Column(SmallInteger)
+    #deaths = Column(SmallInteger)
+    #captures = Column(SmallInteger)
+    #losses = Column(SmallInteger)
+    #gold_spent = Column(SmallInteger)
+    #pop_sum = Column(SmallInteger)
+
+    # history = relationship("MatchHistory", back_populates="results")
+
+    def __init__(self, **kwargs):
+        self.history_id = kwargs.get('history_id')
+        self.uid = kwargs.get('uid')
+
+        self.div = kwargs.get('div')
+        self.iso = kwargs.get('iso')
+        self.order = kwargs.get('order')
+        self.result = kwargs.get('result')
+
+        self.areas = kwargs.get('areas', 0)
+        self.cities = kwargs.get('cities', 0)
+        self.shields = kwargs.get('shields', 0)
+        self.gold = kwargs.get('gold', 0)
+        self.inf = kwargs.get('inf', 0)
+        self.cav = kwargs.get('cav', 0)
+        self.art = kwargs.get('art', 0)
+        self.barr = kwargs.get('barr', 0)
+        self.house = kwargs.get('house', 0)
+        self.cita = kwargs.get('cita', 0)
+
+    def to_dict(self):
+        return {
+            "history_id": self.history_id,
+            "uid": self.uid,
+            "div": self.div,
+            "iso": self.iso,
+            "order": self.order,
+            "result": self.result,
+            "shields": self.shields,
+            "gold": self.gold,
+            "areas": self.areas,
+            "cities": self.cities,
+            "inf": self.inf,
+            "cav": self.cav,
+            "art": self.art,
+            "barr": self.barr,
+            "house": self.house,
+            "cita": self.cita,
+        }
+

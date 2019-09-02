@@ -5,7 +5,41 @@ import sys
 from game.entities import Country, Area
 
 
-def load_gtml(filename, skip=[]):
+def load_isos(filename):
+
+    isos = []
+    f_countries = []
+
+    with open(filename) as fh:
+        status = None
+
+        for line in fh:
+            if not line or line[0] == '#' or line[0] == '\n':
+                continue
+            if line[0] == '>':
+                status = line[1:-1]
+
+                if status[:9] == 'COUNTRIES':
+                    f_countries = status[10:].split()
+                    status = 'COUNTRIES'
+                continue
+
+            if status is not None and status != 'COUNTRIES':
+                continue
+
+            attrs = line.split()
+
+            for val, attr in zip(attrs, f_countries):
+                if attr == 'iso':
+                    isos.append(val)
+                    break
+
+    return isos
+
+
+def load_gtml(filename, skip=None):
+    if skip is None:
+        skip = []
     l_countries = []
     l_areas = []
     l_calls = []

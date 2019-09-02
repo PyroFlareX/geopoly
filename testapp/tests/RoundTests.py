@@ -14,12 +14,12 @@ players = [
 class RoundTests(TestCase):
     def _set_up(self):
         world = World(current='P4')
-        countries = [
-            Country(iso='P1', gold=0, pop=0, shields=7, conquers=0),
-            Country(iso='P2', gold=0, pop=0, shields=7, conquers=0),
-            Country(iso='P3', gold=0, pop=0, shields=7, conquers=0),
-            Country(iso='P4', gold=0, pop=0, shields=7, conquers=0)
-        ]
+        countries = {
+            'P1': Country(iso='P1', gold=0, pop=0, shields=7, conquers=0),
+            'P2': Country(iso='P2', gold=0, pop=0, shields=7, conquers=0),
+            'P3': Country(iso='P3', gold=0, pop=0, shields=7, conquers=0),
+            'P4': Country(iso='P4', gold=0, pop=0, shields=7, conquers=0)
+        }
 
         return world, countries, countries[3]
 

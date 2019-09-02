@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from game.entities import User, Area, World, Country
 from game.instance import worlds, countries, areas, users
-from game.services import movement, building, turns, endgame
+from game.services import movement, building, turns as turns_serv, endgame
 
 
 class GameGroup:
@@ -103,8 +103,12 @@ class GameGroup:
         #     return {"err": "waiting_for_players"}
 
         try:
-            round_end_events = turns.end_turn(world, curr_country, world_countries)
-        except turns.TurnException as e:
+            round_end_events = turns_serv.end_turn(world, curr_country, world_countries)
+            winner_iso = None
+        except turns_serv.EndGameException as e:
+            winner_iso = e.reason
+            round_end_events = e.events
+        except turns_serv.TurnException as e:
             return {"err": e.reason}
 
         if round_end_events is not None:
@@ -115,7 +119,7 @@ class GameGroup:
                 country = world_countries[iso]
 
                 if country.shields > 0:
-                    country.shields = 0
+                    country.shields = 0#-1
                     countries_to_save.append(country)
 
             # save emperor and previous emperor countries
@@ -127,7 +131,6 @@ class GameGroup:
 
             countries.save_all(countries_to_save)
 
-        worlds.save(world)
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":end_turn",
@@ -139,27 +142,29 @@ class GameGroup:
             "round_end": round_end_events.to_dict() if round_end_events else None
         })
 
-        # winner = endgame.check_endgame(world)
-        # if winner:
-        #     # Game has ended, finalize it
-        #     print("TODO: ENDGAME")
-        #     return;
-        #
-        #     players = users.list_all(world.wid)
-        #
-        #     #endgame.finalize_world(world, winner, players)
-        #
-        #     # self.server.send_to_world(user.wid, {
-        #     #     "route": self.name + ":end_game",
-        #     #     "winner": winner
-        #     # })
-        #
-        #     users.save_all(players)
-        #
-        #     # delete match
-        #     worlds.delete(world)
-        #     countries.delete_all(world.wid)
-        #     areas.delete_all(world.wid)
+        if winner_iso:
+            # create match history
+            world_users = users.list_all(world.wid)
+            endgame.create_match_history(world, world_users, world_countries, winner=winner_iso if winner_iso != '-1' else None)
+
+            for user in world_users:
+                user.iso = None
+                user.wid = None
+
+                # todo: rating
+                print("TODO: rating")
+
+            users.save_all(world_users)
+
+            # this schedules the world to be deleted at a later time
+            world.turns = -1
+
+            self.server.send_to_world(user.wid, {
+                "route": self.name + ":end_game",
+                "winner": winner_iso
+            })
+
+        worlds.save(world)
 
     def surrender(self, user: User):
         world = worlds.get(user.wid)
