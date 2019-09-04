@@ -19,7 +19,7 @@ export const areaSource = new ol.source.Vector({
 
 export const areaLayer = new ol.layer.Vector({
   source: areaSource,
-  maxResolution: 4000,
+  maxResolution: 2445,
 
   style: (feature, res) => {
     const styles = [];
@@ -123,7 +123,7 @@ areaLayer.click = (feature, key) => {
   }
 
   if (move.selected) {
-    // move-arrow click: ending
+    // move-arrow click: move to that position
     if (gui.opened == 'move-info' && !move.disable_tooltip) {
       gui.infobar("close");
     }

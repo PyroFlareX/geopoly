@@ -2,15 +2,16 @@ import {map, view} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
 import {init_flags} from '/engine/flags.js';
 import {gui} from '/engine/gui.js';
+import {maps} from '/js/game/maps.js';
 
 import {setup_features} from '/engine/modules/geomap/setup.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
-import {init_borders, add_border_layer} from '/engine/modules/borders/borders.js';
 import {init_building} from '/engine/modules/building/building.js';
 
 import {watercolorLayer} from '/engine/layers/watercolor.js';
 import {arrowLayer} from '/engine/layers/arrows.js';
 import {areaLayer, areaSource} from '/js/layers/areas.js';
+import {init_countries, countryLayer} from '/js/layers/countries.js';
 
 import {client} from '/js/client.js';
 import {init_chat} from '/js/chat.js';
@@ -22,10 +23,7 @@ map.getLayers().extend([
   //outlineLayer,
 
   areaLayer,
-  
-  add_border_layer('border-stroke', {
-   width: 4
-  }),
+  countryLayer,
   // add_border_layer('border-fill', {
     
   // }),
@@ -44,10 +42,11 @@ map.getLayers().extend([
 export function init_app(conf, user, token, world) {
   init_flags(conf.flags);
 
-  view.setCenter([parseFloat(conf.client.center[0]), parseFloat(conf.client.center[1])]);
-  view.setZoom(parseInt(conf.client.zoom));
+  view.setCenter(maps[window.world_map].center);
+  view.setZoom(maps[window.world_map].zoom);
   
   if (conf.client.debug) {
+    window.map = map;
     window.layers = map.getLayers();
     window.areas = window.layers.item(1).getSource();
   }
@@ -83,7 +82,7 @@ onload((ctx) => {
   
   if (ctx.conf.borders.enabled) {
     ctx.conf.borders.source = areaSource;
-    init_borders(ctx.conf.borders);
+    init_countries(ctx.conf.borders);
   }
 
   if (ctx.conf.chat.enabled) {

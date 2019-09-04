@@ -21,22 +21,12 @@ def get_K(elo, n_games):
     return 100
 
 
-def calculate_elo(eloA, eloB, sA, numA=0, numB=0):
+def elo_change(eloA, eloB, sA, nA=0):
     expA = get_expected(eloA, eloB)
-    expB = 1 - expA
 
-    Ka = get_K(eloA, numA)
-    Kb = get_K(eloB, numB)
+    Ka = 32
+    return round(Ka * (sA - expA))
 
-    sB = 1 - sA
-
-    eloA += Ka*(sA - expA)
-    eloB += Kb*(sB - expB)
-
-    if eloA < 700: eloA = 700
-    if eloB < 700: eloB = 700
-
-    return eloA, eloB
 
 divisions = [
     'silver1', 'silver2', 'silver_elite',

@@ -7,7 +7,7 @@ export const maps = {
     isos: ["UK", "FR", "HU"],
     year: 1921,
     center: [2172000, 5942000],
-    zoom: 5,
+    zoom: 7,
   },
   
   "us_civil_war": {

@@ -143,17 +143,14 @@ class GameGroup:
         })
 
         if winner_iso:
+            winner = winner_iso if winner_iso != '-1' else None
+
             # create match history
             world_users = users.list_all(world.wid)
-            endgame.create_match_history(world, world_users, world_countries, winner=winner_iso if winner_iso != '-1' else None)
+            endgame.create_match_history(world, world_users, world_countries, winner=winner)
 
-            for user in world_users:
-                user.iso = None
-                user.wid = None
-
-                # todo: rating
-                print("TODO: rating")
-
+            # change user ratings
+            endgame.apply_rating(world_users, winner=winner)
             users.save_all(world_users)
 
             # this schedules the world to be deleted at a later time

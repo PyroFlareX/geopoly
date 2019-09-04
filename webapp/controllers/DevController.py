@@ -64,6 +64,7 @@ class DevController():
         start_world(world, AI=True)
 
         user.wid = world.wid
+        user.iso = 'UK'
         users.save(world)
 
 

@@ -1,3 +1,4 @@
+from engine import settings
 from game.entities import User, World
 from game.instance import worlds, users
 from game.services.startgame import create_world, join_world, set_map
@@ -77,8 +78,10 @@ class WorldsGroup:
         })
 
         self.server.client_leave_world(user.client)
-        user.wid = None
-        user.iso = None
-        users.set_world(user.uid, None, None)
+
+        if settings.get('client.leave_world_on_disconnect'):
+            user.wid = None
+            user.iso = None
+            users.set_world(user.uid, None, None)
 
         return {}
