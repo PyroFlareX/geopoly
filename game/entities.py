@@ -54,6 +54,7 @@ class User(Base):
             "username": self.username,
             "iso": self.iso,
             "wid": str(self.wid) if self.wid else None,
+            "token": self.token,
 
             "elo": self.elo,
             "division": self.division,

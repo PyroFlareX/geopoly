@@ -19,11 +19,9 @@ export const client = {
       this.ws.connect(conf.ws_address, ()=>{
 
         // init WS auth
-        this.ws.request("Users:guest", {
-          wid: user.wid,
+        this.ws.request("Users:auth_token", {
           uid: user.uid,
-          iso: user.iso,
-          username: user.username,
+          token: user.token,
         }).then(cb||(()=>{}));
       });
     } else {
