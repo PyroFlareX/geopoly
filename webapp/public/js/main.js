@@ -2,7 +2,6 @@ import {map, view} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
 import {init_flags} from '/engine/flags.js';
 import {gui} from '/engine/gui.js';
-import {maps} from '/js/game/maps.js';
 
 import {setup_features} from '/engine/modules/geomap/setup.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
@@ -14,7 +13,11 @@ import {areaLayer, areaSource} from '/js/layers/areas.js';
 import {init_countries, countryLayer} from '/js/layers/countries.js';
 
 import {client} from '/js/client.js';
-import {init_chat} from '/js/chat.js';
+
+import {maps} from '/js/game/maps.js';
+import {init_chat} from '/js/game/chat.js';
+import {} from "/js/game/building.js";
+
 
 
 map.getLayers().extend([

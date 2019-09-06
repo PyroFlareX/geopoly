@@ -36,6 +36,16 @@ export function apply_kill(iso2) {
   countries[iso2].pop += 1;
 }
 
+export function apply_resources(iso, {gold, pop}, dir) {
+  if (dir == null)
+    dir = 1;
+
+  if (gold)
+    countries[iso].gold += dir*gold;
+  if (pop)
+    countries[iso].pop += dir*pop;
+}
+
 // export function set_payday(payday, _emperor) {
 //   for (let [iso,country] of Object.items(countries)) {
 //     country.emperor = false;

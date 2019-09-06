@@ -57,10 +57,12 @@ function in_ring2(id1, id2) {
 }
 
 
-client.ws.on('Areas:move', ({from_id, to_id})=>{
+client.ws.on('Game:move', ({iso,area_id,to_id,events:{conquer,is_kill}})=>{
+  console.log("TODO: move", iso, area_id, to_id, conquer, is_kill);
+  return;
+
   const from = areaSource.getFeatureById(from_id);
   const to = areaSource.getFeatureById(to_id);
-  const iso = from.get('iso');
   const iso2 = to.get('iso');
 
   const to_had_unit = to.get('unit');

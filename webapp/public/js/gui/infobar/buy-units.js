@@ -1,4 +1,6 @@
 import {template} from "/js/gui/infobar/buy-units.vue.js"
+import {ws_client} from '/engine/modules/websocket/wsclient.js';
+
 
 export let component = Vue.component('infobar-buy-units', {
   template: template,
@@ -21,6 +23,15 @@ export let component = Vue.component('infobar-buy-units', {
 
       this.infobar_id = 'buy-units-'+area.id;
     },
+
+    onBuy: function(item) {
+      ws_client.request("Game:buy", {
+        area_id: this.area.id,
+        item_id: item.id,
+      });
+
+      this.show = false;
+    }
   },
 
   computed: {

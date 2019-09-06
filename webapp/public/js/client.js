@@ -1,15 +1,11 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
-import {offline_request} from '/js/solo/handler.js';
+import {offline_request} from '/js/game/solo_handler.js';
 
 export const client = {
   controllers: {
-    // Areas: new AreasController(),
-    // Worlds: new WorldsController(),
   },
 
   groups: {
-    //Areas: new AreasGroup(),
-   //Worlds: new WorldsGroup(ws_client),    
   },
 
   ws: ws_client,

@@ -16,8 +16,8 @@ export const template = `
       <p v-if="!area.build"><strong>Buy Building:</strong></p>
       <p v-else><strong>Upgrade <i :class="'ra ra-2x ra-build-'+area.build"></i> to:</strong></p>
 
-      <build-catalog item_slot="build" col_size.number="4" :parent="world" :entity="area"></build-catalog>
-      <build-catalog item_slot="tile" col_size.number="4" :parent="world" :entity="area"></build-catalog>
+      <build-catalog @buy="onBuy" item_slot="build" col_size.number="4" :parent="world" :entity="area"></build-catalog>
+      <build-catalog @buy="onBuy" item_slot="tile" col_size.number="4" :parent="world" :entity="area"></build-catalog>
     </div>
   </div>
 `;
