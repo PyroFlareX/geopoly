@@ -12,25 +12,9 @@ export const template = `
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
+          <div class="d-flex">
 
-
-            <div class="col-4">
-              <strong>Background</strong>
-
-              <div class="custom-control custom-radio">
-                <input v-model="baseLayer" value="outline" :checked="baseLayer == 'outline'" type="radio" id="baseLayerRadio3" name="baseLayerRadio" class="custom-control-input">
-                <label class="custom-control-label" for="baseLayerRadio3">Blank map</label>
-              </div>
-
-              <div class="custom-control custom-radio">
-                <input v-model="baseLayer" value="watercolor" :checked="baseLayer == 'watercolor'" type="radio" id="baseLayerRadio1" name="baseLayerRadio" class="custom-control-input">
-                <label class="custom-control-label" for="baseLayerRadio1">Watercolor</label>
-              </div>
-            </div>
-
-
-            <div class="col-4">
+            <div class="flex-fill">
               <strong>Color scheme</strong>
               
               <div class="custom-control custom-radio">
@@ -62,15 +46,30 @@ export const template = `
                 <label class="custom-control-label" for="blendmode7">Dark</label>
               </div>
             </div>
-
-
-            <div class="col-6">
-              <strong>Other settings</strong>
+          
+            <div class="flex-fill">
+              <strong>Game HUD</strong>
 
               <div class="custom-control custom-checkbox">
-                <input v-model="smartcast" value="hide" :checked="smartcast" type="checkbox" class="custom-control-input" id="smartCast1">
+                <input v-model="smartcast" :checked="smartcast" type="checkbox" class="custom-control-input" id="smartCast1">
                 <label class="custom-control-label" for="smartCast1">Enable smartcast</label>
               </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="show_flags" DISABLED :checked="show_flags" type="checkbox" class="custom-control-input" id="showflags1">
+                <label class="custom-control-label" for="showflags1">Show country flags</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="thick_borders" DISABLED :checked="thick_borders" type="checkbox" class="custom-control-input" id="thickBorders1">
+                <label class="custom-control-label" for="thickBorders1">Stylish borders</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="units3d" DISABLED :checked="units3d" type="checkbox" class="custom-control-input" id="units1">
+                <label class="custom-control-label" for="units1">3D Army figures</label>
+              </div>
+
             </div>
 
           </div>

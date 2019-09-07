@@ -8,6 +8,7 @@ import {component as countriesInfo} from '/js/gui/infobar/countries.js';
 
 import {component as playersDialog} from '/engine/dialog/players.js';
 import {component as settingsDialog} from '/js/gui/dialog/settings.js';
+import {component as gameEndDialog} from '/js/gui/dialog/game-end.js';
 
 import {component as countryPopup} from '/js/gui/overlay/overlay-country.js';
 
@@ -32,6 +33,7 @@ export const template = `
 
   <dialog-settings ref="dialog-settings"></dialog-settings>
   <dialog-players ref="dialog-players"></dialog-players>
+  <dialog-game-end ref="dialog-game-end"></dialog-game-end>
 
   <infobar-move-info ref="infobar-move-info"></infobar-move-info>
   <infobar-buy-builds ref="infobar-buy-builds"></infobar-buy-builds>

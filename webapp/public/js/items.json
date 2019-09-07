@@ -108,6 +108,7 @@
     "cost_pop": 99999,
 
     "exhaust": 2,
+    "prohibit": true,
     "slot": "tile"
   },
   "mount": {
@@ -116,6 +117,7 @@
     "cost_pop": 99999,
 
     "exhaust": 3,
+    "prohibit": true,
     "slot": "tile"
   }
 }
