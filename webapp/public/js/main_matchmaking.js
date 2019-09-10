@@ -8,3 +8,9 @@ export function init_app(conf, user) {
     gui.$refs.matchmaking.open();
   });
 }
+
+
+
+export function init_playtest(users) {
+  gui.$refs.playtesting.open(users);
+}

@@ -5,7 +5,7 @@ export const template = `
       <div :class="'flag flag-inline flag-xs flag-box flag-'+area.iso"></div>
 
       Movement
-      <button type="button" class="close" aria-label="Close" v-on:click="show=false">
+      <button type="button" class="close" aria-label="Close" @click="$emit('close')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>

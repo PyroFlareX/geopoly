@@ -7,7 +7,7 @@ export const template = `
         <div class="modal-header">
           <h5 class="modal-title">Select map</h5>
 
-          <button type="button" class="close" aria-label="Close" v-on:click="show=false">
+          <button type="button" class="close" aria-label="Close" @click="$emit('close')">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>

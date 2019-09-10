@@ -13,7 +13,13 @@ export function offline_request(route, params) {
 
   switch(route) {
 
-    case 'Game:move': cli.onmessage(resp); break;
+    case 'Game:move':
+      resp.params.events = {
+        conquer: false,
+        kill: false
+      };
+      cli.onmessage(resp);
+    break;
     case 'Game:buy':
       let item = items[params.item_id];
       resp.params.cost = {

@@ -1,5 +1,7 @@
 import {init_borders, add_border_layer} from '/engine/modules/borders/borders.js';
 import {countries} from '/engine/modules/worlds/world.js';
+import {test_action} from '/js/test.js';
+
 
 
 export const countryLayer = add_border_layer('border-stroke', {
@@ -8,19 +10,29 @@ export const countryLayer = add_border_layer('border-stroke', {
  minResolution: 2445
 });
 
-
 countryLayer.click = (feature, key, event) => {
-  let iso = feature.get('iso');
+  
+  if (!feature) {
+    // hide GUI overlays
+    gui.overlay('close');
+  } else if (!key) {
+    let iso = feature.get('iso');
 
-
-  gui.overlay('country', event.coordinate, countries[iso]);
-
-  console.log(iso);
+    gui.overlay('country', event.coordinate, countries[iso]);
+  } else {
+    // DEBUG country feature
+    if (key == 'CTRL') {
+      test_action(feature);
+    }
+  }
 }
 
-  // layers['border-stroke'].click = on_click;
-  // layers['border-fill'].click = on_click;
-  // layers['border-instroke'].click = on_click;
+countryLayer.keydown = (feature, key) => {
+  if (key == 'ESCAPE') {
+    // exit GUI overlays
+    gui.overlay('close');
+  }
+};
 
 export function init_countries(conf) {
   init_borders(conf);

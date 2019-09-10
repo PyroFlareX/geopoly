@@ -1,7 +1,7 @@
 import {_mixins} from '/engine/mixins.js';
 import {chat_gui} from '/engine/modules/chat/gui.js';
 
-import {component as areaBuy1} from '/js/gui/infobar/buy-builds.js';
+import {component as areaBuy1} from '/js/gui/infobar/buy-tiles.js';
 import {component as areaBuy2} from '/js/gui/infobar/buy-units.js';
 import {component as moveInfo} from '/js/gui/infobar/move-info.js';
 import {component as countriesInfo} from '/js/gui/infobar/countries.js';
@@ -31,14 +31,14 @@ export const template = `
   <flash ref="flash"></flash>
   <chat-gui room-id="global" id="game-global-chat" ref="global-chat"></chat-gui>
 
-  <dialog-settings ref="dialog-settings"></dialog-settings>
-  <dialog-players ref="dialog-players"></dialog-players>
-  <dialog-game-end ref="dialog-game-end"></dialog-game-end>
+  <dialog-settings @close="quit" ref="dialog-settings"></dialog-settings>
+  <dialog-players @close="quit" ref="dialog-players"></dialog-players>
+  <dialog-game-end @close="quit" ref="dialog-game-end"></dialog-game-end>
 
-  <infobar-move-info ref="infobar-move-info"></infobar-move-info>
-  <infobar-buy-builds ref="infobar-buy-builds"></infobar-buy-builds>
-  <infobar-buy-units ref="infobar-buy-units"></infobar-buy-units>
-  <infobar-countries ref="infobar-countries"></infobar-countries>
+  <infobar-move-info @close="quit" ref="infobar-move-info"></infobar-move-info>
+  <infobar-buy-tiles @close="quit" ref="infobar-buy-tiles"></infobar-buy-tiles>
+  <infobar-buy-units @close="quit" ref="infobar-buy-units"></infobar-buy-units>
+  <infobar-countries @close="quit" ref="infobar-countries"></infobar-countries>
 
   <overlay-country ref="overlay-country"></overlay-country>
 `;

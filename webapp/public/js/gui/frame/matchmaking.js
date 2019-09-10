@@ -1,6 +1,6 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
 
-import {template} from "/js/gui/component/matchmaking.vue.js"
+import {template} from "/js/gui/frame/matchmaking.vue.js"
 
 import {maps} from '/js/game/maps.js';
 

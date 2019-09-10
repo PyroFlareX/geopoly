@@ -1,4 +1,4 @@
-import {map, view} from '/engine/map.js';
+import {map, view, init_map} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
 import {init_flags} from '/engine/flags.js';
 import {gui} from '/engine/gui.js';
@@ -18,6 +18,7 @@ import {maps} from '/js/game/maps.js';
 import {init_chat} from '/js/game/chat.js';
 import {} from "/js/game/building.js";
 
+import {init_test} from "/js/test.js";
 
 
 map.getLayers().extend([
@@ -39,6 +40,13 @@ map.getLayers().extend([
   // unitLayer,
 ]);
 
+// key
+// @todo: add from settings + other keys too!
+// @todo: smartcasts + settings
+init_map({
+  global_keypress: new Set([' ', 'ESCAPE', 'TAB']),
+
+});
 
 // todo: set up colors?
 
@@ -98,6 +106,8 @@ onload((ctx) => {
   }
 
   init_building(ctx.conf.building);
+
+  init_test();
 
   console.log("Game loaded.")
 });

@@ -1,4 +1,4 @@
-from eme.entities import loadConfig
+from eme.entities import loadConfig, loadHandlers
 from eme.website import WebsiteApp
 
 from webapp.services import login, mail, filters

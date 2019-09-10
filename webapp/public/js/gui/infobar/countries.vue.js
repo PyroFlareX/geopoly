@@ -4,7 +4,7 @@ export const template = `
     <div class="infobar-header">
       Countries
 
-      <button type="button" class="close" aria-label="Close" v-on:click="show=false">
+      <button type="button" class="close" aria-label="Close" @click="$emit('close')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>

@@ -1,11 +1,11 @@
 import {load, onload} from '/engine/loader.js';
 import {getColor, getMapBlend, getHighlight, colors} from '/engine/colors.js';
-import {world, countries} from '/engine/modules/worlds/world.js';
+import {world} from '/engine/modules/worlds/world.js';
 import {openRandom} from '/engine/gfx/jumpto.js';
-import {show_arrow, set_arrow, hide_arrow} from '/engine/gfx/arrows.js';
 
 import {client} from '/js/client.js';
-import {validate_move} from '/js/game/moves.js';
+import {area_select, area_target} from '/js/game/moves.js';
+import {test_action} from '/js/test.js';
 
 /**
  * Area layer
@@ -82,19 +82,22 @@ export const areaLayer = new ol.layer.Vector({
 
     const unit = feature.get('unit');
     if (unit) {
+      const exhausted = feature.get('exhaust') > 0;
       let uicon = hovered ? unit+'-mark' : unit;
+
       styles.push(new ol.style.Style({
         image: new ol.style.Icon(({
           src: `/img/map/unit-${uicon}.png`,
-          scale: 0.4
+          scale: 0.4,
+          color: exhausted ? colors.exhausted.rgb() : undefined
         })),
-        text: (hovered || selected) ? new ol.style.Text({
-          text: feature.get('name'),
-          fill: new ol.style.Fill({color: dark_bg.rgb()}),
-          stroke: new ol.style.Stroke({color: dark_bg.contrast(), width: 3}),
-          font: '14px "Opera Lyrics"',
-          offsetY: 28,
-        }) : null,
+        // text: (hovered || selected) ? new ol.style.Text({
+        //   text: feature.get('name'),
+        //   fill: new ol.style.Fill({color: dark_bg.rgb()}),
+        //   stroke: new ol.style.Stroke({color: dark_bg.contrast(), width: 3}),
+        //   font: '14px "Opera Lyrics"',
+        //   offsetY: 28,
+        // }) : null,
         geometry: new ol.geom.Point(feature.get('cen'))
       }));
     }
@@ -104,172 +107,97 @@ export const areaLayer = new ol.layer.Vector({
 });
 areaLayer.name = 'areas';
 
-export const move = {
-  selected: null,
-
-  disable_tooltip: false,
-};
 
 areaLayer.click = (feature, key) => {
-  let iso = feature.get('iso');
-
-  if (!world.me && world.can_join) {
-    // Claim feature on click
-
-    if (countries[iso].player.default && !world.isos.includes(iso)) {
-      gui.dialog("join-world", world, iso, feature.getId(), feature.get('name'));
-    }
-    return;
-  }
-
-  if (move.selected) {
-    // move-arrow click: move to that position
-    if (gui.opened == 'move-info' && !move.disable_tooltip) {
-      gui.infobar("close");
-    }
-
-    if (validate_move(move.selected, feature)) {
-      client.ws.request('Areas:move', {
-        from_id: move.selected.getId(),
-        to_id: feature.getId()
-      });
+  if (feature) {
+    // clicked on a feature
+    if (key == 'CTRL') {
+      test_action(feature);
+      return;
     } else {
-      console.log("TODO: flash: can't move there");
+      // Left click makes units move
+      area_select(feature);
     }
-
-    hide_arrow();
-    move.selected = null;
+  } else {
+    // clicked outside the map
+    area_select(null);
   }
+};
 
-  if (!key) {
-    // https://www.youtube.com/watch?v=1KC2-EZ1ee0
+areaLayer.rightclick = (feature, key) => {
+  if (feature) {
+    // right clicked on a feature
+    const iso = feature.get('iso');
 
     if (world.me == iso) {
-      // selecting my owned area
-      const nam = gui.opened ? gui.opened.substr(0,9) : null;
+      // Open buy panels for my areas
 
-      // remember last selected infobar:
-      if (nam == 'buy-units')
-        gui.infobar("buy-units", feature.getProperties(), world);
-      else if (nam == 'buy-build')
-        gui.infobar("buy-builds", feature.getProperties(), world);
-      else if (nam == 'area-info')
-        gui.infobar("area-info", feature.getProperties(), world);
-      else {
-        // smart-guess of what you want to do
-
-        if (feature.get('unit')) {
-          // area has unit, start&stopmoving
-          if (!move.disable_tooltip)
-            gui.infobar("move-info", feature.getProperties());
-
-          show_arrow(feature);
-          move.selected = feature;
-
-        } else if (feature.get('tile') == 'city') {
-          // unit-less city, open unit dialog
-          gui.infobar("buy-units", feature.getProperties(), world);
-        } else {
-          // empty area, open build dialog
-          gui.infobar("buy-builds", feature.getProperties(), world);
-        }
+      if (feature.get('tile') == 'city') {
+        // buy g
+        gui.infobar('buy-units', feature, world);
+      } else {
+        // empty tile -> we definitely want to buy tiles
+        gui.infobar('buy-tiles', feature, world);
       }
     } else {
-      // we click on other's area: open area info
-      gui.infobar("area-info", feature.getProperties(), world);
+      // not my area, nothing to do
     }
-  } else if (key == 'CTRL') {
-    // todo: later: info popover, instead of console log
-
-    console.log(feature.getId(), iso, feature.getProperties());
+  } else {
+    // right clicked outside the map
   }
 };
 
-areaLayer.keypress = (feature, key) => {
+areaLayer.keydown = (feature, key) => {
   if (key == 'ESCAPE') {
-    let prevent = onCancelSelection();
+    // cancel move selection
+    area_select(null);
 
-    // special case, escape is not smartcast, but it always cancels selection
-    if (!prevent) {
-      // close infobars
-      gui.infobar('close');
-      gui.dialog('close');
-    }
+    // exit GUI popovers
+    gui.quit();
   }
+
   else if (key == 'SPACE' || key == ' ') {
-    // jump to random area
-    openRandom();
+    // jump to random city area
+    openRandom((feature)=>{
+      return feature.get('iso') == world.me && feature.get('tile') == 'city';
+    });
   }
-  else {
-    switch(key) {
-      case 'Q':
-        if (gui.opened && gui.opened == 'area-info-'+feature.get('id')) {
-          gui.infobar('close');
-        }
-        gui.infobar("area-info", feature.getProperties(), world);
-      break;
-      case 'W':
-        if (gui.opened && gui.opened == 'buy-units-'+feature.get('id')) {
-          gui.infobar('close');
-        }
-        gui.infobar("buy-units", feature.getProperties(), world);
-      break;
-      case 'E':
-        if (gui.opened && gui.opened == 'buy-builds-'+feature.get('id')) {
-          gui.infobar('close');
-        }
-        gui.infobar("buy-builds", feature.getProperties(), world);
-      break;
-      case 'R':
-        gui.infobar("countries");
-      break;
-    }
+
+  else if (key == 'TAB') {
+    // toggle countries overview infobar
+    if (!gui.opened)
+      gui.infobar("countries");
   }
 };
+
+areaLayer.keyup = (feature, key) => {
+  if (key == 'TAB') {
+    // toggle countries overview infobar
+    gui.quit('countries');
+  }
+};
+
 
 let hovered = null;
 areaLayer.hover = (feature) => {
   if (hovered) {
     hovered.set('hovered', false);
-  }
-
-  feature.set('hovered', true);
-  hovered = feature;
-  $("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";
-
-
-  if (move.selected) {
-    //  validate if can move
-    if (validate_move(move.selected, feature)) {
-      // change move arrow & tooltip gui
-      set_arrow(feature);
-
-      if (gui.opened == 'move-info') {
-        gui.opened_comp.set_to(feature);
-      }
-    } else {
-      // hide arrow & tooltip gui
-      hide_arrow();
-
-      if (gui.opened == 'move-info') {
-        gui.opened_comp.set_to(null);
-      }
-    }
-  }
-};
-
-areaLayer.hover_out = () => {
-  if (hovered) {
-    hovered.set('hovered', false);
     hovered = null;
   }
 
-  $("#app-map").style.cursor = "";
+  if (feature) {
+    // hover in 
+    feature.set('hovered', true);
+    hovered = feature;
+    //$("#app-map").style.cursor = "url('/img/map/claim-cursor.png'), default";    
 
-  hide_arrow();
+  } else {
+    // hover out 
+    //$("#app-map").style.cursor = "";
+  }
 
-  if (gui.opened == 'move-info' && gui.opened_comp)
-    gui.opened_comp.set_to(null);
+  // hovering changes the move arrow
+  area_target(feature);
 };
 
 

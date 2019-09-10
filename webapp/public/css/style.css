@@ -36,6 +36,14 @@
       -2px 1px 0 #a00a0e,
        2px 1px 0 #a00a0e;
 }
+.geopoly.geopoly-sm {
+    font-size: 36px;
+    text-shadow:
+     -0.6px -0.6px 0 #a00a0e,
+      0.6px -0.6px 0 #a00a0e,
+      -0.6px 0.6px 0 #a00a0e,
+       0.6px 0.6px 0 #a00a0e;
+}
 .subopoly {
     font-family: 'Cinzel Decorative', cursive;
     font-size: 28px;

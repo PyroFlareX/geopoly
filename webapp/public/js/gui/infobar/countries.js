@@ -8,6 +8,7 @@ export let component = Vue.component('infobar-countries', {
   data: function() {
     return {
       show: false,
+      infobar_id: null,
 
       countries: countries,
       world: world,
@@ -16,7 +17,7 @@ export let component = Vue.component('infobar-countries', {
 
   methods: {
     open: function() {
-
+      this.infobar_id = 'countries';
     },
   },
 

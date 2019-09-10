@@ -1,5 +1,6 @@
 import {template} from "/js/gui/infobar/buy-units.vue.js"
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {countries} from '/engine/modules/worlds/world.js';
 
 
 export let component = Vue.component('infobar-buy-units', {
@@ -10,16 +11,16 @@ export let component = Vue.component('infobar-buy-units', {
       show: false,
       infobar_id: null,
       area: {},
-      world: {},
+      country: {},
     }
   },
 
   methods: {
-    open: function(area, world) {
+    open: function(area) {
       if (area.getProperties)
         area = area.getProperties();
       this.area = area;
-      this.world = world;
+      this.country = countries[area.iso];
 
       this.infobar_id = 'buy-units-'+area.id;
     },
