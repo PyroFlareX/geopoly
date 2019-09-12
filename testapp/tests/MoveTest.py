@@ -99,7 +99,7 @@ class MoveTest(unittest.TestCase):
         except MoveException as e:
             self.fail("test_mount_exhaust_pass raised MoveException({}) unexpectedly!".format(e.reason))
 
-        self.assertEqual(area2.exhaust, 2)
+        self.assertEqual(area2.exhaust, 3)
 
     def test_bridge_noexhaust_pass(self):
         area1 = Area(id="A1", iso='UK', unit='inf')
@@ -109,7 +109,8 @@ class MoveTest(unittest.TestCase):
             movement.move_to(area1, area2)
         except MoveException as e:
             self.fail("test_bridge_noexhaust_pass raised MoveException({}) unexpectedly!".format(e.reason))
-        self.assertIsNone(area2.exhaust)
+
+        self.assertEqual(area2.exhaust, 1)
 
     def test_infantry_attack_pass(self):
         area1 = Area(id="A1", iso='UK', unit='inf')
