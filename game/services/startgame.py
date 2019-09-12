@@ -1,4 +1,6 @@
 import math
+from collections import defaultdict
+
 from engine.modules.worlds import service
 from engine.modules.turns.service import TurnBox
 
@@ -12,18 +14,23 @@ def create_world_entities(world: World, orders=None, AI=False):
 
     world.max_players = len(l_countries)
 
+    country_pops = defaultdict(int)
     for area in l_areas:
         area.wid = world.wid
         area.iso2 = area.iso
 
-    for i,country in enumerate(l_countries):
+        if area.unit:
+            country_pops[area.iso] -= 1
+        if area.tile == 'barr':
+            country_pops[area.iso] += 3
+        elif area.tile in ('cita','house'):
+            country_pops[area.iso] += 1
+
+    for i, country in enumerate(l_countries):
         country.wid = world.wid
         country.ai = AI and i > 0
-
-        if orders is None:
-            country.order = i
-        else:
-            country.order = orders.index(country.iso)
+        country.pop = country_pops[country.iso]
+        country.order = i if orders is None else orders.index(country.iso)
 
     # Number of cities in a map:
     # CEIL(N_MAX_PLAYERS * ((N_START_SHIELDS-1)/3))

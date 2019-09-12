@@ -98,13 +98,13 @@ class GameGroup:
         if error: return error
 
         world_countries = countries.list_all(world.wid)
-        world_countries = OrderedDict((c.iso, c) for c in world_countries)
+        dict_countries = OrderedDict((c.iso, c) for c in world_countries)
 
         # if len(world.isos) < 2:
         #     return {"err": "waiting_for_players"}
 
         try:
-            round_end_events = turns_serv.end_turn(world, curr_country, world_countries)
+            round_end_events = turns_serv.end_turn(world, curr_country, dict_countries)
             winner_iso = None
         except turns_serv.EndGameException as e:
             winner_iso = e.reason
@@ -113,25 +113,21 @@ class GameGroup:
             return {"err": e.reason}
 
         if round_end_events is not None:
-            countries_to_save = []
-
-            # save countries that have been eliminated by conquer
-            for iso in round_end_events.eliminated:
-                country = world_countries[iso]
-
-                if country.shields > 0:
-                    country.shields = 0#-1
-                    countries_to_save.append(country)
-
-            # save emperor and previous emperor countries
-            if round_end_events.ex_emperor:
-                countries_to_save.append(round_end_events.ex_emperor)
 
             if round_end_events.emperor:
-                countries_to_save.append(round_end_events.emperor)
+                # emperor is cast: order is reassigned, so we have to save all countries
+                countries.save_all(world_countries)
+            else:
+                # only save countries that have been eliminated by conquer
+                for iso in round_end_events.eliminated:
+                    country = dict_countries[iso]
 
-            countries.save_all(countries_to_save)
-
+                    # this resets shields where the country lost all of their cities & units
+                    # elimination by annexation
+                    if country.shields > 0:
+                        country.shields = 0#-1
+                        countries.save(country, commit=False)
+                countries.session.commit()
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":end_turn",

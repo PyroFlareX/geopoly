@@ -1,0 +1,9 @@
+>COUNTRIES iso  gold  shields
+           P1   900   2
+           P2   900   2
+           P3   900   2
+
+>AREAS
+AR01(P1,house)
+AR02(P2,house,cav)
+AR03(P3,house) AR04(P3,barr)

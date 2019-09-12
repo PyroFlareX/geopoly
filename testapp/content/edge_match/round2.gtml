@@ -1,0 +1,18 @@
+>TEST_CALLS
+# 2. normal round with P2 as starting emperor
+#    & checking if we go through a full circle
+  END        ,          P2      {"route":"Game:end_turn","iso":"P2","turn_end":{"turns":4,"current":"P3"},"round_end":null}
+
+  END        ,          P3      {"route":"Game:end_turn","iso":"P3","turn_end":{"turns":5,"current":"P1"},"round_end":null}
+
+  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":6,"current":"P2"},"round_end":{"round":2,"payday":null,"isos":["P2","P3","P1"],"emperor":null,"ex_emperor":null,"eliminated":[]}}
+
+>COUNTRIES iso  gold  shields  pop  emperor
+           P1   910   2        1    false
+           P2   920   3        1    true
+           P3   910   1        3    false
+
+>AREAS
+AR01(P1,house)
+AR02(P2,house)
+AR03(P2,house,cav)  AR04(P3,barr)

@@ -59,10 +59,19 @@ def end_turn(world: World, curr: Country, countries: dict):
         if resp.emperor:
             # new round starts counting from the new emperor
             tb.start(resp.emperor.iso)
+            isos = tb.current_playerIds()
+
+            # reassign country orders  based on tb isos:
+            for country in countries.values():
+                country.order = isos.index(country.iso)
+
         else:
             # otherwise, we continue as usual
             tb.start()
 
+            # order & isos list stays as before.
+
+        resp.isos = tb.current_playerIds()
 
         return resp
 
@@ -87,13 +96,6 @@ def _end_round(world, d_countries, tb):
     if has_payday:
         # at least one player conquered, so we have payday
         events.payday = db_countries.calculate_payday(world.wid, commit=False)
-
-    if events.emperor:
-        # new turn starts from the new emperor!
-        tb.start(events.emperor.iso)
-
-        # todo: itt: reset country orders
-        print("TODO: country orders!")
 
     # reset areas
     db_areas.set_decrement_exhaust(world.wid, commit=False)

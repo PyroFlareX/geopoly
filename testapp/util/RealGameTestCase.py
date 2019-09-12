@@ -62,7 +62,7 @@ class RealGameTestCase(unittest.TestCase):
                     self.fail(MSG)
                     #self.assertEqual(resp_exp, resp_obs)#, MSG)
 
-    def _assert_map(self, t_countries, t_areas):
+    def _assert_map(self, t_countries, t_areas=None):
         o_countries, o_areas = _load_map()
         o_countries = {c.iso: c for c in o_countries}
         o_areas = {a.id: a for a in o_areas}
@@ -76,6 +76,9 @@ class RealGameTestCase(unittest.TestCase):
 
         cid = lambda x, y: 'a{}{}'.format(y, x)
         x,y = 0,0
+
+        if t_areas is None:
+            return
 
         for t_intmd in t_areas:
             for exp_area in t_intmd:

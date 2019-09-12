@@ -8,7 +8,7 @@ from game.ctx import config, set_session
 from game.instance import worlds, countries, areas, users, matchresults, histories
 from game.entities import World, User
 from engine.modules.geomap import service
-from game.util.load_gtml import load_gtml
+from game.util.load_gtml import load_gtml, load_isos
 from testapp.webmock import mock_ws
 
 WID = '00000000-0000-1000-a000-000000000000'
@@ -48,6 +48,35 @@ def _set_up_gtml(filename):
     adict, l_countries = load_gtml(filename)
 
     return _set_up_game(adict, l_countries)
+
+
+def _set_up_match(l_countries, l_areas):
+    _delete_all()
+
+    world = World(wid=WID, current='P1', name="Test World", map='autotest_map', max_rounds=None)
+    l_users = []
+
+    for i,country in enumerate(l_countries):
+        country.name = 'Country '+country.iso
+        country.wid = world.wid
+        country.order = i+1
+
+        l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='Person '+country.iso, wid=world.wid, elo=1100, division=1))
+
+    for area in l_areas:
+        area.wid = world.wid
+        area.iso2 = area.iso
+
+    # todo: later: add conn graph to GTML
+    service.switch_conn_graph({})
+
+    worlds.save(world)
+    countries.save_all(l_countries)
+    areas.save_all(l_areas)
+    users.save_all(l_users)
+
+    # reset entities
+    countries.calculate_pop(WID)
 
 
 def _set_up_game(l_countries, adict):
