@@ -2,7 +2,8 @@ from collections import OrderedDict
 
 from game.entities import User, Area, World, Country
 from game.instance import worlds, countries, areas, users
-from game.services import movement, building, turns as turns_serv, endgame
+from game.services import movement, economy, turns as turns_serv, endgame, economy
+
 
 
 class GameGroup:
@@ -43,8 +44,8 @@ class GameGroup:
             return {"err": "cant_buy_after_move"}
 
         try:
-            building.buy_item(area, country, item_id)
-        except building.service.BuyException as e:
+            economy.buy_item(area, country, item_id)
+        except economy.service.BuyException as e:
             return {"err": e.reason}
 
         areas.save(area)
@@ -57,7 +58,7 @@ class GameGroup:
             "area_id": area_id,
             "item_id": item_id,
 
-            "cost": building.get_cost(item_id)
+            "cost": economy.get_cost(item_id)
         })
 
     def move(self, area_id, to_id, user: User):
@@ -162,6 +163,23 @@ class GameGroup:
             })
 
         worlds.save(world)
+
+    def tribute(self, iso, amount, user: User):
+        """
+        Country1 gives a certain amount of gold to other country
+        """
+        world = worlds.get(user.wid)
+
+        country1: Country = countries.get(user.iso, world.wid)
+        country2: Country = countries.get(iso, world.wid)
+
+        if economy.give_tribute(country1, country2, amount):
+            countries.save_all([country1, country2])
+
+        self.server.send_to_world(user.wid, {
+            "route": self.name+":tribute",
+            "iso": user.iso
+        })
 
     def surrender(self, user: User):
         world = worlds.get(user.wid)

@@ -4,6 +4,7 @@ from engine.modules.turns.service import TurnBox
 
 from game.entities import World, User, Country
 from game.instance import countries as db_countries, areas as db_areas
+from game.services.conquering import fetch_conquers, list_eliminated_players
 from game.views import RoundEventsView
 
 
@@ -53,7 +54,7 @@ def end_turn(world: World, curr: Country, countries: dict):
 
     if next_iso is None:
         # round ends, restart turn
-        resp = _end_round(world, countries.values(), countries, tb)
+        resp = _end_round(world, countries, tb)
 
         if resp.emperor:
             # new round starts counting from the new emperor
@@ -68,46 +69,31 @@ def end_turn(world: World, curr: Country, countries: dict):
     return None
 
 
-def _end_round(world, countries_list, isos, tb):
+def _end_round(world, d_countries, tb):
     events = RoundEventsView()
 
     # re-calculate pop difference
     pops = db_countries.calculate_pop(world.wid, commit=False)
 
-    # apply shield changes
-    shield_changes = db_countries.calculate_shields(world.wid, commit=False)
-
     # check elimination condition
     events.wid = world.wid
     events.round = world.rounds
-    still_playing = db_countries.list_still_playing(world.wid)
-    events.eliminated = set(isos) - set(still_playing)
 
-    # determine if we had a top conqueror
-    conquered = lambda c: shield_changes.get(c.iso, (None, 0))[1]
-    best, runnerup = heapq.nlargest(2, countries_list, key=conquered)
+    events.eliminated, winner = list_eliminated_players(world, d_countries)
 
-    if conquered(best) > 0:
+    # Calculate conquers done in the round and assign new emperor & payday:
+    has_payday, events.emperor, events.ex_emperor = fetch_conquers(world, d_countries.values())
+
+    if has_payday:
         # at least one player conquered, so we have payday
         events.payday = db_countries.calculate_payday(world.wid, commit=False)
 
-        if conquered(best) > conquered(runnerup):
-            # there is no tie in the number of conquers
-            # the frontrunner becomes the emperor.
-            try:
-                ex_emperor: Country = next(filter(lambda c: c.emperor, countries_list))
-                ex_emperor.emperor = False
-            except StopIteration:
-                # there was no ex emperor
-                ex_emperor = None
+    if events.emperor:
+        # new turn starts from the new emperor!
+        tb.start(events.emperor.iso)
 
-            best.emperor = True
-            best.gold += 20
-            events.ex_emperor = ex_emperor
-            events.emperor = best
-
-            # new turn starts from the new emperor!
-            tb.start(best.iso)
+        # todo: itt: reset country orders
+        print("TODO: country orders!")
 
     # reset areas
     db_areas.set_decrement_exhaust(world.wid, commit=False)
@@ -116,28 +102,9 @@ def _end_round(world, countries_list, isos, tb):
     # commit all changes at once
     db_countries.session.commit()
 
-    # Update countries' model with DB changes
-    # (in case the calling method wants to use the country objects)
-    # for country in countries_list:
-    #     # update loaded entity models (we're not saving these here, though):
-    #     #country.gold += events.payday.get(country.iso, 1)
-    #     #country.pop = pops[country.iso]
-    #
-    #     sh_loss, sh_gain = shield_changes.get(country.iso, (0, 0))
-    #     country.shields += sh_gain
-    #     country.shields -= sh_loss
-    #
-    #     # this is done in the controller instead:
-    #     # if country.iso in events.eliminated:
-    #     #     country.shields = 0
-    #
-    #     #country.conquers += conquered(country)
 
     # check end game condition
-    if len(still_playing) <= 1:
-        if len(still_playing) == 1:
-            raise EndGameException(still_playing[0], events)
-        else:
-            raise EndGameException('-1', events)
+    if winner:
+        raise EndGameException(winner, events)
 
     return events
