@@ -1,4 +1,8 @@
 
+>OPTIONS
+    initial_order       random
+
+
 >COUNTRIES iso  gold  shields   color      name
            UK   130   7         #BADA55    United Kingdom
            FR   130   7         #BA55DA    France

@@ -25,7 +25,7 @@ class WorldsController():
             "world": world.to_dict(),
             "countries": _countries,
             "areas": _areas,
-            "player_names": {player.iso: player.username for player in players},
+            "players": {player.iso: player.to_game_view() for player in players},
         })
 
     def index(self):

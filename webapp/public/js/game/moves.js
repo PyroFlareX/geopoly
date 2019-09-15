@@ -1,7 +1,7 @@
 import {is_connected, are_neighbors, get_neighbors} from '/engine/modules/geomap/conn.js';
 import {show_arrow, set_arrow, hide_arrow} from '/engine/gfx/arrows.js';
 
-import {calculate_economy, apply_capture, apply_kill} from '/js/game/countries.js'
+import {apply_capture, apply_kill} from '/js/game/countries.js'
 import {areaSource} from '/js/layers/areas.js';
 import {client} from '/js/client.js';
 

@@ -40,6 +40,16 @@ export let component = Vue.component('playtesting', {
         else
           alert("Number of users not matching ("+no+")")
       });
-    }
+    },
+
+    
+    onDelete: function() {
+      fetch('/playtest/finish').then((resp)=>{
+        return resp.json();
+      }).then(({result, no})=>{
+        if (result)
+          alert("Match deleted!");
+      });
+    },
   },
 });

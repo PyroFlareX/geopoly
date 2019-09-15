@@ -4,6 +4,7 @@ import {chat_gui} from '/engine/modules/chat/gui.js';
 import {component as areaBuy1} from '/js/gui/infobar/buy-tiles.js';
 import {component as areaBuy2} from '/js/gui/infobar/buy-units.js';
 import {component as moveInfo} from '/js/gui/infobar/move-info.js';
+import {component as countryInfo} from '/js/gui/infobar/country.js';
 import {component as countriesInfo} from '/js/gui/infobar/countries.js';
 
 import {component as playersDialog} from '/engine/dialog/players.js';
@@ -39,6 +40,7 @@ export const template = `
   <infobar-buy-tiles @close="quit" ref="infobar-buy-tiles"></infobar-buy-tiles>
   <infobar-buy-units @close="quit" ref="infobar-buy-units"></infobar-buy-units>
   <infobar-countries @close="quit" ref="infobar-countries"></infobar-countries>
+  <infobar-country @close="quit" ref="infobar-country"></infobar-country>
 
   <overlay-country ref="overlay-country"></overlay-country>
 `;

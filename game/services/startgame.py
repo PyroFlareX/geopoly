@@ -1,4 +1,5 @@
 import math
+import random
 from collections import defaultdict
 
 from engine.modules.worlds import service
@@ -9,8 +10,8 @@ from game.instance import countries, areas, worlds, users
 from game.util.load_gtml import load_gtml
 
 
-def create_world_entities(world: World, orders=None, AI=False):
-    l_countries, l_areas, _ = load_gtml("game/maps/{}.gtml".format(world.map))
+def create_world_entities(world: World, AI=False):
+    l_countries, l_areas, l_options = load_gtml("game/maps/{}.gtml".format(world.map))
 
     world.max_players = len(l_countries)
 
@@ -21,16 +22,28 @@ def create_world_entities(world: World, orders=None, AI=False):
 
         if area.unit:
             country_pops[area.iso] -= 1
-        if area.tile == 'barr':
+        if area.build == 'barr':
             country_pops[area.iso] += 3
-        elif area.tile in ('cita','house'):
+        elif area.build in ('cita','house'):
             country_pops[area.iso] += 1
+
+    if 'initial_order' in l_options:
+        if l_options['initial_order'] == 'random':
+            # randomized order
+            orders = list(range(len(l_countries)))
+            random.shuffle(orders)
+        else:
+            # map-defined starting order
+            orders = list(map(int, l_options['initial_order'].split(',')))
+    else:
+        # normal order 0,1,2...
+        orders = list(range(len(l_countries)))
 
     for i, country in enumerate(l_countries):
         country.wid = world.wid
         country.ai = AI and i > 0
         country.pop = country_pops[country.iso]
-        country.order = i if orders is None else orders.index(country.iso)
+        country.order = orders[i]
 
     # Number of cities in a map:
     # CEIL(N_MAX_PLAYERS * ((N_START_SHIELDS-1)/3))
@@ -47,11 +60,13 @@ def create_world_entities(world: World, orders=None, AI=False):
 def start_world(world, AI=False):
     l_countries, l_areas = create_world_entities(world, AI=AI)
 
+    # set first player as current
+    tb = TurnBox(world, map(lambda c: c.iso, sorted(l_countries, key=lambda c: c.order)))
+    tb.start()
+
+    # save entities
     countries.save_all(l_countries)
     areas.save_all(l_areas)
-
-    tb = TurnBox(world, map(lambda c: c.iso, sorted(l_countries, key=lambda c: c.order)))
-
     worlds.save(world)
 
 

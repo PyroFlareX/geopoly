@@ -6,17 +6,19 @@ import {gui} from '/engine/gui.js';
 import {setup_features} from '/engine/modules/geomap/setup.js';
 import {load_world, set_user} from '/engine/modules/worlds/world.js';
 import {init_building} from '/engine/modules/building/building.js';
+import {init_borders} from '/engine/modules/borders/borders.js';
 
 import {watercolorLayer} from '/engine/layers/watercolor.js';
 import {arrowLayer} from '/engine/layers/arrows.js';
 import {areaLayer, areaSource} from '/js/layers/areas.js';
-import {init_countries, countryLayer} from '/js/layers/countries.js';
+import {countryLayer} from '/js/layers/countries.js';
 
 import {client} from '/js/client.js';
 
 import {maps} from '/js/game/maps.js';
 import {init_chat} from '/js/game/chat.js';
 import {} from "/js/game/building.js";
+import {calculate_economy} from '/js/game/countries.js'
 
 import {init_test} from "/js/test.js";
 
@@ -93,7 +95,7 @@ onload((ctx) => {
   
   if (ctx.conf.borders.enabled) {
     ctx.conf.borders.source = areaSource;
-    init_countries(ctx.conf.borders);
+    init_borders(ctx.conf.borders);
   }
 
   if (ctx.conf.chat.enabled) {
@@ -106,6 +108,8 @@ onload((ctx) => {
   }
 
   init_building(ctx.conf.building);
+
+  calculate_economy();
 
   init_test();
 

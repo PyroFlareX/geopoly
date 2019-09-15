@@ -16,7 +16,7 @@ export let component = Vue.component('infobar-countries', {
   },
 
   methods: {
-    open: function() {
+    open: function(count) {
       this.infobar_id = 'countries';
     },
   },
@@ -26,8 +26,8 @@ export let component = Vue.component('infobar-countries', {
       let _max_conquers = 0;
 
       for (let iso in countries) {
-        if (!_max_conquers || countries[iso].conquers > _max_conquers)
-          _max_conquers = countries[iso].conquers;
+        if (!_max_conquers || countries[iso].stats.conquers > _max_conquers)
+          _max_conquers = countries[iso].stats.conquers;
       }
 
       return _max_conquers;

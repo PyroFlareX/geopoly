@@ -1,7 +1,8 @@
 import datetime
 import uuid
 
-from sqlalchemy import Column, Integer, String, Boolean, SmallInteger, ForeignKey, ForeignKeyConstraint, Date, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, SmallInteger, ForeignKey, ForeignKeyConstraint, Date, DateTime, \
+    TIMESTAMP, func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -13,7 +14,8 @@ class User(Base):
     __tablename__ = 'users'
 
     uid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    created_at = Column(Integer, nullable=True)
+    created_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
+    last_time = Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
 
     iso = Column(String(3))
     wid = Column(postgresql.UUID(as_uuid=True))
@@ -60,6 +62,12 @@ class User(Base):
             "division": self.division,
         }
 
+    def to_game_view(self):
+        return {
+            "username": self.username,
+            "division": self.division,
+        }
+
     def __repr__(self):
         return "{}({})".format(self.iso, self.username)
 
@@ -69,6 +77,7 @@ class World(Base):
 
     # Worlds module
     wid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    #created_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
     name = Column(String(20))
     map = Column(String(20))
     max_players = Column(SmallInteger)

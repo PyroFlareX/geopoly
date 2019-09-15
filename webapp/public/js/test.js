@@ -4,10 +4,10 @@
  **/
 
 export function init_test() {
-  countries['UK'].pop = 99;
+  //countries['UK'].pop = 99;
 
-  for (let i of range(0,19))
-    layers.item(1).getSource().getFeatures()[i].set('iso','UK');
+  //for (let i of range(0,19))
+  //  layers.item(1).getSource().getFeatures()[i].set('iso','UK');
 }
 
 export function test_action(feature) {

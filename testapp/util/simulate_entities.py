@@ -61,7 +61,7 @@ def _set_up_match(l_countries, l_areas):
         country.wid = world.wid
         country.order = i+1
 
-        l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='Person '+country.iso, wid=world.wid, elo=1100, division=1))
+        l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='___TEST___'+country.iso, wid=world.wid, elo=1100, division=1))
 
     for area in l_areas:
         area.wid = world.wid
@@ -90,7 +90,7 @@ def _set_up_game(l_countries, adict):
         country.wid = world.wid
         country.order = i+1
 
-        l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='Person '+country.iso, wid=world.wid, elo=1100, division=1))
+        l_users.append(User(iso=country.iso, email='c1@c.com', password='p', token='t', salt='s', username='___TEST___'+country.iso, wid=world.wid, elo=1100, division=1))
 
     conn_graph = {}
     l_areas = {}

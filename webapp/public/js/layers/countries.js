@@ -1,4 +1,4 @@
-import {init_borders, add_border_layer} from '/engine/modules/borders/borders.js';
+import {add_border_layer} from '/engine/modules/borders/borders.js';
 import {countries} from '/engine/modules/worlds/world.js';
 import {test_action} from '/js/test.js';
 
@@ -33,7 +33,3 @@ countryLayer.keydown = (feature, key) => {
     gui.overlay('close');
   }
 };
-
-export function init_countries(conf) {
-  init_borders(conf);
-}

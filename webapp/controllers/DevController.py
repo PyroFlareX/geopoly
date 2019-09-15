@@ -1,7 +1,7 @@
 from flask import request
 
 from game.entities import World, Country
-from game.instance import countries, areas, worlds, users
+from game.instance import countries, areas, worlds, users, histories
 from game.services import turns
 from game.services.startgame import create_world_entities, start_world, reset_world
 from webapp.entities import ApiResponse
@@ -27,6 +27,28 @@ class DevController():
         return ApiResponse({
 
         })
+
+    def purge(self):
+        # exclude our dear admin
+        user = getUser()
+        obo = users.find_user(username='oboforty')
+
+        if obo.uid != user.uid:
+            return 'No rights'
+
+        users.set_world(obo.uid, None, None)
+
+        # delete all test users
+        lworlds = worlds.list_all()
+
+        for world in lworlds:
+            worlds.delete(world)
+
+        # delete all entities
+        users.delete_all_test()
+        histories.delete_all()
+
+        return 'Purged everything :)'
 
     def force_turn(self):
         user = getUser()

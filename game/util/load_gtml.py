@@ -43,6 +43,7 @@ def load_gtml(filename, skip=None):
     l_countries = []
     l_areas = []
     l_calls = []
+    l_options = {}
 
     f_countries = []
 
@@ -102,6 +103,10 @@ def load_gtml(filename, skip=None):
 
                     l_areas.append(area)
 
+            elif status == 'OPTIONS':
+                k,v = line.split()
+
+                l_options[k] = v
             elif status == 'TEST_AREAS':
                 ff = []
 
@@ -144,5 +149,8 @@ def load_gtml(filename, skip=None):
                     continue
 
                 l_calls.append((call, exp_js))
+
+    if len(l_calls) == 0 and len(l_options) != 0:
+        l_calls = l_options
 
     return l_countries, l_areas, l_calls

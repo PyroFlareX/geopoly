@@ -11,6 +11,7 @@ export const template = `
         <hr/>
 
         <button @click="onStart" class="btn btn-primary">Start Game</button>
+        <button @click="onDelete" class="btn btn-danger">Reset match</button>
       </div>
       <div class="col">
         <h2 class="geopoly geopoly-sm">UserS:</h2>

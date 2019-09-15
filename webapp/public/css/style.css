@@ -79,3 +79,12 @@ a:hover {
 .btn-brand:hover {
     color: crimson;
 }
+
+.rank-box {
+  background: black;
+  display: inline-block;
+  max-width: 40px;
+  max-height: 40px;
+  border: solid 1px black;
+  border-radius: 3px;
+}

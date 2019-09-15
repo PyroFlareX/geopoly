@@ -1,10 +1,15 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {world, countries} from '/engine/modules/worlds/world.js'
+import {calculate_economy, reassign_orders} from '/js/game/countries.js'
 
 
 ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
   world.current = turn_end.current;
   world.turns = turn_end.turns;
+
+  // at each turn, we recalculate country economies
+  calculate_economy();
+
 
   const country_curr = countries[world.current];
 
@@ -36,6 +41,9 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
       const country_emp = countries[emperor];
       country_emp.emperor = true;
       country_emp.gold += 20;
+
+      // update orders of countries -- emperor starts
+      reassign_orders(emperor);
 
       gui.flash("New emperor: "+(country_emp.username||country_emp.name), "danger", world.emperor);
     } else {
