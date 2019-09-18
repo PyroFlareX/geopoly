@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from flask import request
 
 from game.entities import World, Country
@@ -56,9 +58,10 @@ class DevController():
 
         country: Country = countries.get(world.current, world.wid)
         world_countries = countries.list_all(world.wid)
+        dict_countries = OrderedDict((c.iso, c) for c in world_countries)
 
         try:
-            round_end_events = turns.end_turn(world, country, world_countries)
+            round_end_events = turns.end_turn(world, country, dict_countries)
         except turns.TurnException as e:
             return {"err": e.reason}
 

@@ -1,6 +1,7 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {world, countries} from '/engine/modules/worlds/world.js'
 import {calculate_economy, reassign_orders} from '/js/game/countries.js'
+import {add_sys_message} from '/js/game/chat.js';
 
 
 ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
@@ -45,14 +46,25 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
       // update orders of countries -- emperor starts
       reassign_orders(emperor);
 
-      gui.flash("New emperor: "+(country_emp.username||country_emp.name), "danger", world.emperor);
+      do_turn_notify("New emperor", country_emp);
     } else {
-      gui.flash("New round: "+(country_curr.username||country_curr.name), "danger", world.current);      
+      do_turn_notify("New round", country_curr);
     }
   } else {
-    gui.flash("Current turn: "+(country_curr.username||country_curr.name), "danger", world.current);
+    do_turn_notify("Current turn", country_curr);
   }
 });
+
+
+function do_turn_notify(txt, country) {
+  const text = txt+": "+(country.username||country.name);
+
+  add_sys_message(text, country.iso);
+
+  // todo: SFX
+}
+
+
 
 export function end_turn() {
   // todo: get user

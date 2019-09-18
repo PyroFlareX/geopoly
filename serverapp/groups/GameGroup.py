@@ -174,7 +174,9 @@ class GameGroup:
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":tribute",
-            "iso": user.iso
+            "iso": user.iso,
+            "to_iso": iso,
+            "amount": amount
         })
 
     def surrender(self, user: User):

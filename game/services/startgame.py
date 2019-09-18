@@ -61,7 +61,7 @@ def start_world(world, AI=False):
     l_countries, l_areas = create_world_entities(world, AI=AI)
 
     # set first player as current
-    tb = TurnBox(world, map(lambda c: c.iso, sorted(l_countries, key=lambda c: c.order)))
+    tb = TurnBox(world, list(map(lambda c: c.iso, sorted(l_countries, key=lambda c: c.order))))
     tb.start()
 
     # save entities

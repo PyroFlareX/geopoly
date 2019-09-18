@@ -1,12 +1,22 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {chat_gui} from '/engine/modules/chat/gui.js';
+import {world} from '/engine/modules/worlds/world.js'
 
-function burnchat(text) {
-  // will be presented with burning text in the chat
 
-  return function() {
+export function add_sys_message(msg, iso) {
+  gui.flash(msg, "white", iso);
 
-  }
+
+  // add timestamp for chat
+  msg += `  [T${world.rounds}]`;
+
+  chat_gui.add_message({
+    msg: msg,
+    iso: iso,
+    username: undefined
+  });
 }
+
 
 export function init_chat(chat, conf) {
   /**
@@ -18,53 +28,53 @@ export function init_chat(chat, conf) {
    *   /surrender and ENTER
    **/
   chat.emojis = {
-    'flup': 'flup.png',
-    'baby jesus': 'baby_jesus.png',
-    'beholder': 'beholder.png',
+    'angry': '(.gif',
+    'animeskull': 'animeskull.png',
+    'obo': 'beholder.png',
+    'boolean': 'boolean.png',
+    'happy': 'D.gif',
     'eme': 'eme_logo.png',
-    'sadgry': 'sadgry.png',
-    'katzen': 'katzen.png',
+    'eyes': 'eyes.gif',
+    'favicon': 'favicon.png',
+    'flup': 'flup.png',
+    'geoguy': 'geoguy.png',
+    'geolite': 'geolite.png',
+    'headbop': 'headbop.gif',
+    'hopsin': 'hopsin.png',
     'idgaf': 'idgaf.png',
+    'katzen': 'katzen.png',
+    'geo': 'logo.png',
+    'meh': 'meh.png',
+    'melon': 'melon.png',
+    'metroplier': 'metroplier.png',
+    'moth': 'moth.png',
+    'mummy': 'mummy.png',
+    'parker': 'parker.gif',
+    'rekt': 'rekt.png',
+    'sadgry': 'sadgry.png',
+    'slap': 'slap.gif',
+    'smh': 'smh.gif',
+    'snek': 'snek.png',
+    'dany': 'sorry_hihi.png',
+    'syncdab': 'sync_dab.gif',
     'thunk': 'thunk.png',
-    'sync dab': 'sync_dab.gif',
-    'lookin': 'eyes.gif',
-    'ramsay': 'slap.gif',
-    'wowzors': 'wowzors.png',
-    'sorrihihi': 'sorry_hihi.png',
+    'tribute': 'tribute.png',
     'triggered': 'triggered.png',
     'trump': 'trump.gif',
-    'snek': 'snek.png',
-    'mummy': 'mummy.png',
-    'miaow': 'miaow.png',
-    'headbop': 'headbop.gif',
-    'hipson': 'hopsin.png',
+    'trumpo': 'trumpo.png',
+    'walrus': 'whead.png',
+    'walrus2': 'O.png',
+    'whoa mama': 'whoa_mama.png',
+    'wowzors': 'wowzors.png',
   };
 
   chat.actions = {
-  // ----- COMMANDS -----:
-    "geopoly": burnchat("geopoly"),
-    "geogine": burnchat("geogine"),
-    "doors": burnchat("doors"),
-    "obo": burnchat("obo"),
-    "ooh wah-ah-ah-ah": burnchat("ooh wah-ah-ah-ah"),
-    "obey appa": burnchat("obeey appa"),
-    "wisteria lane": ()=>{
-      // will turn the different unit types into their equivalents from the Desperate Housewives universe
-    },
-    "and now my order is in YOUR court": () =>{
-      //plays judge eric andre music
-    },
-    "ilyesadam bazmeg": ()=>{
-      // will be presented with burning text in the chat
-      // makes the screen shake and surrenders
-
-      return burnchat("ilyesadam bazmeg");
-    },
+    // ----- COMMANDS -----:
     "surrender": ()=>{
       // kicks you out of the game
-
-      ws_client.request("Game:surrender", {});
-      window.location = '/';
+      ws_client.request("Game:surrender", {}).then(()=>{
+        gui.dialog('game-end', null);
+      });
     },
     "draw": ()=>{
       // ends game in draw in offline mode
@@ -99,8 +109,11 @@ export function init_chat(chat, conf) {
     "kids with guns": ()=>{
       // gives you artillery at all city tiles
     },
-    "flame": ()=>{
+    "ilyesadam bazmeg": ()=>{
       // gives you infantry at all city tiles
+    },
+    "and now my order is in YOUR court": () =>{
+      // idk
     },
   };
 

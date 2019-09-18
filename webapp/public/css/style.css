@@ -21,6 +21,48 @@
   font-weight: normal;
 }
 
+/* GUI FLASH */
+.gui-flash-wrapper {
+  position: fixed;
+  left: 50%;
+  top: 60px;
+  margin-left: -250px;
+}
+
+.gui-flash-wrapper .gui-flash {
+  min-width: 400px;
+  height: 40px;
+
+  border: 1.5px solid #000;
+  border-radius: 8px;
+  background: rgba(220,220,220, 0.92);
+}
+
+.gui-flash-wrapper .flag {
+  margin-top: -10px;
+  margin-left: -4px;
+  margin-right: 40px;
+}
+
+.gui-flash-wrapper .gui-flash-text{
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  line-height: 18px;
+}
+
+.gui-text {
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    text-shadow:
+     -1px -1px 0 #a00a0e,
+      1px -1px 0 #a00a0e,
+      -1px 1px 0 #a00a0e,
+       1px 1px 0 #a00a0e;
+    font-weight: bold;
+}
+
 /* BRAND & Texts */
 .geopoly {
     font-size: 128px;
@@ -63,21 +105,21 @@
   text-align: center;
 }
 .text-brand, a {
-   color: #a00a0e;
-   transition: 0.3s;
+  color: #a00a0e;
+  transition: 0.3s;
 }
 a:hover {
    color: crimson;
 }
 .btn-brand {
-    background-color: #dbdb9b;
-    border-color: #a00a0e;
-    border-width: 1.6px;
-    color: #a00a0e;
-    transition: 0.3s;
+  background-color: #dbdb9b;
+  border-color: #a00a0e;
+  border-width: 1.6px;
+  color: #a00a0e;
+  transition: 0.3s;
 }
 .btn-brand:hover {
-    color: crimson;
+  color: crimson;
 }
 
 .rank-box {

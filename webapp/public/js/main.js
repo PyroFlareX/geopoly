@@ -17,7 +17,7 @@ import {client} from '/js/client.js';
 
 import {maps} from '/js/game/maps.js';
 import {init_chat} from '/js/game/chat.js';
-import {} from "/js/game/building.js";
+import {} from "/js/game/economy.js";
 import {calculate_economy} from '/js/game/countries.js'
 
 import {init_test} from "/js/test.js";

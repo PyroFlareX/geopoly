@@ -35,7 +35,7 @@ export let component = Vue.component('flash', {
       this.timeout = setTimeout(function(){
         self.show = false;
         self.text = null;
-      }, 4500);
+      }, 4500000);
     }
   },
 });

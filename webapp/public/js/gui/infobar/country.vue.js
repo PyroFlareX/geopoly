@@ -24,21 +24,25 @@ export const template = `
 
       <div class="d-flex">
         <div class="flex-fill">
+
           <div>
             <i class="ra ra-2x ra-shadow ra-shadow ra-res-gold"></i> {{ country.gold }} (+{{ country.stats.income }})
           </div>
           <div>
             <i class="ra ra-2x ra-res-pop"></i> {{ country.pop }}
           </div>
-
-        </div>
-        <div class="flex-fill">
           <div>
             <i class="ra ra-2x ra-shadow ra-res-shield"></i> {{ country.shields }}
           </div>
           <div>
             <i class="ra ra-2x ra-shadow ra-icon-conquer"></i> {{ country.stats.conquers }} (-{{ country.stats.losses }})
           </div>
+
+        </div>
+        <div class="flex-fill">
+
+          
+
         </div>
       </div>
 
