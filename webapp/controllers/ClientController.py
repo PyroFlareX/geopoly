@@ -36,3 +36,16 @@ class ClientController():
             debug=True,
             err=request.args.get('err')
         )
+
+    def debug(self):
+        user = getUser()
+        if user.wid:
+            world = worlds.get(user.wid)
+        else:
+            world = None
+
+        return render_template('/client/debug.html',
+            conf=settings._conf,
+            world=world,
+            err=request.args.get('err')
+        )

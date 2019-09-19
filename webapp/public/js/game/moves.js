@@ -19,14 +19,22 @@ const MOVE_ERRORS = {
 export function move_to(from, to) {
   let tile = to.get('tile');
 
-  // moves
-  to.set('unit', from.get('unit'));
-  to.set('iso', from.get('iso'));
-  to.set('exhaust', tile == 'mount' ? 3 : (tile == 'forest' ? 2 : 1));
+  if (to.get('unit') && from.get('unit') == 'art') {
+    // artillery attack
+    to.set('unit', null);
+    from.set('exhaust', 1);
+  } else {
+    // normal move
+    to.set('unit', from.get('unit'));
+    to.set('iso', from.get('iso'));
 
-  // clear prev. cell
-  from.set('unit', null);
-  from.set('exhaust', 0);
+    // clear prev. cell
+    from.set('unit', null);
+    from.set('exhaust', 0);
+  
+    to.set('exhaust', tile == 'mount' ? 3 : (tile == 'forest' ? 2 : 1));
+  }
+
 }
 
 

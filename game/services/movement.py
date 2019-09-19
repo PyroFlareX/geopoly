@@ -57,25 +57,31 @@ def move_to(area1: Area, area2: Area, map_name=None):
     is_cannon_fire = area1.unit == 'art' and bool(area2.unit)
     is_conquer = area2.tile == 'city' and area2.iso != area1.iso
 
-    # unit is killed
-    area2.unit = None
-    area2.exhaust = 1
-
     # cannons do not move position when they attack
     if not is_cannon_fire:
-        # move to empty area
+        area2.exhaust = 1
+
+        # move to area
         area2.iso = area1.iso
         area2.unit = area1.unit
         area1.unit = None
 
-    if area2.tile:
-        # exhaust unit, can't move next round
-        conf = items[area2.tile]
-        area2.exhaust = conf.get('exhaust', 1)
+        if area2.tile:
+            # exhaust unit, can't move next round
+            conf = items[area2.tile]
+            area2.exhaust = conf.get('exhaust', 1)
 
-    if is_conquer:
-        # conquer area
-        area2.iso = area1.iso
+        if is_conquer:
+            # conquer area
+            area2.iso = area1.iso
+
+    else:
+        # artillery attacks
+        area2.unit = None
+        area1.exhaust = 1
+
+        is_conquer = False
+
 
     return is_conquer
 

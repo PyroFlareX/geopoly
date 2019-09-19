@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from flask import request
+from flask import request, render_template
 
 from game.entities import World, Country
 from game.instance import countries, areas, worlds, users, histories
@@ -123,4 +123,3 @@ class DevController():
         worlds.save(world)
 
         return redirect('/')
-

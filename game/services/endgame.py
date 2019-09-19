@@ -16,7 +16,7 @@ def create_match_history(world, world_users, world_countries, winner=None):
 
     for iso in isos:
         user = world_users.get(iso)
-        country = world_countries.get(iso)
+        country = next(filter(lambda c: c.iso == iso, world_countries))
 
         mr = MatchResult( history_id=world.wid, iso=iso, shields=country.shields, gold=country.gold )
         if user is not None:

@@ -152,8 +152,10 @@ class GameGroup:
         country1: Country = countries.get(user.iso, world.wid)
         country2: Country = countries.get(iso, world.wid)
 
-        if economy.give_tribute(country1, country2, amount):
-            countries.save_all([country1, country2])
+        if not economy.give_tribute(country1, country2, amount):
+            return
+
+        countries.save_all([country1, country2])
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":tribute",

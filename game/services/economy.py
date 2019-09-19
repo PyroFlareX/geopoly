@@ -22,7 +22,7 @@ def buy_item(area, country, item_id):
 
 
 def give_tribute(country1: Country, country2: Country, amount):
-    if amount % 10 != 0:
+    if amount % 10 != 0 or amount <= 0:
         return False
 
     if country1.gold < amount:

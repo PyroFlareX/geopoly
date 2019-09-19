@@ -37,6 +37,9 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
 
 
 function do_turn_notify(txt, country) {
+  if (!country)
+    return;
+
   const text = txt+": "+(country.username||country.name);
 
   add_sys_message(text, country.iso);
