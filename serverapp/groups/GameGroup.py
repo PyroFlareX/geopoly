@@ -69,7 +69,7 @@ class GameGroup:
         is_kill = bool(area2.unit)
 
         try:
-            is_conquer = movement.move_to(area1, area2)
+            is_conquer = movement.move_to(area1, area2, world.map)
         except movement.MoveException as e:
             return {"err": e.reason}
 
@@ -111,23 +111,6 @@ class GameGroup:
             round_end_events = e.events
         except turns_serv.TurnException as e:
             return {"err": e.reason}
-
-        if round_end_events is not None:
-
-            if round_end_events.emperor:
-                # emperor is cast: order is reassigned, so we have to save all countries
-                countries.save_all(world_countries)
-            else:
-                # only save countries that have been eliminated by conquer
-                for iso in round_end_events.eliminated:
-                    country = dict_countries[iso]
-
-                    # this resets shields where the country lost all of their cities & units
-                    # elimination by annexation
-                    if country.shields > 0:
-                        country.shields = 0#-1
-                        countries.save(country, commit=False)
-                countries.session.commit()
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":end_turn",

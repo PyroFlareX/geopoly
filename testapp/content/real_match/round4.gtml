@@ -2,10 +2,10 @@
 # command,  params,     iso,    resps
   BUY       a22,cav     P1      {"route":"Game:buy","iso":"P1","area_id":"a22","item_id":"cav","cost":{"gold":70,"pop":1}}
   MOVE      a12,a02     P1      {"route":"Game:move","iso":"P1","area_id":"a12","to_id":"a02","events":{"conquer":true,"kill":false}}
-  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":12,"current":"P2"},"round_end":null}
+  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":11,"current":"P2"},"round_end":null}
 
 # todo: itt: why would P2 be eliminated?
-  END        ,          P2      {"route":"Game:end_turn","iso":"P2","turn_end":{"turns":13,"current":"P1"},"round_end":{"round":4,"payday":{"P1":30,"P2":10},"emperor":"P1","ex_emperor":"P1","eliminated":["P2","P3","P4"]}}
+  END        ,          P2      {"route":"Game:end_turn","iso":"P2","turn_end":{"turns":12,"current":"P1"},"round_end":{"round":4,"orders":{"P1":0,"P2":1,"P3":2,"P4":3},"payday":{"P1":30,"P2":10},"emperor":"P1","ex_emperor":"P1","eliminated":["P3","P4"]}}
 
 
 

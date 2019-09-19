@@ -10,7 +10,7 @@
 
   MOVE      a33,a32     P4      {"err":"cant_move_more"}
 # FAILS: turns should be 7
-  END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":8,"current":"P1"},"round_end":{"round":2,"payday":{"P1":20,"P2":20},"emperor":"P1","ex_emperor":null,"eliminated":["P3"]}}
+  END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":7,"current":"P1"},"round_end":{"round":2,"orders":{"P1":0,"P2":1,"P3":2,"P4":3},"payday":{"P1":20,"P2":20},"emperor":"P1","ex_emperor":null,"eliminated":["P3"]}}
 
 
 >COUNTRIES iso  gold  shields  pop   emperor

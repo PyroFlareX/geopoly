@@ -1,9 +1,19 @@
 import {is_connected, are_neighbors, get_neighbors} from '/engine/modules/geomap/conn.js';
 import {show_arrow, set_arrow, hide_arrow} from '/engine/gfx/arrows.js';
 
-import {apply_capture, apply_kill} from '/js/game/countries.js'
+import {apply_capture, apply_kill} from '/js/game/economy.js'
 import {areaSource} from '/js/layers/areas.js';
 import {client} from '/js/client.js';
+
+
+const MOVE_ERRORS = {
+  invalid_params: "invalid_params",
+  cant_move_more: "You have already moved with this figure.",
+  not_enemy: "Figure is not an enemy.",
+  cant_attack_cavalry: "Cavalry can't attack forest.",
+  cant_attack_there: "Can't move there [attack].",
+  cant_move_there: "Can't move there [move].",
+};
 
 
 export function move_to(from, to) {
@@ -141,27 +151,32 @@ function in_ring2(id1, id2) {
 }
 
 
-client.ws.on('Game:move', ({iso,area_id,to_id,events:{conquer,is_kill}})=>{
-  console.log("TODO: move", iso, area_id, to_id, conquer, is_kill);
-  return;
+client.ws.on('Game:move', ({err,iso,area_id,to_id,events:{conquer,kill}})=>{
+  if (err) {
+    // Buy fail
+    gui.flash(MOVE_ERRORS[err], 'white', null);
 
-  const from = areaSource.getFeatureById(from_id);
+    return;
+  }
+
+
+  const from = areaSource.getFeatureById(area_id);
   const to = areaSource.getFeatureById(to_id);
-  const iso2 = to.get('iso');
+  const iso_to = to.get('iso');
 
   const to_had_unit = to.get('unit');
 
   // move the unit
   move_to(from, to);
 
-  if (iso2 != iso) {
+  if (iso_to != iso) {
     // conquer land
     if (to.get('tile') == 'city') {
-      apply_capture(iso, iso2);
+      apply_capture(iso, iso_to);
     }
 
     if (to_had_unit) {
-      apply_kill(iso2);
+      apply_kill(iso_to);
     }
   }
 });

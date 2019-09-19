@@ -6,7 +6,9 @@ import {add_sys_message} from '/js/game/chat.js';
 client.ws.on('Game:end_game', ({winner})=>{
   gui.quit();
 
-  gui.dialog("game-end", winner);
+  Vue.nextTick(() => {
+    gui.dialog("game-end", winner);
+  });
 });
 
 

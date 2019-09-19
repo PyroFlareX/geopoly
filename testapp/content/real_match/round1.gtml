@@ -17,7 +17,7 @@
   END        ,          P3      {"route":"Game:end_turn","iso":"P3","turn_end":{"turns":3,"current":"P4"},"round_end":null}
 
   MOVE      a32,a33     P4      {"route":"Game:move","iso":"P4","area_id":"a32","to_id":"a33","events":{"conquer":false,"kill":false}}
-  END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":4,"current":"P1"},"round_end":{"round":1,"payday":{"P1":10,"P2":30},"emperor":null,"ex_emperor":null,"eliminated":["P3"]}}
+  END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":4,"current":"P1"},"round_end":{"round":1,"payday":{"P1":10,"P2":30},"emperor":null,"ex_emperor":null,"orders":{},"eliminated":["P3"]}}
 
 
 >COUNTRIES iso  gold  shields  pop

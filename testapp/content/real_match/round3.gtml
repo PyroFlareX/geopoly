@@ -2,12 +2,12 @@
 # command,  params,     iso,    resps
   MOVE      a11,a12     P1      {"route":"Game:move","iso":"P1","area_id":"a11","to_id":"a12","events":{"conquer":false,"kill":false}}
   MOVE      a22,a33     P1      {"route":"Game:move","iso":"P1","area_id":"a22","to_id":"a33","events":{"conquer":false,"kill":true}}
-  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":9,"current":"P2"},"round_end":null}
+  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":8,"current":"P2"},"round_end":null}
 
-  END        ,          P2      {"route":"Game:end_turn","iso":"P2","turn_end":{"turns":10,"current":"P4"},"round_end":null}
+  END        ,          P2      {"route":"Game:end_turn","iso":"P2","turn_end":{"turns":9,"current":"P4"},"round_end":null}
 
 # P4 is about to get eliminated, but not before he is to make his last turn:
-  END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":11,"current":"P1"},"round_end":{"round":3,"payday":null,"emperor":null,"ex_emperor":null,"eliminated":["P3","P4"]}}
+  END        ,          P4      {"route":"Game:end_turn","iso":"P4","turn_end":{"turns":10,"current":"P1"},"round_end":{"round":3,"orders":{},"payday":null,"emperor":null,"ex_emperor":null,"eliminated":["P3","P4"]}}
 
 >COUNTRIES iso  gold  shields  pop   emperor
            P1   860   3        2     true

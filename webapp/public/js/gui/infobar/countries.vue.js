@@ -23,12 +23,12 @@ export const template = `
           </tr>
         </thead>
         <tbody>
-          <tr @click="open_infobar('country', country)" v-for="(country, iso) in countries" :class="{'pointer': true, 'table-active': world.current == iso}">
+          <tr @click="open_infobar('country', country)" v-for="(country, iso) in countries" :class="{'pointer': true, 'table-active': world.current == iso, 'strikeout': country.shields <= 0}">
             <td>
               <i v-if="world.current == iso" class="ra ra-lg ra-shadow ra-icon-current"></i>
             </td>
             <td>
-              <div :class="'flag flag-xs pointer flag-box flag-'+iso" v-b-popover.hover.top="country.name" ></div>
+              <div :class="'flag flag-xs pointer flag-box flag-'+iso+(country.shields <=0?' flag-unclaimed':'')" v-b-popover.hover.top="country.name" ></div>
             </td>
             <td>
               <i v-if="country.emperor" class="ra ra-2x ra-shadow ra-icon-emperor"></i>

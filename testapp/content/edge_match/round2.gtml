@@ -5,7 +5,7 @@
 
   END        ,          P3      {"route":"Game:end_turn","iso":"P3","turn_end":{"turns":5,"current":"P1"},"round_end":null}
 
-  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":6,"current":"P2"},"round_end":{"round":2,"payday":null,"isos":["P2","P3","P1"],"emperor":null,"ex_emperor":null,"eliminated":[]}}
+  END        ,          P1      {"route":"Game:end_turn","iso":"P1","turn_end":{"turns":6,"current":"P2"},"round_end":{"round":2,"payday":null,"orders":{},"emperor":null,"ex_emperor":null,"eliminated":[]}}
 
 >COUNTRIES iso  gold  shields  pop  emperor
            P1   910   2        1    false

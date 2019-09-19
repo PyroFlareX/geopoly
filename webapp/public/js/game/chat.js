@@ -1,5 +1,4 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
-import {chat_gui} from '/engine/modules/chat/gui.js';
 import {world} from '/engine/modules/worlds/world.js'
 
 
@@ -8,9 +7,10 @@ export function add_sys_message(msg, iso) {
 
 
   // add timestamp for chat
-  msg += `  [T${world.rounds}]`;
+  msg = `[#${world.rounds}] <span class="small">${msg}</span>`;
 
-  chat_gui.add_message({
+  // hack
+  gui.$refs['global-chat'].add_message({
     msg: msg,
     iso: iso,
     username: undefined

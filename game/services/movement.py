@@ -14,14 +14,14 @@ class MoveException(Exception):
         return str(self.reason)
 
 
-def _is_invalid_move(area1: Area, area2: Area):
+def _check_move(area1: Area, area2: Area):
     # move rules
     if area1.id == area2.id or not area1.unit:
         #  or not area1.iso == playerId
-        return 'invalid_params'
+        raise MoveException('invalid_params')
     if area1.exhaust:
         # unit is exhausted. it needs more turns
-        return 'cant_move_more'
+        raise MoveException('cant_move_more')
 
     conf = items[area1.unit]
 
@@ -29,30 +29,30 @@ def _is_invalid_move(area1: Area, area2: Area):
         # attack
         if area2.iso == area1.iso:
             # can't attack self
-            return 'not_enemy'
+            raise MoveException('not_enemy')
 
         if area2.tile == 'forest' and area1.unit == 'cav':
             # Cavalry can't attack into forest
-            return 'cant_attack_cavalry'
+            raise MoveException('cant_attack_cavalry')
 
         if not map_serv.is_connected(area1.id, area2.id, top_depth=conf['attack_range']):
             # invalid move with range
-            return 'cant_attack_there'
+            raise MoveException('cant_attack_there')
 
     else:
         # simple move
         if not map_serv.is_connected(area1.id, area2.id, top_depth=conf['move_range']):
             # invalid move with range
-            return 'cant_move_there'
+            raise MoveException('cant_move_there')
 
-    return False
+    return True
 
 
-def move_to(area1: Area, area2: Area):
+def move_to(area1: Area, area2: Area, map_name=None):
+    map_serv.switch_conn_graph(map_name)
 
-    err_code = _is_invalid_move(area1, area2)
-    if err_code:
-        raise MoveException(err_code)
+    # raises MoveException
+    _check_move(area1, area2)
 
     is_cannon_fire = area1.unit == 'art' and bool(area2.unit)
     is_conquer = area2.tile == 'city' and area2.iso != area1.iso
@@ -100,7 +100,7 @@ def move_bulk(area_moves_dict):
     for area1 in area1_list:
         area2 = area2_dict[area_moves_dict[area1.id]]
 
-        is_conquer = move_to(area1, area2)
+        is_conquer = move_to(area1, area2, world.map)
 
         if is_conquer:
             conquer_dict[area1.iso] += 1

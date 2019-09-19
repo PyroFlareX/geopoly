@@ -1,68 +1,109 @@
-import {client} from '/js/client.js';
-import {areaSource} from '/js/layers/areas.js';
-import {apply_resources} from '/js/game/countries.js'
 import {countries} from '/engine/modules/worlds/world.js'
-import {add_sys_message} from '/js/game/chat.js';
-
-const BUILDINGS = new Set(['barr','house','cita']);
-const TILES = new Set(['river','bridge','city']);
-const UNITS = new Set(['inf','cav','art']);
+import {areaSource} from '/js/layers/areas.js';
 
 
-const ITEM_NAMES = {
-  'inf': 'infantry',
-  'cav': 'cavalry',
-  'art': 'artillery',
+//export function get_top_countries() {}
 
-  'barr': 'barracks',
-  'house': 'house',
-  'cita': 'citadel',
+export function reset_game_entities() {
+  /**
+   * Resets all areas and countries
+   * and recalculates their attributes
+   **/
+  console.info("reset game entities");
 
-  'river': 'river',
-  'bridge': 'bridge',
-  'city': 'settlement',
-};
+  for (let [iso, country] of Object.items(countries)) {
+    // reset:
+    country.pop = 0;
 
-
-client.ws.on('Game:buy', ({iso,area_id,item_id,cost})=>{
-  const feature = areaSource.getFeatureById(area_id);
-
-  if (iso == null)
-    iso = feature.get('iso');
-  // -cost
-  apply_resources(iso, cost, -1);
-
-  // +item
-  if (UNITS.has(item_id)) {
-    feature.set('unit', item_id);
-    feature.set('exhaust', 1);
-  }
-  else if (BUILDINGS.has(item_id)) {
-    feature.set('build', item_id);
-  }
-  else if (TILES.has(item_id)) {
-    feature.set('tile', item_id);
+    country.stats = {
+      conquers: 0,
+      losses: 0,
+      income: 0,
+    };
   }
 
-  areaSource.changed();
 
-  const c = countries[iso];
-  const item_name = ITEM_NAMES[item_id];
+  for (let feature of areaSource.getFeatures()) {
+    const iso = feature.get('iso');
+    const iso2 = feature.get('iso2');
 
-  add_sys_message((c.username||c.name) + ' has bought ' + item_name.title() + ' on ' + feature.get('name'), iso);
-});
+    if (!iso || !countries[iso])
+      continue
+
+    if (feature.get('unit')) {
+      countries[iso].pop -= 1;
+
+      // Reset area exhaust
+      if (feature.get('exhaust') > 0)
+        feature.set('exhaust', feature.get('exhaust')-1);
+
+    }
+
+    if (feature.get('tile') == 'city') {
+
+     // calculate conquers:
+      if (iso2 != iso) {
+        if (countries[iso])
+          countries[iso].stats.conquers += 1;
+
+        if (countries[iso2])
+          countries[iso2].stats.losses += 1;
+      }
+
+      // and then reset iso2
+      feature.set('iso2', feature.get('iso'));
+
+      // recalculate set pop and income statistics
+      if (feature.get('build') == 'house') {
+        countries[iso].pop += 1;
+        countries[iso].stats.income += 10;
+      } else if (feature.get('build') == 'barr') {
+        countries[iso].pop += 3;
+        countries[iso].stats.income += 10;
+      } else if (feature.get('build') == 'cita') {
+        countries[iso].pop += 1;
+        countries[iso].stats.income += 30;
+      }
+    }
+  }
+}
 
 
-client.ws.on('Game:tribute', ({iso,to_iso,amount})=>{
+export function apply_capture(iso, iso2) {
+  const country = countries[iso];
+  country.stats.conquers += 1;
 
-  countries[iso].gold -= amount;
-  countries[to_iso].gold += amount;
+  const country2 = countries[iso2];
 
-  const c = countries[iso];
-  add_sys_message((c.username||c.name) + ' has given ' + amount + ' gold to ' + countries[to_iso].name, iso);
-});
+  if (country2 && country2.shields > 0)
+    country2.shields -= 1;
 
+  country.shields += 1;
+}
 
-// client.ws.on('Game:sacrifise', ({iso,to_iso,amount})=>{
-// 
-// });
+export function apply_kill(iso2) {
+  if (countries[iso2])
+    countries[iso2].pop += 1;
+}
+
+export function apply_resources(iso, {gold, pop}, dir) {
+  if (dir == null)
+    dir = 1;
+
+  if (gold)
+    countries[iso].gold += dir*gold;
+  if (pop)
+    countries[iso].pop += dir*pop;
+}
+
+export function apply_payday(taxes, emp) {
+  // reset emperor title 
+  for (let [iso,country] of Object.items(countries)) {
+    country.emperor = false;
+    country.gold += taxes[iso]||0;
+  }
+
+  // set emperor title & receive extra gold
+  countries[emp].emperor = true;
+  countries[emp].gold += 20;
+}

@@ -54,7 +54,7 @@ def end_turn(world: World, curr: Country, countries: dict):
 
     if next_iso is None:
         # round ends, restart turn
-        resp = _end_round(world, countries, tb)
+        resp = _end_round(world, countries)
 
         if resp.emperor:
             # new round starts counting from the new emperor
@@ -64,31 +64,39 @@ def end_turn(world: World, curr: Country, countries: dict):
             # reassign country orders  based on tb isos:
             for country in countries.values():
                 country.order = isos.index(country.iso)
+                resp.orders[country.iso] = country.order
 
+                db_countries.save(country, commit=False)
         else:
             # otherwise, we continue as usual
             tb.start()
-
             # order & isos list stays as before.
 
-        resp.isos = tb.current_playerIds()
+        # we can change country orders, emperor status, gold and
+        db_countries.session.commit()
 
         return resp
 
     return None
 
 
-def _end_round(world, d_countries, tb):
+def _end_round(world, d_countries):
     events = RoundEventsView()
 
     # re-calculate pop difference
-    pops = db_countries.calculate_pop(world.wid, commit=False)
+    events.pops = db_countries.calculate_pop(world.wid, commit=False)
 
     # check elimination condition
     events.wid = world.wid
     events.round = world.rounds
 
+    # auto set shields to 0 of eliminated players
     events.eliminated, winner = list_eliminated_players(world, d_countries)
+    for iso in events.eliminated:
+        if d_countries[iso].shields > 0:
+            d_countries[iso].shields = 0
+
+            db_countries.save(d_countries[iso], commit=False)
 
     # Calculate conquers done in the round and assign new emperor & payday:
     has_payday, events.emperor, events.ex_emperor = fetch_conquers(world, d_countries.values())

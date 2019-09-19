@@ -60,10 +60,21 @@ class DevController():
         world_countries = countries.list_all(world.wid)
         dict_countries = OrderedDict((c.iso, c) for c in world_countries)
 
+        if not country:
+            # ???
+            return
+
         try:
             round_end_events = turns.end_turn(world, country, dict_countries)
         except turns.TurnException as e:
             return {"err": e.reason}
+        except turns.EndGameException as e:
+            # fake end game: used for playtesting
+            # we don't schedule the world to be deleted and don't give ratings
+            return ApiResponse({
+                "route": "Game:end_game",
+                "winner": e.reason
+            })
 
         worlds.save(world)
 
