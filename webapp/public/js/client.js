@@ -17,13 +17,31 @@ export const client = {
       this.ws.groups = this.groups;
 
       this.ws.connect(conf.ws_address, ()=>{
-
-        // init WS auth
-        this.ws.request("Users:auth_token", {
-          uid: user.uid,
-          token: user.token,
-        }).then(cb||(()=>{}));
+        this.request_auth(user, cb);
       });
+
+      this.ws.onerror((event)=>{
+        console.error(event);
+      });
+
+      this.ws.ondisconnect((event)=>{
+        if (gui.opened != 'disconnect')
+          gui.dialog('disconnect', 'reconnect');
+
+        // try reconnecting
+        this.ws.tryReconnect(1, ()=>{
+          this.request_auth(user, ()=>{
+            gui.$refs['dialog-disconnect'].onReconnect();
+          });
+        }, ()=>{
+          // couldn't reconnect
+          gui.$refs['dialog-disconnect'].onFailed();
+        }, ()=>{
+          // reconnect attempt
+          gui.$refs['dialog-disconnect'].onAttempt();
+        });
+      });
+
     } else {
       this.ws.request = offline_request;
     }
@@ -31,5 +49,16 @@ export const client = {
     if (conf.debug) {
       window.client = client;
     }
+  },
+
+  request_auth: function({uid, token}, cb) {
+    // init WS auth
+    const r = this.ws.request("Users:auth_token", {
+      uid: uid,
+      token: token,
+    })
+
+    if (cb != null)
+      r.then(cb);
   }
 };

@@ -10,6 +10,7 @@ import {component as countriesInfo} from '/js/gui/infobar/countries.js';
 import {component as playersDialog} from '/engine/dialog/players.js';
 import {component as settingsDialog} from '/js/gui/dialog/settings.js';
 import {component as gameEndDialog} from '/js/gui/dialog/game-end.js';
+import {component as disconnectDialog} from '/js/gui/dialog/disconnect.js';
 
 import {component as countryPopup} from '/js/gui/overlay/overlay-country.js';
 
@@ -35,6 +36,7 @@ export const template = `
   <dialog-settings @close="quit" ref="dialog-settings"></dialog-settings>
   <dialog-players @close="quit" ref="dialog-players"></dialog-players>
   <dialog-game-end @close="quit" ref="dialog-game-end"></dialog-game-end>
+  <dialog-disconnect @close="quit" ref="dialog-disconnect"></dialog-disconnect>
 
   <infobar-move-info @close="quit" ref="infobar-move-info"></infobar-move-info>
   <infobar-buy-tiles @close="quit" ref="infobar-buy-tiles"></infobar-buy-tiles>
