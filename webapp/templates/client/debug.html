@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+  <div id="ws">Connecting to server...</div>
+
+  <script type="module">
+    import {ws_client} from '/engine/modules/websocket/wsclient.js';
+
+    const ws = ws_client;
+    const conf = {{ conf|tojson }};
+    const user = {{ get_user().to_dict()|tojson }};
+
+
+    ws.connect(conf.client.ws_address, ()=>{
+      $("#ws").innerHTML = "Authenticating...";
+
+      ws.request("Users:auth_token", {
+        uid: user.uid,
+        token: user.token,
+      }).then(()=>{
+        $("#ws").innerHTML = "Connected!";
+      });
+    });
+
+  </script>
+{% endblock %}

@@ -1,3 +1,4 @@
+import redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -14,12 +15,31 @@ elif db_type == 'sqlite':
 
 Session = sessionmaker(bind=db_engine)
 
-session = Session()
+db_session = Session()
+
+
+def set_session(sess):
+    global db_session
+
+    db_session.close()
+    db_session = sess
 
 
 def get_session(force=False):
     if force:
-        session.close()
+        global db_session
 
+        db_session.close()
+        db_session = Session()
 
-    return session
+    return db_session
+
+redis_session = None
+
+def get_redis(force=False):
+    global redis_session
+
+    if redis_session is None or force:
+        redis_session = redis.StrictRedis(**config['redis'])
+
+    return redis_session

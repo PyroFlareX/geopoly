@@ -195,126 +195,124 @@
  * Generated content below - do not modify
  **/
 
-.ra-action-garrison:before {
+.ra-build-barr:before {
   content: "\e900";
 }
-.ra-action-team:before {
+.ra-build-cita:before {
   content: "\e901";
 }
-.ra-castle-1:before {
+.ra-build-house:before {
   content: "\e902";
 }
-.ra-castle-2:before {
+.ra-icon-conquer:before {
   content: "\e903";
 }
-.ra-castle-3:before {
+.ra-icon-current:before {
   content: "\e904";
+  color: #ffb945;
 }
-.ra-castle-4:before {
+.ra-icon-emperor:before {
   content: "\e905";
+  color: #ffb945;
 }
-.ra-head-admin:before {
+.ra-icon-exit:before {
   content: "\e906";
 }
-.ra-head-duke:before {
+.ra-icon-mute:before {
   content: "\e907";
 }
-.ra-head-emperor:before {
+.ra-icon-player:before {
   content: "\e908";
 }
-.ra-head-emperor2:before {
+.ra-icon-python:before {
   content: "\e909";
 }
-.ra-head-hochmeister:before {
+.ra-icon-settings:before {
   content: "\e90a";
 }
-.ra-head-khan:before {
+.ra-icon-topscore:before {
   content: "\e90b";
+  color: #ffb945;
 }
-.ra-head-king:before {
+.ra-icon-tribute:before {
   content: "\e90c";
-}
-.ra-head-lord:before {
-  content: "\e90d";
-}
-.ra-head-pope:before {
-  content: "\e90e";
-}
-.ra-head-prince:before {
-  content: "\e90f";
-}
-.ra-head-sultan:before {
-  content: "\e910";
-}
-.ra-icon-arrow-left:before {
-  content: "\e911";
-}
-.ra-icon-arrow-right:before {
-  content: "\e912";
-}
-.ra-icon-chat:before {
-  content: "\e913";
-}
-.ra-icon-conquer:before {
-  content: "\e914";
-}
-.ra-icon-health:before {
-  content: "\e915";
-}
-.ra-icon-info:before {
-  content: "\e916";
-}
-.ra-icon-king:before {
-  content: "\e917";
-}
-.ra-icon-mute:before {
-  content: "\e918";
-}
-.ra-icon-none:before {
-  content: "\e919";
-}
-.ra-icon-player:before {
-  content: "\e91a";
-}
-.ra-icon-settings:before {
-  content: "\e91b";
+  color: #2e4e0a;
 }
 .ra-icon-unmute:before {
+  content: "\e90d";
+}
+.ra-rank-1:before {
+  content: "\e90e";
+  color: #9aa597;
+}
+.ra-rank-2:before {
+  content: "\e90f";
+  color: #9aa597;
+}
+.ra-rank-3:before {
+  content: "\e910";
+  color: #9aa597;
+}
+.ra-rank-4:before {
+  content: "\e911";
+  color: #ffb945;
+}
+.ra-rank-5:before {
+  content: "\e912";
+  color: #ffb945;
+}
+.ra-rank-6:before {
+  content: "\e913";
+  color: #ffb945;
+}
+.ra-rank-7:before {
+  content: "\e914";
+  color: #ffb945;
+}
+.ra-rank-8:before {
+  content: "\e915";
+  color: #ffb945;
+}
+.ra-rank-9:before {
+  content: "\e916";
+  color: #3b3fd4;
+}
+.ra-res-emerald:before {
+  content: "\e917";
+  color: #49de20;
+}
+.ra-res-gold:before {
+  content: "\e918";
+  color: #2e4e0a;
+}
+.ra-res-pop:before {
+  content: "\e919";
+}
+.ra-res-shield:before {
+  content: "\e91a";
+  color: #db1219;
+}
+.ra-tile-bridge:before {
+  content: "\e91b";
+}
+.ra-tile-city:before {
   content: "\e91c";
 }
-.ra-unit-archer:before {
+.ra-tile-forest:before {
   content: "\e91d";
 }
-.ra-unit-barbar:before {
+.ra-tile-mount:before {
   content: "\e91e";
 }
-.ra-unit-bard:before {
+.ra-tile-river:before {
   content: "\e91f";
 }
-.ra-unit-cata:before {
+.ra-unit-art:before {
   content: "\e920";
 }
-.ra-unit-defender:before {
+.ra-unit-cav:before {
   content: "\e921";
 }
-.ra-unit-foot:before {
+.ra-unit-inf:before {
   content: "\e922";
-}
-.ra-unit-hero:before {
-  content: "\e923";
-}
-.ra-unit-knight:before {
-  content: "\e924";
-}
-.ra-unit-lightcav:before {
-  content: "\e925";
-}
-.ra-unit-pike:before {
-  content: "\e926";
-}
-.ra-unit-strong:before {
-  content: "\e927";
-}
-.ra-unit-thug:before {
-  content: "\e928";
 }

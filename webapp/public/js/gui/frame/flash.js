@@ -1,4 +1,4 @@
-import {template} from "/js/vue/frame/flash.vue.js"
+import {template} from "/js/gui/frame/flash.vue.js"
 
 
 // Game GUI's main frame
@@ -25,17 +25,17 @@ export let component = Vue.component('flash', {
       this.iso = iso;
       this.show = true;
 
-      var self = this;
-
       if (this.timeout) {
+        // disable previous timeout as a new message has popped (and the old one was cleared anyway)
         clearTimeout(this.timeout);
         this.timeout = null;
       }
 
-      this.timeout = setTimeout(function(){
-        self.show = false;
-        self.text = null;
-      }, 4500);
+      // clear the message after a while
+      this.timeout = setTimeout(()=>{
+        this.show = false;
+        this.text = null;
+      }, 7500);
     }
   },
 });

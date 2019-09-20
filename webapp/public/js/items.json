@@ -1,0 +1,123 @@
+{
+  "inf": {
+    "name": "infantry",
+    "cost_gold": 20,
+    "cost_pop": 1,
+    "requires": {"tile": "city"},
+
+    "move_range": 1,
+    "attack_range": 1,
+    "slot": "unit"
+  },
+  "cav": {
+    "name": "cavalry",
+    "__old_gold": 50,
+    "upgrades": ["inf"],
+
+    "cost_gold": 70,
+    "cost_pop": 1,
+    "requires": {"tile": "city"},
+
+    "move_range": 1,
+    "attack_range": 2,
+    "slot": "unit"
+  },
+  "art": {
+    "name": "artillery",
+    "__old_gold": 100,
+    "upgrades": ["inf"],
+
+    "cost_gold": 120,
+    "cost_pop": 1,
+    "requires": {"tile": "city"},
+
+    "move_range": 1,
+    "attack_range": 2,
+    "slot": "unit"
+  },
+
+  "house": {
+    "name": "house",
+    "cost_gold": 30,
+    "cost_pop": 0,
+
+    "give_pop": 1,
+    "give_gold": 10,
+    
+    "requires": {"tile": "city", "build": null},
+
+    "slot": "build"
+  },
+  "barr": {
+    "name": "barracks",
+    "cost_gold": 100,
+    "cost_pop": 0,
+
+    "give_pop": 3,
+    "give_gold": 10,
+
+    "upgrades": ["house"],
+    "requires": {"tile": "city"},
+
+    "slot": "build"
+  },
+  "cita": {
+    "name": "citadel",
+    "cost_gold": 300,
+    "cost_pop": 0,
+
+    "give_pop": 1,
+    "give_gold": 30,
+
+    "upgrades": ["house"],
+    "requires": {"tile": "city"},
+
+    "slot": "build"
+  },
+
+  "city": {
+    "name": "city",
+    "cost_gold": 300,
+    "cost_pop": 0,
+    "requires": {"tile": null},
+
+    "slot": "tile"
+  },
+  "bridge": {
+    "name": "bridge",
+    "cost_gold": 300,
+    "cost_pop": 0,
+
+    "upgrades": ["river"],
+    "requires": {"tile": "river"},
+
+    "slot": "tile"
+  },
+  "river": {
+    "name": "river",
+    "cost_gold": 500,
+    "cost_pop": 0,
+    "requires": {"tile": null, "build": null},
+
+    "exhaust": 2,
+    "slot": "tile"
+  },
+  "forest": {
+    "name": "forest",
+    "cost_gold": 99999,
+    "cost_pop": 99999,
+
+    "exhaust": 2,
+    "prohibit": true,
+    "slot": "tile"
+  },
+  "mount": {
+    "name": "mount",
+    "cost_gold": 99999,
+    "cost_pop": 99999,
+
+    "exhaust": 3,
+    "prohibit": true,
+    "slot": "tile"
+  }
+}

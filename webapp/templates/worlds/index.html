@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+  <!-- OpenLayers 5 -->
+  <link rel="stylesheet" type="text/css" href="css/ol.css">
+  <script defer type="text/javascript" src="js/vendor/ol.js"></script>
+{% endblock %}
+
+{% block content %}
+  <div id="app-gui"></div>
+
+  <script type="module">
+    // import gui frame
+    import {template} from "/js/gui/templates/matchmaking.vue.js";
+    $("#app-gui").innerHTML = template;
+  </script>
+  <script type="module">
+    import {gui} from '/engine/gui.js';
+    import {init_app} from '/js/main_matchmaking.js';
+
+    // declare variables from backend
+    window.gui = gui;
+
+    // start app
+    init_app({{ conf|tojson }}, {{ get_user().to_dict()|tojson }});
+  </script>
+{% endblock %}

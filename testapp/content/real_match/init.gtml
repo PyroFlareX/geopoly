@@ -1,0 +1,13 @@
+>COUNTRIES iso  gold  shields
+           P1   900   1
+           P2   900   1
+           P3   900   7
+           P4   900   2
+
+>TEST_AREAS
+# iso, build/tile, unit
+# 0           1            2             3
+  P1,barr     P1           P2,house      P2
+  P1,city     P1,,cav      P2,,inf       P2,house
+  P3          P3,city      P4,house      P4
+  P3          P3           P4,,inf       P4,mount

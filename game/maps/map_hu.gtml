@@ -1,0 +1,25 @@
+
+>OPTIONS
+    initial_order       random
+
+
+>COUNTRIES iso  gold  shields   color      name
+           UK   130   7         #BADA55    United Kingdom
+           FR   130   7         #BA55DA    France
+           HU   130   7         #55BADA    Hungary
+
+>AREAS
+# Start areas
+HU222(UK,house)    HU331(FR,house)    HU323(HU,house)
+
+# Cities
+HU232(,city)  HU212(,city)  HU312(,city)  HU332(,city)
+
+# Environment
+HU221(,forest)  HU120(,forest)  HU311(,forest)
+HU313(,mount)
+
+# Common areas
+HU231()  HU213()  HU211()
+HU223()  HU333()  HU321()
+HU322()  HU233()

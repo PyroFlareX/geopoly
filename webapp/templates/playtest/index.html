@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+  <div id="app-gui"></div>
+
+  <script type="module">
+    // import gui frame
+    import {template} from "/js/gui/templates/playtesting.vue.js";
+    $("#app-gui").innerHTML = template;
+  </script>
+  <script type="module">
+    import {gui} from '/engine/gui.js';
+    import {init_playtest} from '/js/main_matchmaking.js';
+
+    // declare variables from backend
+    window.gui = gui;
+
+    // start app
+    init_playtest({{ users|tojson }});
+  </script>
+{% endblock %}

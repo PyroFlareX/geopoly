@@ -1,0 +1,147 @@
+@font-face {
+  font-family: 'geo';
+  src:
+    url('fonts/geo.ttf?mb163') format('truetype'),
+    url('fonts/geo.woff?mb163') format('woff'),
+    url('fonts/geo.svg?mb163#geo') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="ra-"], [class*=" ra-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'geo' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ra-build-barr:before {
+  content: "\e900";
+}
+.ra-build-cita:before {
+  content: "\e901";
+}
+.ra-build-house:before {
+  content: "\e902";
+}
+.ra-icon-conquer:before {
+  content: "\e903";
+}
+.ra-icon-current:before {
+  content: "\e904";
+  color: #ffb945;
+}
+.ra-icon-emperor:before {
+  content: "\e905";
+  color: #ffb945;
+}
+.ra-icon-exit:before {
+  content: "\e906";
+}
+.ra-icon-mute:before {
+  content: "\e907";
+}
+.ra-icon-player:before {
+  content: "\e908";
+}
+.ra-icon-python:before {
+  content: "\e909";
+}
+.ra-icon-settings:before {
+  content: "\e90a";
+}
+.ra-icon-topscore:before {
+  content: "\e90b";
+  color: #ffb945;
+}
+.ra-icon-tribute:before {
+  content: "\e90c";
+  color: #2e4e0a;
+}
+.ra-icon-unmute:before {
+  content: "\e90d";
+}
+.ra-rank-1:before {
+  content: "\e90e";
+  color: #9aa597;
+}
+.ra-rank-2:before {
+  content: "\e90f";
+  color: #9aa597;
+}
+.ra-rank-3:before {
+  content: "\e910";
+  color: #9aa597;
+}
+.ra-rank-4:before {
+  content: "\e911";
+  color: #ffb945;
+}
+.ra-rank-5:before {
+  content: "\e912";
+  color: #ffb945;
+}
+.ra-rank-6:before {
+  content: "\e913";
+  color: #ffb945;
+}
+.ra-rank-7:before {
+  content: "\e914";
+  color: #ffb945;
+}
+.ra-rank-8:before {
+  content: "\e915";
+  color: #ffb945;
+}
+.ra-rank-9:before {
+  content: "\e916";
+  color: #3b3fd4;
+}
+.ra-res-emerald:before {
+  content: "\e917";
+  color: #49de20;
+}
+.ra-res-gold:before {
+  content: "\e918";
+  color: #2e4e0a;
+}
+.ra-res-pop:before {
+  content: "\e919";
+}
+.ra-res-shield:before {
+  content: "\e91a";
+  color: #db1219;
+}
+.ra-tile-bridge:before {
+  content: "\e91b";
+}
+.ra-tile-city:before {
+  content: "\e91c";
+}
+.ra-tile-forest:before {
+  content: "\e91d";
+}
+.ra-tile-mount:before {
+  content: "\e91e";
+}
+.ra-tile-river:before {
+  content: "\e91f";
+}
+.ra-unit-art:before {
+  content: "\e920";
+}
+.ra-unit-cav:before {
+  content: "\e921";
+}
+.ra-unit-inf:before {
+  content: "\e922";
+}

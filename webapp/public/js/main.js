@@ -1,12 +1,27 @@
-import {map, view} from '/engine/map.js';
+import {map, view, init_map} from '/engine/map.js';
 import {load, onload} from '/engine/loader.js';
+import {init_flags} from '/engine/flags.js';
+import {gui} from '/engine/gui.js';
+
+import {setup_features} from '/engine/modules/geomap/setup.js';
+import {load_world, set_user} from '/engine/modules/worlds/world.js';
+import {init_building} from '/engine/modules/building/building.js';
+import {init_borders} from '/engine/modules/borders/borders.js';
 
 import {watercolorLayer} from '/engine/layers/watercolor.js';
-//import {borderLayer} from '/engine/layers/borders.js';
 import {arrowLayer} from '/engine/layers/arrows.js';
+import {areaLayer, areaSource} from '/js/layers/areas.js';
+import {countryLayer} from '/js/layers/countries.js';
 
-import {areaLayer} from '/js/layers/areas.js';
-import {world} from '/js/store.js';
+import {client} from '/js/client.js';
+
+import {maps} from '/js/game/maps.js';
+import {init_chat} from '/js/game/chat.js';
+import {} from "/js/game/money.js";
+import {reset_game_entities} from '/js/game/economy.js'
+
+import {init_test} from "/js/test.js";
+
 
 map.getLayers().extend([
   //osmLayer,
@@ -14,79 +29,89 @@ map.getLayers().extend([
   //outlineLayer,
 
   areaLayer,
-  //borderLayer,
+  countryLayer,
+  // add_border_layer('border-fill', {
+    
+  // }),
+  // add_border_layer('border-instroke', {
+    
+  // }),
 
   arrowLayer,
   // eventLayer,
   // unitLayer,
 ]);
 
+// key
+// @todo: add from settings + other keys too!
+// @todo: smartcasts + settings
+init_map({
+  global_keypress: new Set([' ', 'ESCAPE', 'TAB']),
+
+});
 
 // todo: set up colors?
 
+export function init_app(conf, user, token, world) {
+  init_flags(conf.flags);
 
-export function init_app(debug, ws_address, user, token) {
-  view.setCenter([1475042.8063459413, 6077055.881901362]);
-  view.setZoom(6);
-
-
-  if (user && user.wid) {
-    world.wid = user.wid;
-    world.me = user.iso;
-    world.pid = user.uid;
-  }
-
-  if (debug) {
-    // window.store = {
-    //   countries: countries,
-    // };
-    window.world = world;
+  view.setCenter(maps[window.world_map].center);
+  view.setZoom(maps[window.world_map].zoom);
+  
+  if (conf.client.debug) {
     window.map = map;
-    //window.client = client;
-
     window.layers = map.getLayers();
     window.areas = window.layers.item(1).getSource();
   }
-  
-  load(function() {
-    fetch('/client/load').then((resp)=>{
-      return resp.json();
-    }).then((resp)=>{
-      this.ctx.iso = resp.iso;
-      this.ctx.world = resp.world;
 
-      this.loaded();
-   });
+  client.init_game_client(conf.client, user);
+
+  set_user(user);
+  load_world(world, function(resp){
+    // save info coming from WorldController
+    this.ctx.conf = conf;
+    this.ctx.debug = conf.client.debug;
+    this.ctx.areas = resp.areas;
   });
-
-  onload((ctx) => {
-    console.info("Game loaded");
-
-    // init_game(ctx);
-    // init_features(ctx);
-    // init_test();
-  });
-
 }
 
 
-export function init_features(ctx) {
-  const format = new ol.format.GeoJSON();
-  const format2 = {'type': 'json'};
+onload((ctx) => {
+  // add areas
+  for (let area of ctx.areas) {
+    let feature = areaSource.getFeatureById(area.id);
 
-//  for (let feature of areaSource.getFeatures()) {
-//    setupFeature(feature);
-//  }
+    if (!feature) {
+      console.error("Missing feature:" + area.id);
+      continue;
+    }
 
-//  // add areas:
-//  if (ctx.areas)
-//  for (let area of ctx.areas) {
-//    addArea(area, format);
-//  }
-//
-//  // Set up units
-//  if (ctx.units)
-//  for (let unit of ctx.units) {
-//    addUnit(unit, format2);
-//  }
-};
+    // add properties
+    feature.setProperties(area);
+  }
+
+  // geoconn setup
+  setup_features(areaSource);
+  
+  if (ctx.conf.borders.enabled) {
+    ctx.conf.borders.source = areaSource;
+    init_borders(ctx.conf.borders);
+  }
+
+  if (ctx.conf.chat.enabled) {
+    // init WS global chat
+    init_chat(gui.$refs['global-chat'], ctx.conf.chat);
+  } else {
+    // hide chat
+    if (gui.$refs['global-chat'])
+      gui.$refs['global-chat'].show = false;
+  }
+
+  init_building(ctx.conf.building);
+
+  reset_game_entities();
+
+  init_test();
+
+  console.log("Game loaded.")
+});

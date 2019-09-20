@@ -1,10 +1,16 @@
 export const template = `
-  <div>
+  <div v-if="world && world.me" >
     <div v-if="world.me" class="gui-corner-left-wrapper">
       <div class="gui-corner-left" @click="onClickFlag">
         <div class="glass"></div>
-        <div class="flag-wrap">
+
+        <!-- use this for coats of arms: -->
+        <!--<div class="flag-wrap">
           <div class="flag-shield" :style="herald(world.me)"></div>
+        </div>-->
+
+        <div class="flag-wrap">
+          <div :class="'flag flag-'+world.me"></div>
         </div>
       </div>
     </div>
@@ -21,38 +27,24 @@ export const template = `
         </div>
       </div>
 
-      <div title="Players" @click="open_dialog('players')" class="gui-corner-icon tilt-0">
+
+      <div title="" @click="open_infobar('countries')" class="gui-corner-icon tilt-0">
         <i class="ra icon-ra ra-icon-player"></i>
       </div>
 
-      <div title="Events" @click="open_infobar('events')" class="gui-corner-icon tilt-22_5">
-        <i class="ra icon-ra ra-icon-info"></i>
+      <div title="" class="gui-corner-icon tilt-22_5">
       </div>
 
-      <div title="Map settings" @click="open_dialog('settings')" class="gui-corner-icon tilt-45">
+      <div title="" class="gui-corner-icon tilt-45">
+      </div>
+
+      <div title="Map settings"  @click="open_dialog('settings')" class="gui-corner-icon tilt-67_5">
         <i class="ra icon-ra ra-icon-settings"></i>
-      </div>
-
-      <div title="" @click="" class="gui-corner-icon tilt-67_5">
-        <i class="ra icon-ra ra-icon-mute"></i>
       </div>
 
       <div title="" @click="exit" class="gui-corner-icon tilt-90">
         <i class="ra icon-ra ra-icon-exit"></i>
       </div>
-    </div>
-
-
-    <div class="units-bar" v-if="team">
-      <div class="d-flex flex-row">
-        <div @click="open_infobar('unit', unit)" class="pointer unit-box text-center p-2" :style="unit_background(unit)" v-for="unit in team" >
-
-
-          <img class="img-fluid" :src="src_unit(unit)" style="min-height:75px" />
-
-          <i :class="'ra ra-lg ra-unit-' + units[unit.get('prof')].name.lower()" style="position: absolute; top: 70px"></i>
-        </div>
-      </div>      
     </div>
 
   </div>

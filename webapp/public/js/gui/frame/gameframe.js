@@ -1,11 +1,11 @@
 import {SRNG} from '/js/vendor/srng.js';
+import {world} from '/engine/modules/worlds/world.js';
 import {openRandom} from '/engine/gfx/jumpto.js';
 import {getColor, colors} from '/engine/colors.js';
 
 import {template} from "/js/gui/frame/gameframe.vue.js"
 
-import {world} from '/js/store.js';
-import {client} from '/js/client.js';
+import {end_turn} from '/js/game/turns.js';
 
 
 // Game GUI's main frame
@@ -15,9 +15,7 @@ export let component = Vue.component('game-frame', {
     return {
       iso: "AA",
       world: world,
-      username: "",
 
-      team: null,
       updates: 0,
     }
   },
@@ -28,9 +26,7 @@ export let component = Vue.component('game-frame', {
     },
 
     onClickSeason: function(e) {
-      // end turn papa
-
-      client.controllers.Worlds.request_end_turn();
+      end_turn();
     },
 
     exit: function() {
@@ -38,7 +34,7 @@ export let component = Vue.component('game-frame', {
         let resp = confirm("Are you sure you want to leave the world?");
         
         if (resp)
-          client.controllers.Worlds.request_leave();
+          leave_world();
       } else {
         Cookie.delete('mid');
         window.location = '/';        
@@ -50,6 +46,7 @@ export let component = Vue.component('game-frame', {
 
     season: function() {
       let m = this.world.turns % 12 + 1;
+      console.log("season update")
 
       if (m <= 2 || m == 12)
         return 'Winter';
@@ -63,7 +60,7 @@ export let component = Vue.component('game-frame', {
     },
 
     gameyear: function() {
-      const start_year = 1348;
+      let start_year = 1821;
       let dy = Math.floor(this.world.turns / 12);
 
       return start_year + dy;

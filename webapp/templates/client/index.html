@@ -4,18 +4,25 @@
   <!-- OpenLayers 5 -->
   <link rel="stylesheet" type="text/css" href="css/ol.css">
   <script defer type="text/javascript" src="js/vendor/ol.js"></script>
-  <script defer type="text/javascript" src="js/vendor/ol-ext.min.js"></script>
-
-  <!-- Turf.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.1.5/turf.min.js"></script>
+  <!--<script defer type="text/javascript" src="js/vendor/ol-ext.min.js"></script>-->
 {% endblock %}
 
 {% block content %}
   <div id="app-map" class="map" tabindex="0"></div>
-
   <div id="app-gui"></div>
 
+  <div style="display: none;">
+    <div id="app-popup" title="Welcome to OpenLayers"></div>
+  </div>
+
+
+  <script>
+    // declare variables from backend
+    window.world_map = '{{ world.map }}';
+  </script>
+
   <script type="module">
+    // import gui frame
     import {template} from "/js/gui/templates/client-gui.vue.js";
     $("#app-gui").innerHTML = template;
   </script>
@@ -24,11 +31,9 @@
     import {init_app} from '/js/main.js';
 
     // declare variables from backend
-
-    // declare variables from backend
     window.gui = gui;
 
     // start app
-    init_app({{ debug|tojson }}, '{{ ws_address }}', {{ get_user().to_dict()|tojson }}, '');
+    init_app({{ conf|tojson }}, {{ get_user().to_dict()|tojson }}, '', {{ world.to_dict()|tojson }});
   </script>
 {% endblock %}
