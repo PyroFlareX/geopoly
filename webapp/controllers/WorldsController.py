@@ -2,7 +2,7 @@ from flask import render_template, request
 from werkzeug.utils import redirect
 
 from engine import settings
-from game.instance import worlds, users, countries, areas
+from game.instance import worlds, users, countries, areas, histories
 
 from webapp.entities import ApiResponse
 from webapp.services.login import getUser
@@ -38,3 +38,16 @@ class WorldsController():
             raise Exception("hifga iiii Volume II")
 
         return render_template('/worlds/index.html', conf=settings._conf)
+
+    def history(self):
+        user = getUser()
+
+        if user.username is None:
+            return redirect('/')
+
+        l_histories = histories.list_results_user(user.uid)
+
+        return render_template('/worlds/history.html',
+            histories=[(h.to_dict(), r.to_dict()) for h,r in l_histories],
+            err=request.args.get('err')
+        )

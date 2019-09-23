@@ -15,7 +15,6 @@ export let component = Vue.component('dialog-disconnect', {
 
   methods: {
     open: function() {
-      console.log("KUKI");
       this.show = true;
       this.attempts = 0;
     },

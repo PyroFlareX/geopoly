@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <ul class="list-group">
+    {% for history,result in histories %}
+      <li class="list-group-item">
+
+        <div class="d-flex" wid="{{ history.wid }}">
+          <div class="flag flag-md flag-{{ result.iso }} mr-3"></div>
+
+          <div class="flex-fill p-1">
+            <h4>
+              {% if result.result == 1 %}
+                <span class="text-success">Victory</span>
+              {% else %}
+                <span class="text-danger">Defeat</span>
+              {% endif %}
+               - <span class="small">{{ history.map }}</span></h4>
+            </h4>
+
+            <span><i class="ra ra-2x ra-icon-current"></i> {{ history.rounds }}</span>
+            <span><i class="ra ra-2x ra-res-gold"></i> {{ result.gold }}</span>
+            <span><i class="ra ra-2x ra-res-pop"></i> {{ result.inf+result.cav+result.art }}</span>
+            <span><i class="ra ra-2x ra-build-house"></i> {{ result.house+(result.barr*3)+result.cita }}</span>
+
+            {% if result.result == 1 %}
+              <span><i class="ra ra-2x ra-shadow ra-res-shield"></i> {{ result.shields }}</span>
+            {% else %}
+
+            {% endif %}
+          </div>
+          <div class="small text-center ml-3">
+            <br/>
+            {{ history.created_at.strftime("%H:%M") }}
+            <br/>
+            {{ history.created_at.strftime("%b %d %Y") }}
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

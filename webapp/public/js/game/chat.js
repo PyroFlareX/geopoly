@@ -28,44 +28,51 @@ export function init_chat(chat, conf) {
    *   /surrender and ENTER
    **/
   chat.emojis = {
-    'angry': '(.gif',
-    'animeskull': 'animeskull.png',
-    'obo': 'beholder.png',
-    'boolean': 'boolean.png',
-    'happy': 'D.gif',
-    'eme': 'eme_logo.png',
-    'eyes': 'eyes.gif',
-    'favicon': 'favicon.png',
-    'flup': 'flup.png',
+    // meta / doors 
+    'geogine': 'whead.png',
+    'geopoly': 'favicon.png',
     'geoguy': 'geoguy.png',
     'geolite': 'geolite.png',
-    'headbop': 'headbop.gif',
-    'hopsin': 'hopsin.png',
-    'idgaf': 'idgaf.png',
-    'katzen': 'katzen.png',
     'geo': 'logo.png',
     'meh': 'meh.png',
-    'melon': 'melon.png',
-    'metroplier': 'metroplier.png',
-    'moth': 'moth.png',
-    'mummy': 'mummy.png',
-    'parker': 'parker.gif',
-    'rekt': 'rekt.png',
-    'sadgry': 'sadgry.png',
-    'slap': 'slap.gif',
-    'smh': 'smh.gif',
-    'snek': 'snek.png',
-    'dany': 'sorry_hihi.png',
-    'syncdab': 'sync_dab.gif',
-    'thunk': 'thunk.png',
+    'idgaf': 'idgaf.png',
+    'flup': 'flup.png',
+    'eme': 'eme_logo.png',
+
+    // game
     'tribute': 'tribute.png',
+
+    // generic
+    'headbop': 'headbop.gif',
+    'thunk': 'thunk.png',
+    'angry': '(.gif',
+    'happy': 'D.gif',
+    'melon': 'melon.png',
+    'sadgry': 'sadgry.png',
+
+    // non PC / copyrighted
     'triggered': 'triggered.png',
     'trump': 'trump.gif',
     'trumpo': 'trumpo.png',
-    'walrus': 'whead.png',
-    'walrus2': 'O.png',
+    'ajcry': 'ajsad.gif',
+    'aj': 'alexjones.png',
+    'snek': 'snek.png',
+    'mummy': 'mummy.png',
+    'metroplier': 'metroplier.png',
+    'dany': 'sorry_hihi.png',
+
+    // discord themed
+    'smh': 'smh.gif',
+    'hopsin': 'hopsin.png',
+    'boolean': 'boolean.png',
+    'obo': 'beholder.png',
+
+    // themed
+    'catlooks': 'katzen.png',
+    'moth': 'moth.png',
     'whoa mama': 'whoa_mama.png',
     'wowzors': 'wowzors.png',
+    'pappa': 'pappa.gif',
   };
 
   chat.actions = {
