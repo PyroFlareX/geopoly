@@ -1,7 +1,7 @@
 
 export const template = `
   <div v-if="show" class="infobar infobar-lg">
-    <div class="infobar-header">
+    <div @mousedown="infobar_mousedown" @mouseup="infobar_mouseup" @mousemove="infobar_mousemove" class="infobar-header">
       Countries
 
       <button type="button" class="close" aria-label="Close" @click="$emit('close')">

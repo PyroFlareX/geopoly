@@ -1,7 +1,7 @@
 
 export const template = `
   <div v-if="show" class="infobar infobar-lg font-oldie">
-    <div class="infobar-header" :style="area_background(country)">
+    <div @mousedown="infobar_mousedown" @mouseup="infobar_mouseup" @mousemove="infobar_mousemove" class="infobar-header" :style="area_background(country)">
       <div :class="'flag flag-inline flag-xs flag-box flag-'+country.iso"></div>
 
       {{ country.name }}

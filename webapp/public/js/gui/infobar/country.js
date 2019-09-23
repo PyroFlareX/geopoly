@@ -8,8 +8,10 @@ export let component = Vue.component('infobar-country', {
     return {
       show: false,
       infobar_id: null,
+      dragging: false,
       
       tribute: 0,
+
 
       country: null,
     }
@@ -32,7 +34,7 @@ export let component = Vue.component('infobar-country', {
       });
 
       this.tribute = 0;
-    }
+    },
   },
 
   computed: {

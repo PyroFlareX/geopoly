@@ -8,6 +8,8 @@ export function init_test() {
 
   //for (let i of range(0,19))
   //  layers.item(1).getSource().getFeatures()[i].set('iso','UK');
+
+  gui.infobar('country', countries.UK);
 }
 
 export function test_action(feature) {
