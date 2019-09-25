@@ -69,7 +69,7 @@ class User(Base):
         }
 
     def __repr__(self):
-        return "{}({})".format(self.iso, self.username)
+        return "{}({},{})".format(self.username, self.division, self.iso)
 
 
 class World(Base):
@@ -147,6 +147,9 @@ class Country(Base):
 
     world = relationship("World", back_populates="countries")
 
+
+    def __repr__(self):
+        return "{}({})".format(self.iso, self.nname)
 
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')

@@ -34,7 +34,8 @@ def create_world_entities(world: World, AI=False):
             random.shuffle(orders)
         else:
             # map-defined starting order
-            orders = list(map(int, l_options['initial_order'].split(',')))
+            isos = l_options['initial_order'].split(',')
+            orders = [isos.index(c.iso) for c in l_countries]
     else:
         # normal order 0,1,2...
         orders = list(range(len(l_countries)))
@@ -79,7 +80,7 @@ def reset_world(world):
 
 
 def create_world():
-    default_map = 'map_hu'
+    default_map = 'hu_test'
 
     world = service.create(map=default_map)
 

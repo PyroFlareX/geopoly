@@ -1,5 +1,6 @@
 from time import sleep
 
+from engine.modules.chat import service as chat_service
 from game.instance import worlds
 from game.services import endgame
 
@@ -18,6 +19,10 @@ class DisposalTask:
 
             # then delete world (and cascades countries, areas)
             worlds.delete(world, commit=False)
+
+            # clear chat
+            chat_service.clear(world.wid, 'global')
+            # todo: clear DM chats
 
             if i % 20 == 0:
                 # make sure to save changes every once in a while

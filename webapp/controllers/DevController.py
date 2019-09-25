@@ -94,7 +94,7 @@ class DevController():
         if not user.username:
             return "Login first"
 
-        world = World(name="Test world", map='map_hu', max_rounds=None)
+        world = World(name="Test world", map='hu_test', max_rounds=None)
         worlds.save(world)
 
         start_world(world, AI=True)

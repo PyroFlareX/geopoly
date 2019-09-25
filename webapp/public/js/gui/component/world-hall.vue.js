@@ -7,7 +7,7 @@ export const template = `
         <button @click="$emit('leave')" class="btn btn-danger">Quit</button>
         <button @click="$emit('start')" class="btn btn-danger">Start</button>
 
-        <button @click="onSetMap('map_hu')" class="btn btn-info">Regen map</button>
+        <button @click="onSetMap('hu_test')" class="btn btn-info">Regen map</button>
 
         <br/>
 

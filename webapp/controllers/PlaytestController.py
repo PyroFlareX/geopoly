@@ -14,6 +14,7 @@ class PlaytestController():
 
         # Playtest Singleton ID:
         self.WID = '00000000-0000-2000-a000-000000000000'
+        self.MAP = 'us_civil'
         self.tmp_players = {}
 
     def index(self):
@@ -41,7 +42,7 @@ class PlaytestController():
                 histories.delete(h)
 
         # create world
-        world = World(wid=self.WID, name="Playtest world", map='map_hu', max_rounds=None)
+        world = World(wid=self.WID, name="Playtest world", map=self.MAP, max_rounds=None)
 
         isos = load_isos('game/maps/{}.gtml'.format(world.map))
         if len(isos) < len(l_users):

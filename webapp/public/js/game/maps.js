@@ -10,13 +10,13 @@ export const maps = {
     zoom: 7,
   },
   
-  "us_civil_war": {
+  "us_civil": {
     name: "US Civil War",
     max_players: 2,
     isos: ["US", "CS"],
     year: '1861 - 1865',
-    center: [2172000, 5942000],
-    zoom: 5,
+    center: [-9692857.24, 4265736.48],
+    zoom: 4,
   },
 
   "hu_revolution": {

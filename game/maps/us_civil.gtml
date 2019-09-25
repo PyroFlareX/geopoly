@@ -1,0 +1,25 @@
+>OPTIONS
+    initial_order       US,CS
+
+>COUNTRIES iso  gold  shields   color      name
+           US   320   8         #002e54    United States
+           CS   320   8         #940e15    Confederate States
+
+>AREAS
+# Confederates
+a51(CS,barr)  a27(CS,barr)
+mr143(CS,city)
+
+
+# Union
+a46(US,barr)  a41(US,barr)
+a30(US,city)
+
+# Empty statse
+a40(US)  a9(US)  a17(US)  a47(US)  a22(US)  a8(US)  a37(US)  a29(US)  a23(US)  a11(US)  a42(US)
+a6(CS)  a33(CS)  a32(CS)  a25(CS)  a10(CS)  a12(CS)  a16(CS)
+
+# Subdivided areas
+mr200(CS)  mr71(CS)  mr77(CS)  mr376(CS)  mr419(CS)  mr190(CS)  mr242(CS)  mr411(CS)  mr118(CS)  mr235(CS)  mr164(CS)
+mr208(CS)  mr421(CS)  mr239(CS)  mr19(CS)  mr24(CS)  mr236(CS)  mr51(CS)  mr162(CS)  mr147(CS)  mr193(CS)
+mr330(CS)  mr323(CS)  mr365(CS)  mr165(CS)  mr350(CS)  mr106(CS)  mr108(CS)  mr368(CS)  mr93(CS)  mr114(CS)  mr357(CS)

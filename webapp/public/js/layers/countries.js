@@ -7,7 +7,8 @@ import {test_action} from '/js/test.js';
 export const countryLayer = add_border_layer('border-stroke', {
  width: 4,
  fill: 'color-blend',
- minResolution: 2445
+ //minResolution: 2445
+ minResolution: 999999
 });
 
 countryLayer.click = (feature, key, event) => {
