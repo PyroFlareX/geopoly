@@ -21,11 +21,22 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
     gui.$refs['infobar-countries'].$forceUpdate()
   }
 
+  if (world.current == world.me) {
+    // update player if it's my turn
+    title.update("(1) -");
+  } else {
+    title.update("");
+  }
+
   // round has ended too -> flash & sfx & chat notification
   if (round_end) {
     handle_end_round(round_end);
 
     if (round_end.emperor) {
+      // Update title anyway
+      if (world.current != world.me)
+        title.update("(New Emperor!) -");
+
       do_turn_notify("New emperor", countries[round_end.emperor]);
     } else {
       do_turn_notify("New round starts with", country_curr);

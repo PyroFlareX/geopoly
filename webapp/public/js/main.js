@@ -109,7 +109,8 @@ onload((ctx) => {
 
   init_building(ctx.conf.building);
 
-  reset_game_entities();
+  // initial reset of entities
+  reset_game_entities(true);
 
   init_test();
 

@@ -1,7 +1,9 @@
 import {SRNG} from '/js/vendor/srng.js';
 import {world} from '/engine/modules/worlds/world.js';
+import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {openRandom} from '/engine/gfx/jumpto.js';
 import {getColor, colors} from '/engine/colors.js';
+import {maps} from '/js/game/maps.js';
 
 import {template} from "/js/gui/frame/gameframe.vue.js"
 
@@ -34,10 +36,13 @@ export let component = Vue.component('game-frame', {
         let resp = confirm("Are you sure you want to leave the world?");
         
         if (resp)
-          leave_world();
+          ws_client.request("Game:surrender", {
+          }).then(()=>{
+            window.location = '/';
+          });
+
       } else {
-        Cookie.delete('mid');
-        window.location = '/';        
+        window.location = '/';
       }
     }
   },
@@ -46,7 +51,6 @@ export let component = Vue.component('game-frame', {
 
     season: function() {
       let m = this.world.turns % 12 + 1;
-      console.log("season update")
 
       if (m <= 2 || m == 12)
         return 'Winter';
@@ -60,7 +64,7 @@ export let component = Vue.component('game-frame', {
     },
 
     gameyear: function() {
-      let start_year = 1821;
+      let start_year = maps[this.world.map].year;
       let dy = Math.floor(this.world.turns / 12);
 
       return start_year + dy;

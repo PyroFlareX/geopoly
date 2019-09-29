@@ -5,10 +5,6 @@ import {add_sys_message} from '/js/game/chat.js';
 
 client.ws.on('Game:end_game', ({winner})=>{
   gui.dialog("game-end", winner);
-
-  //gui.quit();
-  //Vue.nextTick(() => {
-  //});
 });
 
 

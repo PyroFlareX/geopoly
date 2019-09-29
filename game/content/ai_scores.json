@@ -1,0 +1,21 @@
+{
+  "move to mount": 5,
+  "move to river": 8,
+  "move to forest": 11,
+  "move to empty": 18,
+  "buy inf": 20,
+  "kill inf": 22,
+  "buy house": 30,
+  "capt area": 35,
+  "capt house": 45,
+  "buy cav": 70,
+  "kill cav": 77,
+  "buy barr": 100,
+  "buy art": 120,
+  "kill art": 132,
+  "buy cita": 150,
+  "buy city": 180,
+  "capt barr": 150,
+  "capt cita": 145,
+  "capt city": 400
+}

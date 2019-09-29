@@ -57,7 +57,7 @@ class DevController():
         world = worlds.get(user.wid)
 
         country: Country = countries.get(world.current, world.wid)
-        world_countries = countries.list_all(world.wid)
+        world_countries = world.countries
         dict_countries = OrderedDict((c.iso, c) for c in world_countries)
 
         if not country:

@@ -33,6 +33,7 @@ export const template = `
             </table>
 
             <p>The game has ended. Winner: {{ countries[winner].name }}</p>
+            <p>This match took <strong>{{ world.rounds }} rounds</strong>.</p>
           </div>
 
           <div>

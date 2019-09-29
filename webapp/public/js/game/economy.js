@@ -4,7 +4,7 @@ import {areaSource} from '/js/layers/areas.js';
 
 //export function get_top_countries() {}
 
-export function reset_game_entities() {
+export function reset_game_entities(init) {
   /**
    * Resets all areas and countries
    * and recalculates their attributes
@@ -33,10 +33,9 @@ export function reset_game_entities() {
     if (feature.get('unit')) {
       countries[iso].pop -= 1;
 
-      // Reset area exhaust
-      if (feature.get('exhaust') > 0)
+      // Reset area exhaust (but not if this is an initial reset!)
+      if (!init && feature.get('exhaust') > 0)
         feature.set('exhaust', feature.get('exhaust')-1);
-
     }
 
     if (feature.get('tile') == 'city') {

@@ -1,7 +1,7 @@
 import {client} from '/js/client.js';
 import {areaSource} from '/js/layers/areas.js';
 import {apply_resources} from '/js/game/economy.js'
-import {countries} from '/engine/modules/worlds/world.js'
+import {world, countries} from '/engine/modules/worlds/world.js'
 import {add_sys_message} from '/js/game/chat.js';
 
 const BUILDINGS = new Set(['barr','house','cita']);
@@ -42,9 +42,14 @@ const BUY_ERRORS = {
 client.ws.on('Game:buy', ({iso,area_id,item_id,cost,err})=>{
   if (err) {
     // Buy fail
-    gui.flash(BUY_ERRORS[err], 'white', null);
+    add_sys_message(BUY_ERRORS[err]||('unknown error: '+err), iso);
 
     return;
+  }
+
+  if (world.me == iso) {
+    // I've made a buy, reset title
+    title.update("");
   }
 
   const feature = areaSource.getFeatureById(area_id);

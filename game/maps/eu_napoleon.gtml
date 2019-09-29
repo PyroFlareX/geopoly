@@ -1,0 +1,19 @@
+>OPTIONS
+    initial_order       random
+
+
+>COUNTRIES iso  gold  shields   color      name
+           UK   130   7         #BADA55    United_Kingdom
+           AT   130   7         #BADA55    Austria
+           PR   130   7         #BADA55    Prussia
+           RU   130   7         #BADA55    Russia
+           FR   130   7         #BADA55    France
+
+           NL   130   7         #BADA55    Netherlands
+           SR   130   7         #BADA55    Sardinia
+           ES   130   7         #BADA55    Spain
+           PT   130   7         #BADA55    Portugal
+           PO   130   7         #BADA55    Papal_States
+           HN   130   7         #BADA55    Hanover
+
+>AREAS

@@ -53,7 +53,8 @@ def create_world_entities(world: World, AI=False):
     max_city_count = math.ceil(world.max_players * (shields_avg+1)/3)
 
     if city_count > max_city_count:
-        raise Exception("Max city count exceeded: {} / {}".format(city_count, max_city_count))
+        print("Warning: ", "Max city count exceeded: {} / {}".format(city_count, max_city_count))
+        #raise Exception()
 
     return l_countries, l_areas
 

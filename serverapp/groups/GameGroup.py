@@ -97,7 +97,7 @@ class GameGroup:
         error, world, curr_country, _ = self._accessControl(user)
         if error: return error
 
-        world_countries = countries.list_all(world.wid)
+        world_countries = world.countries
         dict_countries = OrderedDict((c.iso, c) for c in world_countries)
 
         # if len(world.isos) < 2:

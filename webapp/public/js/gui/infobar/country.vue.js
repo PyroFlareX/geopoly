@@ -1,15 +1,8 @@
 
 export const template = `
   <div v-if="show" class="infobar infobar-lg font-oldie">
-    <div @mousedown="infobar_mousedown" @mouseup="infobar_mouseup" @mousemove="infobar_mousemove" class="infobar-header" :style="area_background(country)">
-      <div :class="'flag flag-inline flag-xs flag-box flag-'+country.iso"></div>
+    <infobar-header :content="country.name" :iso="country.iso" infobar_id="country"></infobar-header>
 
-      {{ country.name }}
-
-      <button type="button" class="close" aria-label="Close" @click="$emit('close')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
     <div class="infobar-content p-2" :country-iso="country.iso">
 
       <div class="d-flex">

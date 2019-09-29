@@ -4,6 +4,7 @@ import {show_arrow, set_arrow, hide_arrow} from '/engine/gfx/arrows.js';
 import {apply_capture, apply_kill} from '/js/game/economy.js'
 import {areaSource} from '/js/layers/areas.js';
 import {client} from '/js/client.js';
+import {add_sys_message} from '/js/game/chat.js';
 
 
 const MOVE_ERRORS = {
@@ -11,8 +12,8 @@ const MOVE_ERRORS = {
   cant_move_more: "You have already moved with this figure.",
   not_enemy: "Figure is not an enemy.",
   cant_attack_cavalry: "Cavalry can't attack forest.",
-  cant_attack_there: "Can't move there [attack].",
-  cant_move_there: "Can't move there [move].",
+  cant_attack_there: "Can't attack there.",
+  cant_move_there: "Can't move there.",
 };
 
 
@@ -60,6 +61,9 @@ export function area_select(feature) {
   if (map_state.selected) {
     // Click with selection -> move to that area
     if (validate_move(map_state.selected, feature)) {
+      // reset title
+      title.update("");
+
       client.ws.request('Game:move', {
         area_id: map_state.selected.getId(),
         to_id: feature.getId()
@@ -70,7 +74,6 @@ export function area_select(feature) {
     }
 
     // hide HUD & stuff:
-    gui.quit("move-info");
     hide_arrow();
     map_state.selected = null;
   }
@@ -88,10 +91,6 @@ export function area_select(feature) {
       // Click on my unit -> we're about to move
       show_arrow(feature);
       map_state.selected = feature;
-
-      // open GUI
-      // if (!map_state.disable_tooltip)
-      //   gui.infobar("move-info", feature.getProperties());
     } else {
       console.log("Clicked on empty area", feature.getId());
     }
@@ -159,14 +158,13 @@ function in_ring2(id1, id2) {
 }
 
 
-client.ws.on('Game:move', ({err,iso,area_id,to_id,events:{conquer,kill}})=>{
+client.ws.on('Game:move', ({err,iso,area_id,to_id,events})=>{
   if (err) {
-    // Buy fail
-    gui.flash(MOVE_ERRORS[err], 'white', null);
+    // move has failed
+    add_sys_message(MOVE_ERRORS[err]||('unknown error: '+err), iso);
 
     return;
   }
-
 
   const from = areaSource.getFeatureById(area_id);
   const to = areaSource.getFeatureById(to_id);

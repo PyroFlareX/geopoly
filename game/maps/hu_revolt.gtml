@@ -1,0 +1,15 @@
+>OPTIONS
+    initial_order       random
+
+
+>COUNTRIES iso  gold  shields   color      name
+           AT   130   7         #BADA55    Austria
+           HU   130   7         #BADA55    Hungary
+           HH   130   7         #BADA55    Croatia
+           RS   130   7         #BADA55    Serbia
+           SK   130   7         #BADA55    Slovakia
+           RO   130   7         #BADA55    Wallachia
+#           RU   130   7         #BADA55    Russia
+#           SR   130   7         #BADA55    Sardinia
+
+>AREAS

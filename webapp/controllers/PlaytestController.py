@@ -76,6 +76,11 @@ class PlaytestController():
 
             worlds.delete(world)
 
+        history = histories.get(self.WID)
+
+        if history:
+            histories.delete(history)
+
 
         return ApiResponse({
             'result': 'OK'

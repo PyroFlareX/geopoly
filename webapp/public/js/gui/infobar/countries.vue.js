@@ -1,13 +1,8 @@
 
 export const template = `
   <div v-if="show" class="infobar infobar-lg">
-    <div @mousedown="infobar_mousedown" @mouseup="infobar_mouseup" @mousemove="infobar_mousemove" class="infobar-header">
-      Countries
-
-      <button type="button" class="close" aria-label="Close" @click="$emit('close')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+    <infobar-header content="Countries" infobar_id="countries"></infobar-header>
+    
     <div class="infobar-content font-oldie p-2">
 
       <table class="table table-borderless table-hover table-sm text-center">

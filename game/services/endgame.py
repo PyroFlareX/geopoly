@@ -40,7 +40,7 @@ def populate_match_history(world):
     # Load and gather necessary entities
     isos = load_isos('game/maps/{}.gtml'.format(world.map))
     history = histories.get(world.wid)
-    world_areas = areasrepo.list_all(world.wid)
+    world_areas = world.areas
     results = history.results
     #results = matchresults.list_all(world.wid)
     d_results = {r.iso: r for r in results}

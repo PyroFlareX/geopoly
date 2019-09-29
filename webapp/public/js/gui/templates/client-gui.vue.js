@@ -1,11 +1,12 @@
 import {_mixins} from '/engine/mixins.js';
 import {chat_gui} from '/engine/modules/chat/gui.js';
+import {component as iheader} from '/engine/gui/infobar-header.js';
 
+import {component as countriesInfo} from '/js/gui/infobar/countries.js';
+import {component as countryInfo} from '/js/gui/infobar/country.js';
+import {component as areaInfo} from '/js/gui/infobar/area.js';
 import {component as areaBuy1} from '/js/gui/infobar/buy-tiles.js';
 import {component as areaBuy2} from '/js/gui/infobar/buy-units.js';
-import {component as moveInfo} from '/js/gui/infobar/move-info.js';
-import {component as countryInfo} from '/js/gui/infobar/country.js';
-import {component as countriesInfo} from '/js/gui/infobar/countries.js';
 
 import {component as playersDialog} from '/engine/dialog/players.js';
 import {component as settingsDialog} from '/js/gui/dialog/settings.js';
@@ -33,16 +34,16 @@ export const template = `
   <flash ref="flash"></flash>
   <chat-gui room-id="global" id="game-global-chat" ref="global-chat"></chat-gui>
 
-  <dialog-settings @close="quit" ref="dialog-settings"></dialog-settings>
-  <dialog-players @close="quit" ref="dialog-players"></dialog-players>
-  <dialog-game-end @close="quit" ref="dialog-game-end"></dialog-game-end>
-  <dialog-disconnect @close="quit" ref="dialog-disconnect"></dialog-disconnect>
+  <dialog-settings @close="quit('dialog-settings')" ref="dialog-settings"></dialog-settings>
+  <dialog-players @close="quit('dialog-players')" ref="dialog-players"></dialog-players>
+  <dialog-game-end @close="quit('dialog-game-end')" ref="dialog-game-end"></dialog-game-end>
+  <dialog-disconnect @close="quit('dialog-disconnect')" ref="dialog-disconnect"></dialog-disconnect>
 
-  <infobar-move-info @close="quit" ref="infobar-move-info"></infobar-move-info>
-  <infobar-buy-tiles @close="quit" ref="infobar-buy-tiles"></infobar-buy-tiles>
-  <infobar-buy-units @close="quit" ref="infobar-buy-units"></infobar-buy-units>
-  <infobar-countries @close="quit" ref="infobar-countries"></infobar-countries>
-  <infobar-country @close="quit" ref="infobar-country"></infobar-country>
+  <infobar-area ref="infobar-area"></infobar-area>
+  <infobar-buy-tiles ref="infobar-buy-tiles"></infobar-buy-tiles>
+  <infobar-buy-units ref="infobar-buy-units"></infobar-buy-units>
+  <infobar-countries ref="infobar-countries"></infobar-countries>
+  <infobar-country ref="infobar-country"></infobar-country>
 
   <overlay-country ref="overlay-country"></overlay-country>
 `;

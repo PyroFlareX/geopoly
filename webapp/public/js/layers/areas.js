@@ -3,7 +3,6 @@ import {getColor, getMapBlend, getHighlight, colors} from '/engine/colors.js';
 import {world} from '/engine/modules/worlds/world.js';
 import {openRandom} from '/engine/gfx/jumpto.js';
 
-import {client} from '/js/client.js';
 import {area_select, area_target} from '/js/game/moves.js';
 import {test_action} from '/js/test.js';
 
@@ -140,7 +139,8 @@ areaLayer.rightclick = (feature, key) => {
         gui.infobar('buy-tiles', feature, world);
       }
     } else {
-      // not my area, nothing to do
+      // not my area, but let's give the player some nice info :)
+      gui.infobar('area', feature, world);
     }
   } else {
     // right clicked outside the map
@@ -152,8 +152,9 @@ areaLayer.keydown = (feature, key) => {
     // cancel move selection
     area_select(null);
 
-    // exit GUI popovers
-    gui.quit();
+    // exit latest opened GUI popovers
+    if (gui.opened)
+      gui.quit(gui.opened);
   }
 
   else if (key == 'SPACE' || key == ' ') {
@@ -173,7 +174,7 @@ areaLayer.keydown = (feature, key) => {
 areaLayer.keyup = (feature, key) => {
   if (key == 'TAB') {
     // toggle countries overview infobar
-    gui.quit('countries');
+    gui.quit('infobar-countries');
   }
 };
 

@@ -3,15 +3,8 @@ import {component as build_dialog} from '/engine/modules/building/gui/build-cata
 
 export const template = `
   <div v-if="show" class="infobar infobar-lg font-oldie">
-    <div @mousedown="infobar_mousedown" @mouseup="infobar_mouseup" @mousemove="infobar_mousemove" class="infobar-header" :style="area_background(area)">
-      <div :class="'flag flag-inline flag-xs flag-box flag-'+area.iso"></div>
+    <infobar-header :content="area.name + ' - buy'" :iso="area.iso" infobar_id="buy-units"></infobar-header>
 
-      {{area.name}} - Buy
-
-      <button type="button" class="close" aria-label="Close" @click="$emit('close')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
     <div class="infobar-content p-2" :area-id="area.id">
       <strong>Buy soldier or building:</strong>
 

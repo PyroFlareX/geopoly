@@ -1,7 +1,7 @@
 
 
 export const maps = {
-  "map_hu": {
+  "hu_test": {
     name: "Test Map (Hungary)",
     max_players: 3,
     isos: ["UK", "FR", "HU"],
@@ -14,25 +14,25 @@ export const maps = {
     name: "US Civil War",
     max_players: 2,
     isos: ["US", "CS"],
-    year: '1861 - 1865',
+    year: 1861,
     center: [-9692857.24, 4265736.48],
     zoom: 4,
   },
 
-  "hu_revolution": {
+  "hu_revolt": {
     name: "Hungarian Revolution",
     max_players: 6,
     isos: ["HU", "AT", "HR", "SK", "RO", "PL", "RU"],
-    year: '1848 - 49',
+    year: 1848,
     center: [2172000, 5942000],
     zoom: 5,
   },
   
-  "napoleonic": {
+  "eu_napoleon": {
     name: "Napoleonic wars",
     max_players: 9,
     isos: ["UK","AT","FR","DE","NL","ES","RU","HV","NS"],
-    year: '1803 - 1815',
+    year: 1810,
     center: [2172000, 5942000],
     zoom: 5,
   },

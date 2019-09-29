@@ -129,8 +129,9 @@ def _set_up_game(l_countries, adict):
 
 
 def _load_map():
-    a = areas.list_all(WID)
-    c = countries.list_all(WID)
+    w = worlds.get(WID)
+    a = w.areas
+    c = w.countries
 
     return c, a
 

@@ -76,6 +76,8 @@ def load_gtml(filename, skip=None):
 
                 for val,attr in zip(attrs, f_countries):
                     if attr in ('iso', 'name', 'color'):
+                        if attr == 'name':
+                            val = val.replace('_', ' ')
                         setattr(cc, attr, val)
                     elif attr in ('emperor', 'ai'):
                         setattr(cc, attr, val == 'true')
