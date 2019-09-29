@@ -1,5 +1,8 @@
 export const template = `
 <div v-if="show">
+  <button class="btn btn-danger" @click="$emit('create')">New Match</button>
+  <br/>
+
   <table class="table table-hover">
     <thead>
       

@@ -2,10 +2,10 @@
 import {client} from '/js/client.js';
 
 
-export function init_app(conf, user) {
+export function init_app(conf, user, wid_url) {
   client.init_game_client(conf.client, user, ()=>{
 
-    gui.$refs.matchmaking.open();
+    gui.$refs.matchmaking.open(user.wid||wid_url);
   });
 }
 

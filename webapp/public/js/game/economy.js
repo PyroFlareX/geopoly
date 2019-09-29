@@ -38,6 +38,10 @@ export function reset_game_entities(init) {
         feature.set('exhaust', feature.get('exhaust')-1);
     }
 
+    if (feature.get('dead')) {
+      feature.set('dead', false);
+    }
+
     if (feature.get('tile') == 'city') {
 
      // calculate conquers:

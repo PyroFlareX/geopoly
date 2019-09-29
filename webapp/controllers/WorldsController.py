@@ -13,6 +13,11 @@ class WorldsController():
         self.server = server
         self.group = "Worlds"
 
+        self.server.addUrlRule({
+            'GET /worlds': 'worlds/index',
+            'GET /worlds/<wid>': 'worlds/index',
+        })
+
     def load(self):
         user = getUser()
 
@@ -28,7 +33,7 @@ class WorldsController():
             "players": {player.iso: player.to_game_view() for player in players},
         })
 
-    def index(self):
+    def get_index(self, wid=None):
         user = getUser()
 
         if user.username is None:
@@ -37,7 +42,7 @@ class WorldsController():
         if user.uid == 'None':
             raise Exception("hifga iiii Volume II")
 
-        return render_template('/worlds/index.html', conf=settings._conf)
+        return render_template('/worlds/index.html', wid=wid, conf=settings._conf)
 
     def history(self):
         user = getUser()

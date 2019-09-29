@@ -13,7 +13,7 @@ class WorldsGroup:
     def list(self, user):
         l_worlds = []
 
-        for world in worlds.list_all():
+        for world in worlds.list_in_hall():
             dd = world.to_dict()
 
             clients = self.server.onlineMatches[str(world.wid)]
@@ -26,6 +26,13 @@ class WorldsGroup:
 
     def join(self, wid, user, iso=None):
         world = worlds.get(wid)
+
+        if not world:
+            # world ceased to exist, kick user out
+            user.wid = None
+            user.iso = None
+            users.set_world(user.uid, user.wid, user.iso)
+            return
 
         clients = self.server.onlineMatches[str(world.wid)]
         players = {c.user.iso: c.user.to_dict() for c in clients}
@@ -54,9 +61,9 @@ class WorldsGroup:
     def create(self, user):
         world, l_countries = create_world()
 
+        worlds.save(world)
 
-
-        #return self.join(world.wid, user)
+        return self.join(world.wid, user)
 
     def edit(self, patch: dict, user):
         # edit map + max_players
@@ -83,5 +90,12 @@ class WorldsGroup:
             user.wid = None
             user.iso = None
             users.set_world(user.uid, None, None)
+
+        # delete match if it hasn't started yet
+        if world.rounds == 0:
+            clients = self.server.onlineMatches[str(world.wid)]
+            if len(clients) == 0:
+                print("DELETING MATCH", world.wid)
+                worlds.delete(world)
 
         return {}

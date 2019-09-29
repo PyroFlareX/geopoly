@@ -110,7 +110,7 @@ export function end_turn() {
   // todo: get user
   
   if (world.current != world.me) {
-    gui.flash("It's not your turn", 'white', world.current);
+    gui.flash("It's not your turn.", 'white', world.current);
 
     return;
   }

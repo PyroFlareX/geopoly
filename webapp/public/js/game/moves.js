@@ -14,6 +14,8 @@ const MOVE_ERRORS = {
   cant_attack_cavalry: "Cavalry can't attack forest.",
   cant_attack_there: "Can't attack there.",
   cant_move_there: "Can't move there.",
+
+  not_your_turn: "It's not your turn.",
 };
 
 
@@ -23,6 +25,8 @@ export function move_to(from, to) {
   if (to.get('unit') && from.get('unit') == 'art') {
     // artillery attack
     to.set('unit', null);
+    to.set('dead', true);
+    
     from.set('exhaust', 1);
   } else {
     // normal move

@@ -36,6 +36,8 @@ const BUY_ERRORS = {
   missing_city: "You can only build over a city.",
   missing_river: "You can only build a bridge over rivers.",
   missing_: "Rawr XD",
+
+  not_your_turn: "It's not your turn.",
 };
 
 

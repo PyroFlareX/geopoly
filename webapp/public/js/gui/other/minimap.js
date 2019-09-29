@@ -71,7 +71,7 @@ export function switch_map(map_id) {
     }),
     view: new ol.View({
       center: maps[map_id].center,
-      zoom: maps[map_id].zoom,
+      zoom: maps[map_id].zoom_mini,
     })
   });
 

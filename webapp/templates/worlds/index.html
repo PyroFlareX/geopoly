@@ -2,8 +2,8 @@
 
 {% block scripts %}
   <!-- OpenLayers 5 -->
-  <link rel="stylesheet" type="text/css" href="css/ol.css">
-  <script defer type="text/javascript" src="js/vendor/ol.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/ol.css">
+  <script defer type="text/javascript" src="/js/vendor/ol.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -22,6 +22,6 @@
     window.gui = gui;
 
     // start app
-    init_app({{ conf|tojson }}, {{ get_user().to_dict()|tojson }});
+    init_app({{ conf|tojson }}, {{ get_user().to_dict()|tojson }}, {{ wid|tojson }});
   </script>
 {% endblock %}

@@ -5,6 +5,6 @@ export const template = `
 <div>
   <world-hall ref="world-hall" @leave="onLeave" @switch="onSwitch" @start="onStart" @setmap="setMap"></world-hall>
 
-  <list-worlds @join="onJoin" ref="list-worlds"></list-worlds>
+  <list-worlds @join="onJoin" @create="onCreate" ref="list-worlds"></list-worlds>
 </div>
 `;

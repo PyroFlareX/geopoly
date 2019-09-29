@@ -23,10 +23,24 @@ export let component = Vue.component('world-hall', {
         this.set_map(this.world.map);
       });
 
+      // change page link
+      if (world.wid) {
+        history.replaceState({
+          "wid": world.wid
+        }, "", "/worlds/"+world.wid);
+      }
+
       this.show = true;
     },
 
     close: function() {
+      if (this.world.wid) {
+        history.replaceState({
+          "url": null
+        }, "", "/worlds");
+      }
+
+
       this.show = false;
     },
 

@@ -17,7 +17,7 @@ export let component = Vue.component('matchmaking', {
   created: function() {
   },
   methods: {
-    open: function() {
+    open: function(wid_join) {
       this.$refs['list-worlds'].open();
 
       ws_client.on("Worlds:joined", ({user})=>{
@@ -32,6 +32,11 @@ export let component = Vue.component('matchmaking', {
         if (patch.map)
           this.$refs['world-hall'].set_map(patch.map);
       });
+
+      if (wid_join) {
+        // automatically reconnect to our world
+        this.onJoin({wid: wid_join}, null);
+      }
     },
 
     onJoin: function(world, iso) {
@@ -50,7 +55,7 @@ export let component = Vue.component('matchmaking', {
       });
     },
     
-    onCreate: function(world) {
+    onCreate: function() {
       ws_client.request("Worlds:create", {}).then(({world})=>{
         this.onJoin(world, []);
       });

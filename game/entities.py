@@ -202,7 +202,7 @@ class Area(Base):
     tile = Column(String(6))
 
     country = relationship("Country", back_populates="areas")
-    world = relationship("World", back_populates="areas")
+    world = relationship("World", back_populates="areas", viewonly=True)
 
     __table_args__ = (ForeignKeyConstraint((iso, wid), [Country.iso, Country.wid]), {})
 

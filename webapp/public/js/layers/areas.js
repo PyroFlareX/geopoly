@@ -80,9 +80,13 @@ export const areaLayer = new ol.layer.Vector({
     }
 
     const unit = feature.get('unit');
-    if (unit) {
+    const dead = feature.get('dead');
+    if (unit || dead) {
       const exhausted = feature.get('exhaust') > 0;
       let uicon = hovered ? unit+'-mark' : unit;
+
+      if (!unit && dead)
+        uicon = 'dead';
 
       styles.push(new ol.style.Style({
         image: new ol.style.Icon(({
