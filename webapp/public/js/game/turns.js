@@ -4,48 +4,6 @@ import {reset_game_entities, apply_payday} from '/js/game/economy.js'
 import {add_sys_message} from '/js/game/chat.js';
 
 
-ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
-  if (len(countries) == 0) {
-    console.error("grr >:(");
-    // world is not yet loaded
-    return;
-  }
-
-  world.current = turn_end.current;
-  world.turns = turn_end.turns;
-
-  const country_curr = countries[world.current];
-
-  // update TAB-countries GUI if opened
-  if (gui.opened == 'countries') {
-    gui.$refs['infobar-countries'].$forceUpdate()
-  }
-
-  if (world.current == world.me) {
-    // update player if it's my turn
-    title.update("(1) -");
-  } else {
-    title.update("");
-  }
-
-  // round has ended too -> flash & sfx & chat notification
-  if (round_end) {
-    handle_end_round(round_end);
-
-    if (round_end.emperor) {
-      // Update title anyway
-      if (world.current != world.me)
-        title.update("(New Emperor!) -");
-
-      do_turn_notify("New emperor", countries[round_end.emperor]);
-    } else {
-      do_turn_notify("New round starts with", country_curr);
-    }
-  } else {
-    do_turn_notify("Current turn", country_curr);
-  }
-});
-
 
 function do_turn_notify(txt, country) {
   if (!country)
@@ -123,3 +81,50 @@ export function leave_world() {
 
   //gui.flash("");
 }
+
+function user_timeout() {
+  // todo: itt
+}
+
+
+ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
+  if (len(countries) == 0) {
+    console.error("grr >:(");
+    // world is not yet loaded
+    return;
+  }
+
+  world.current = turn_end.current;
+  world.turns = turn_end.turns;
+
+  const country_curr = countries[world.current];
+
+  // update TAB-countries GUI if opened
+  if (gui.opened == 'countries') {
+    gui.$refs['infobar-countries'].$forceUpdate()
+  }
+
+  if (world.current == world.me) {
+    // update player if it's my turn
+    title.update("(1) -");
+  } else {
+    title.update("");
+  }
+
+  // round has ended too -> flash & sfx & chat notification
+  if (round_end) {
+    handle_end_round(round_end);
+
+    if (round_end.emperor) {
+      // Update title anyway
+      if (world.current != world.me)
+        title.update("(New Emperor!) -");
+
+      do_turn_notify("New emperor", countries[round_end.emperor]);
+    } else {
+      do_turn_notify("New round starts with", country_curr);
+    }
+  } else {
+    do_turn_notify("Current turn", country_curr);
+  }
+});

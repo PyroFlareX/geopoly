@@ -49,21 +49,27 @@ init_map({
   global_keypress: new Set([' ', 'ESCAPE', 'TAB']),
 
 });
+const world_map = maps[window.world_map];
 
 // todo: set up colors?
 
 export function init_app(conf, user, token, world) {
   init_flags(conf.flags);
 
-  view.setCenter(maps[window.world_map].center);
-  view.setZoom(maps[window.world_map].zoom);
-  
+  // Init map view
+  view.setCenter(world_map.center);
+  view.setZoom(world_map.zoom[1]);
+  view.setMinZoom(world_map.zoom[0]);
+  view.setMaxZoom(world_map.zoom[2]);
+
+  // Global variables for debug
   if (conf.client.debug) {
     window.map = map;
     window.layers = map.getLayers();
     window.areas = window.layers.item(1).getSource();
   }
 
+  // Client and websocket
   client.init_game_client(conf.client, user);
 
   set_user(user);
@@ -89,6 +95,12 @@ onload((ctx) => {
     // add properties
     feature.setProperties(area);
   }
+
+  // set area zoom separator
+  const SR = maps[window.world_map].separate_resolution;
+  areaLayer.setMaxResolution(SR);
+  countryLayer.setMinResolution(SR);
+
 
   // geoconn setup
   setup_features(areaSource);

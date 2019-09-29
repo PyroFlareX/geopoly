@@ -18,7 +18,6 @@ export const areaSource = new ol.source.Vector({
 
 export const areaLayer = new ol.layer.Vector({
   source: areaSource,
-  //maxResolution: 2445,
 
   style: (feature, res) => {
     const styles = [];
