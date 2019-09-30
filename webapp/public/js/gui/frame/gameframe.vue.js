@@ -20,9 +20,9 @@ export const template = `
         <div class="glass"></div>
         <div class="season-wrap">
           <div :class="'season season-' + season">
-            <span class="year-text">{{ gameyear }}</span>
+            <span class="year-text text-oldie">{{ gameyear }}</span>
 
-            <span class="day-text">{{ gamedate }}</span>
+            <span class="day-text text-oldie">{{ gamedate }}</span>
           </div>
         </div>
       </div>
@@ -47,5 +47,10 @@ export const template = `
       </div>
     </div>
 
+
+    <div v-if="world.current == world.me && turn_time_left != null" class="gui-counter text-oldie">
+      <!-- display time left of turn -->
+      <span :class="{'text-danger': turn_time_left < 7 && turn_time_left % 2 == 0, 'text-warning': turn_time_left < 7 && turn_time_left % 2 == 1}">{{ turn_time_left }}s</span>
+    </div>
   </div>
 `;

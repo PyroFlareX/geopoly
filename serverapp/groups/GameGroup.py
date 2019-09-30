@@ -93,7 +93,12 @@ class GameGroup:
             }
         })
 
-    def end_turn(self, user: User):
+    def end_turn(self, user: User, timeout=None):
+        if timeout is not None:
+            print("TODO: backend timeout validation & kick out")
+            # we ignore
+            return
+
         error, world, curr_country, _ = self._accessControl(user)
         if error: return error
 

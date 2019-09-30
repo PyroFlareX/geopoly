@@ -1,5 +1,7 @@
 import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {world, countries} from '/engine/modules/worlds/world.js'
+import {user_timeout} from '/engine/modules/turns/timeout.js'
+
 import {reset_game_entities, apply_payday} from '/js/game/economy.js'
 import {add_sys_message} from '/js/game/chat.js';
 
@@ -82,9 +84,6 @@ export function leave_world() {
   //gui.flash("");
 }
 
-function user_timeout() {
-  // todo: itt
-}
 
 
 ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
@@ -104,12 +103,29 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
     gui.$refs['infobar-countries'].$forceUpdate()
   }
 
+  // update browser title if it's my turn
   if (world.current == world.me) {
-    // update player if it's my turn
     title.update("(1) -");
   } else {
     title.update("");
   }
+
+  // set timeout for user's end turn
+  const current_iso = world.current;
+  user_timeout(current_iso, (p, ticks)=>{
+    if (p < 1) {
+      // update Frontend to show seconds left of my turn
+      if (world.me == current_iso)
+        gui.frame.setTurnTimeout(ticks);
+    } else {
+      gui.frame.setTurnTimeout(null);
+
+      // at timeout of the turn, the user gets forced out by other players
+      ws_client.request("Game:end_turn", {
+        timeout: current_iso
+      });
+    }
+  });
 
   // round has ended too -> flash & sfx & chat notification
   if (round_end) {

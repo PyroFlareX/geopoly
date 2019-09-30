@@ -18,6 +18,7 @@ export let component = Vue.component('game-frame', {
       iso: "AA",
       world: world,
 
+      turn_time_left: null,
       updates: 0,
     }
   },
@@ -29,6 +30,10 @@ export let component = Vue.component('game-frame', {
 
     onClickSeason: function(e) {
       end_turn();
+    },
+
+    setTurnTimeout(ticks) {
+      this.turn_time_left = ticks;
     },
 
     exit: function() {
