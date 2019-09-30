@@ -94,13 +94,20 @@ class GameGroup:
         })
 
     def end_turn(self, user: User, timeout=None):
-        if timeout is not None:
-            print("TODO: backend timeout validation & kick out")
-            # we ignore
-            return
+        if user.wid is None:
+            return {"err": "not_in_match"}
 
-        error, world, curr_country, _ = self._accessControl(user)
-        if error: return error
+        world = worlds.get(user.wid)
+
+        if world.current != user.iso:
+            # Someone else has requested the turn end
+            # Check if the current user is out of its turn time:
+            if not turns_serv.check_timeout(world, current_iso=timeout):
+                # current user is still in time, this request is refused
+                return {"err": "not_your_turn"}
+
+        curr_country = countries.get(world.current, user.wid)
+
 
         world_countries = world.countries
         dict_countries = OrderedDict((c.iso, c) for c in world_countries)
@@ -154,6 +161,11 @@ class GameGroup:
         """
         world = worlds.get(user.wid)
 
+        if world.rounds < 0 or world.rounds == world.max_rounds:
+            # world is not in playing state
+            return
+
+        # turns are not checked, as you can tribute at any time during the game!
         country1: Country = countries.get(user.iso, world.wid)
         country2: Country = countries.get(iso, world.wid)
 
@@ -170,7 +182,14 @@ class GameGroup:
         })
 
     def surrender(self, user: User):
+        """
+        Country surrenders from game (but does not quit it)
+        """
         world = worlds.get(user.wid)
+
+        if world.rounds < 0 or world.rounds == world.max_rounds:
+            # world is not in playing state
+            return
 
         country: Country = countries.get(user.iso, user.wid)
         country.shields = 0

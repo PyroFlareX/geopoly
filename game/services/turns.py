@@ -1,6 +1,8 @@
 import heapq
 
 from engine.modules.turns.service import TurnBox
+from engine.modules.turns.timeout import start_timeout, check_timeout
+
 
 from game.entities import World, User, Country
 from game.instance import countries as db_countries, areas as db_areas
@@ -77,6 +79,10 @@ def end_turn(world: World, curr: Country, countries: dict):
 
         return resp
 
+    if world.current is not None:
+        # start 35 sec timeout
+        start_timeout(world)
+
     return None
 
 
@@ -118,3 +124,4 @@ def _end_round(world, d_countries):
         raise EndGameException(winner, events)
 
     return events
+

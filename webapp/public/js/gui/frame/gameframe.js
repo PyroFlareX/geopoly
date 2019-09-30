@@ -29,11 +29,16 @@ export let component = Vue.component('game-frame', {
     },
 
     onClickSeason: function(e) {
+      this.turn_time_left = null;
+      
       end_turn();
     },
 
     setTurnTimeout(ticks) {
       this.turn_time_left = ticks;
+
+      // force update
+      this.$forceUpdate();
     },
 
     exit: function() {

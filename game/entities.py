@@ -77,7 +77,7 @@ class World(Base):
 
     # Worlds module
     wid = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    #created_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
     name = Column(String(20))
     map = Column(String(20))
     max_players = Column(SmallInteger)
@@ -88,6 +88,7 @@ class World(Base):
     rounds = Column(SmallInteger)
     current = Column(String(3))
     max_rounds = Column(SmallInteger)
+    user_timeout = Column(DateTime, nullable=True)
 
     has_moved = Column(Boolean, nullable=False, default=False)
 
@@ -104,6 +105,7 @@ class World(Base):
         self.max_players = kwargs.get('max_players')
         self.turn_time = kwargs.get('turn_time')
         self.turns = kwargs.get('turns', 0)
+        self.user_timeout = kwargs.get('user_timeout')
         self.rounds = kwargs.get('rounds', 0)
         self.current = kwargs.get('current')
         self.max_rounds = kwargs.get('max_rounds')
@@ -119,6 +121,7 @@ class World(Base):
             "max_players": self.max_players,
             "has_moved": self.has_moved,
             "turn_time": self.turn_time,
+            "user_timeout": self.user_timeout,
             "turns": self.turns,
             "rounds": self.rounds,
             "current": self.current,
