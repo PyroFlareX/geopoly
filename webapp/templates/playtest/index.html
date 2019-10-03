@@ -8,12 +8,12 @@
 
   <script type="module">
     // import gui frame
-    import {template} from "/js/gui/templates/playtesting.vue.js";
+    import {template} from "/js/gui-templates/playtesting.vue.js";
     $("#app-gui").innerHTML = template;
   </script>
   <script type="module">
     import {gui} from '/engine/gui.js';
-    import {init_playtest} from '/js/main_matchmaking.js';
+    import {init_playtest} from '/js/matchmaking.js';
 
     // declare variables from backend
     window.gui = gui;

@@ -2,19 +2,17 @@
 /**
  * Dev test functions
  **/
-
-export function init_test() {
+function init_test() {
   //countries['UK'].pop = 99;
-
+  console.info("Test module loaded!");
   //for (let i of range(0,19))
   //  layers.item(1).getSource().getFeatures()[i].set('iso','UK');
 
   //gui.infobar('country', countries.UK);
 }
 
-export function test_action(feature) {
+function test_action(feature) {
   // triggered by a CTRL key
-
 
   // de-exhaust
   if (feature.get('exhaust') > 0)

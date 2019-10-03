@@ -2,6 +2,10 @@
 engine/
 webapp/public/engine/
 webapp/public/js/vendor/
+webapp/public/js/client.js
+webapp/public/js/matchmaking.js
+webapp/public/js/admin.js
+
 
 # EME
 _dev/assets/
