@@ -2,9 +2,7 @@
 engine/
 webapp/public/engine/
 webapp/public/js/vendor/
-webapp/public/js/client.js
-webapp/public/js/matchmaking.js
-webapp/public/js/admin.js
+webapp/public/js/*.min.js
 
 
 # EME

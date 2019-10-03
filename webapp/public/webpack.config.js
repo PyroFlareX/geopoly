@@ -15,7 +15,8 @@ module.exports = {
   },
   output: {
     path: __dirname + "/js",
-  
+    filename: '[name].min.js',
+
     libraryExport: 'default',
     libraryTarget: 'umd',
     library: 'geopoly',
