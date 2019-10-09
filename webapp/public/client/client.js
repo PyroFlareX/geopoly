@@ -66,12 +66,8 @@ export default function init_app(conf, user, token, world) {
   view.setMinZoom(world_map.zoom[0]);
   view.setMaxZoom(world_map.zoom[2]);
 
-  // Global variables for debug
-  if (conf.client.debug) {
-    window.map = map;
-    window.layers = map.getLayers();
-    window.areas = window.layers.item(1).getSource();
-  }
+  // Global variables
+  window.gui = gui;
 
   // Client and websocket
   client.init_game_client(conf.client, user);
@@ -129,7 +125,17 @@ onload(["world", "map"], (ctx) => {
   // initial reset of entities
   reset_game_entities(true);
 
+  if (ctx.conf.client.debug) {
+    // set testing debug variables
+    window.areas = areaSource.getFeatures();
+    window.countries = ctx.countries;
+    window.players = ctx.players;
+
+    window.map = map;
+    window.layers = map.getLayers();
+  }
+
   init_test();
 
-  console.info("Game loaded.")
+  console.info("Game loaded.");
 });

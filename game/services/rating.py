@@ -1,5 +1,6 @@
 import random
 
+from engine import settings
 from game.entities import User
 
 
@@ -28,11 +29,7 @@ def elo_change(eloA, eloB, sA, nA=0):
     return round(Ka * (sA - expA))
 
 
-divisions = [
-    'silver1', 'silver2', 'silver_elite',
-    'gold1', 'gold2',
-    'major', 'colonel', 'general', 'marshal'
-]
+divisions = settings.get('rating.divisions')
 MAX_DIV = divisions.index('marshal')
 
 

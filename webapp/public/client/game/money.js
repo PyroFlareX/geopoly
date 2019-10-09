@@ -54,6 +54,7 @@ client.ws.on('Game:buy', ({iso,area_id,item_id,cost,err})=>{
     title.update("");
   }
 
+  const is_sacrifice = cost['shields'] > 0;
   const feature = areaSource.getFeatureById(area_id);
 
   if (iso == null)
@@ -78,7 +79,10 @@ client.ws.on('Game:buy', ({iso,area_id,item_id,cost,err})=>{
   const c = countries[iso];
   const item_name = ITEM_NAMES[item_id];
 
-  add_sys_message((c.username||c.name) + ' has bought ' + item_name.title() + ' on ' + feature.get('name'), iso);
+  if (is_sacrifice)
+    add_sys_message((c.username||c.name) + ' has sacrificed sacrificed a shield for a ' + item_name.title() + ' on ' + feature.get('name'), iso);
+  else
+    add_sys_message((c.username||c.name) + ' has bought ' + item_name.title() + ' on ' + feature.get('name'), iso);
 });
 
 
@@ -91,7 +95,3 @@ client.ws.on('Game:tribute', ({iso,to_iso,amount})=>{
   add_sys_message((c.username||c.name) + ' has given ' + amount + ' golds to ' + countries[to_iso].name, iso);
 });
 
-
-// client.ws.on('Game:sacrifise', ({iso,to_iso,amount})=>{
-// 
-// });

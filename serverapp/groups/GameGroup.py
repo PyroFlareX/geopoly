@@ -36,7 +36,7 @@ class GameGroup:
 
         return None, world, country, area
 
-    def buy(self, area_id, item_id, user: User):
+    def buy(self, area_id, item_id, user: User, sacrifice=False):
         error, world, country, area = self._accessControl(user, area_id)
         if error: return error
 
@@ -44,12 +44,27 @@ class GameGroup:
             return {"err": "cant_buy_after_move"}
 
         try:
-            economy.buy_item(area, country, item_id)
+            if sacrifice:
+                economy.sacrifice_shield(country, area, item_id)
+            else:
+                economy.buy_item(area, country, item_id)
         except economy.service.BuyException as e:
             return {"err": e.reason}
 
         areas.save(area)
         countries.save(country)
+
+        cost = economy.get_cost(item_id)
+
+        if sacrifice:
+            del cost['gold']
+            cost["shields"] = 1
+
+            # a sacrifice counts as a normal move, you can't buy afterwards!
+            if not world.has_moved:
+                world.has_moved = True
+                worlds.save(world)
+
 
         self.server.send_to_world(user.wid, {
             "route": self.name+":buy",
@@ -57,8 +72,7 @@ class GameGroup:
             "iso": country.iso,
             "area_id": area_id,
             "item_id": item_id,
-
-            "cost": economy.get_cost(item_id)
+            "cost": cost
         })
 
     def move(self, area_id, to_id, user: User):

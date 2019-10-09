@@ -39,7 +39,7 @@ def give_tribute(country1: Country, country2: Country, amount):
 
 def sacrifice_shield(country: Country, area: Area, item):
     old_gold = country.gold
-    old_pop = country.pop
+    #old_pop = country.pop
 
     if country.shields <= 1:
         raise BuyException("not_enough_shields")
@@ -50,7 +50,7 @@ def sacrifice_shield(country: Country, area: Area, item):
 
     # hack: set infinite resources, buy item, then reset
     country.gold = 999
-    country.pop = 99
+    #country.pop = 99
 
     try:
         return buy_item(area, country, item)
@@ -59,4 +59,7 @@ def sacrifice_shield(country: Country, area: Area, item):
     finally:
         # restore original resources
         country.gold = old_gold
-        country.pop = old_pop
+        #country.pop = old_pop
+
+        # remove 1 shield
+        country.shields -= 1

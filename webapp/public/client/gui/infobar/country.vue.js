@@ -18,7 +18,7 @@ export const template = `
             <i class="ra ra-2x ra-shadow ra-res-shield"></i> {{ country.shields }}
           </div>
           <div>
-            <i class="ra ra-2x ra-shadow ra-icon-conquer"></i> {{ country.stats.conquers }} (-{{ country.stats.losses }})
+            <i class="ra ra-2x ra-shadow ra-action-conquer"></i> {{ country.stats.conquers }} (-{{ country.stats.losses }})
           </div>
 
         </div>
@@ -48,7 +48,7 @@ export const template = `
 
           <div class="input-group-append">
             <button @click="onTribute" class="btn btn-outline-success" type="button">
-              <i class="ra ra-lg ra-icon-tribute"></i>
+              <i class="ra ra-lg ra-action-tribute"></i>
               <span style="color:#2e4e0a">Send</span>
             </button>
           </div>

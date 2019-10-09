@@ -89,7 +89,7 @@ export function apply_kill(iso2) {
     countries[iso2].pop += 1;
 }
 
-export function apply_resources(iso, {gold, pop}, dir) {
+export function apply_resources(iso, {gold, pop, shields}, dir) {
   if (dir == null)
     dir = 1;
 
@@ -97,6 +97,8 @@ export function apply_resources(iso, {gold, pop}, dir) {
     countries[iso].gold += dir*gold;
   if (pop)
     countries[iso].pop += dir*pop;
+  if (shields)
+    countries[iso].shields += dir*shields;
 }
 
 export function apply_payday(taxes, emp) {

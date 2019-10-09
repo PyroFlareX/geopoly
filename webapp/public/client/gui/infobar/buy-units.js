@@ -12,6 +12,8 @@ export let component = Vue.component('infobar-buy-units', {
       infobar_id: null,
       area: {},
       country: {},
+
+      sacrifice: false,
     }
   },
 
@@ -21,16 +23,26 @@ export let component = Vue.component('infobar-buy-units', {
         area = area.getProperties();
       this.area = area;
       this.country = countries[area.iso];
+      this.sacrifice = false;
 
       this.infobar_id = 'buy-units-'+area.id;
     },
 
     onBuy: function(item) {
+      if (this.sacrifice) {
+        let pick = confirm("This action costs 0 gold, but removes 1 shield from your country! Are you sure?");
+
+        if (!pick)
+          return;
+      }
+
       ws_client.request("Game:buy", {
         area_id: this.area.id,
         item_id: item.id,
+        sacrifice: this.sacrifice || undefined
       });
 
+      this.sacrifice = false;
       this.show = false;
     }
   },

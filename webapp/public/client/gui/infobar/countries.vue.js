@@ -14,7 +14,7 @@ export const template = `
             <td><i class="ra ra-2x ra-shadow ra-shadow ra-res-gold"></i></td>
             <td><i class="ra ra-2x ra-res-pop"></i></td>
             <td><i class="ra ra-2x ra-shadow ra-res-shield"></i></td>
-            <td><i class="ra ra-2x ra-shadow ra-icon-conquer"></i></td>
+            <td><i class="ra ra-2x ra-shadow ra-action-conquer"></i></td>
           </tr>
         </thead>
         <tbody>

@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'geo';
   src:
-    url('fonts/geo.ttf?mb163') format('truetype'),
-    url('fonts/geo.woff?mb163') format('woff'),
-    url('fonts/geo.svg?mb163#geo') format('svg');
+    url('fonts/geo.ttf?7mb1mo') format('truetype'),
+    url('fonts/geo.woff?7mb1mo') format('woff'),
+    url('fonts/geo.svg?7mb1mo#geo') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -24,124 +24,133 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.ra-build-barr:before {
+.ra-action-conquer:before {
   content: "\e900";
 }
-.ra-build-cita:before {
+.ra-action-sacrifice .path1:before {
   content: "\e901";
+  color: rgb(219, 18, 25);
+}
+.ra-action-sacrifice .path2:before {
+  content: "\e902";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.ra-action-tribute:before {
+  content: "\e903";
+  color: #2e4e0a;
+}
+.ra-build-barr:before {
+  content: "\e904";
+}
+.ra-build-cita:before {
+  content: "\e905";
 }
 .ra-build-house:before {
-  content: "\e902";
-}
-.ra-icon-conquer:before {
-  content: "\e903";
+  content: "\e906";
 }
 .ra-icon-current:before {
-  content: "\e904";
+  content: "\e907";
   color: #ffb945;
 }
 .ra-icon-emperor:before {
-  content: "\e905";
+  content: "\e908";
   color: #ffb945;
 }
 .ra-icon-exit:before {
-  content: "\e906";
-}
-.ra-icon-mute:before {
-  content: "\e907";
-}
-.ra-icon-player:before {
-  content: "\e908";
-}
-.ra-icon-python:before {
   content: "\e909";
 }
-.ra-icon-settings:before {
+.ra-icon-mute:before {
   content: "\e90a";
 }
-.ra-icon-topscore:before {
+.ra-icon-player:before {
   content: "\e90b";
-  color: #ffb945;
 }
-.ra-icon-tribute:before {
+.ra-icon-python:before {
   content: "\e90c";
-  color: #2e4e0a;
 }
-.ra-icon-unmute:before {
+.ra-icon-settings:before {
   content: "\e90d";
 }
-.ra-rank-1:before {
+.ra-icon-topscore:before {
   content: "\e90e";
-  color: #9aa597;
+  color: #ffb945;
 }
-.ra-rank-2:before {
+.ra-icon-unmute:before {
   content: "\e90f";
-  color: #9aa597;
 }
-.ra-rank-3:before {
+.ra-rank-1:before {
   content: "\e910";
   color: #9aa597;
 }
-.ra-rank-4:before {
+.ra-rank-2:before {
   content: "\e911";
-  color: #ffb945;
+  color: #9aa597;
 }
-.ra-rank-5:before {
+.ra-rank-3:before {
   content: "\e912";
-  color: #ffb945;
+  color: #9aa597;
 }
-.ra-rank-6:before {
+.ra-rank-4:before {
   content: "\e913";
   color: #ffb945;
 }
-.ra-rank-7:before {
+.ra-rank-5:before {
   content: "\e914";
   color: #ffb945;
 }
-.ra-rank-8:before {
+.ra-rank-6:before {
   content: "\e915";
   color: #ffb945;
 }
-.ra-rank-9:before {
+.ra-rank-7:before {
   content: "\e916";
+  color: #ffb945;
+}
+.ra-rank-8:before {
+  content: "\e917";
+  color: #ffb945;
+}
+.ra-rank-9:before {
+  content: "\e918";
   color: #3b3fd4;
 }
 .ra-res-emerald:before {
-  content: "\e917";
+  content: "\e919";
   color: #49de20;
 }
 .ra-res-gold:before {
-  content: "\e918";
+  content: "\e91a";
   color: #2e4e0a;
 }
 .ra-res-pop:before {
-  content: "\e919";
+  content: "\e91b";
 }
 .ra-res-shield:before {
-  content: "\e91a";
+  content: "\e91c";
   color: #db1219;
 }
 .ra-tile-bridge:before {
-  content: "\e91b";
-}
-.ra-tile-city:before {
-  content: "\e91c";
-}
-.ra-tile-forest:before {
   content: "\e91d";
 }
-.ra-tile-mount:before {
+.ra-tile-city:before {
   content: "\e91e";
 }
-.ra-tile-river:before {
+.ra-tile-forest:before {
   content: "\e91f";
 }
-.ra-unit-art:before {
+.ra-tile-mount:before {
   content: "\e920";
 }
-.ra-unit-cav:before {
+.ra-tile-river:before {
   content: "\e921";
 }
-.ra-unit-inf:before {
+.ra-unit-art:before {
   content: "\e922";
+}
+.ra-unit-cav:before {
+  content: "\e923";
+}
+.ra-unit-inf:before {
+  content: "\e924";
 }
