@@ -1,7 +1,7 @@
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {client} from '/client/websocket.js';
 import {items} from '/engine/modules/building/building.js';
 
-let cli = ws_client;
+let cli = client.ws;
 
 
 

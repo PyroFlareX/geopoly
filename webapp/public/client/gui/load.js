@@ -16,19 +16,10 @@ import '/client/gui/overlay/overlay-country.js';
 import '/client/gui/frame/gameframe.js';
 import '/client/gui/frame/flash.js';
 
-import {_mixins} from '/engine/mixins.js';
+import '/engine/mixins.js';
 import {gui as argentina_colombia} from '/engine/gui.js';
 
 
-Vue.mixin({
-  
-  data: function() {
-    return {
-      me: null,
-      ..._mixins
-    };
-  }
-});
 
 
 // https://www.youtube.com/watch?v=xoLmeOBn4ck

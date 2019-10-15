@@ -1,5 +1,5 @@
 import {world} from '/engine/modules/worlds/world.js';
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {client} from '/client/websocket.js';
 import {openRandom} from '/engine/gfx/jumpto.js';
 import {getColor, colors} from '/engine/colors.js';
 import {maps} from '/client/game/maps.js';
@@ -59,7 +59,7 @@ export let component = Vue.component('game-frame', {
         let resp = confirm("Are you sure you want to leave the world?");
         
         if (resp)
-          ws_client.request("Game:surrender", {
+          client.ws.request("Game:surrender", {
           }).then(()=>{
             window.location = '/';
           });

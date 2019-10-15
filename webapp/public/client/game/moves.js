@@ -4,19 +4,8 @@ import {show_arrow, set_arrow, hide_arrow} from '/engine/gfx/arrows.js';
 import {apply_capture, apply_kill} from '/client/game/economy.js'
 import {areaSource} from '/client/layers/areas.js';
 import {client} from '/client/websocket.js';
-import {add_sys_message} from '/client/game/chat.js';
+import {add_sys_message, play_sfx} from '/client/game/notifications.js';
 
-
-const MOVE_ERRORS = {
-  invalid_params: "invalid_params",
-  cant_move_more: "You have already moved with this figure.",
-  not_enemy: "Figure is not an enemy.",
-  cant_attack_cavalry: "Cavalry can't attack forest.",
-  cant_attack_there: "Can't attack there.",
-  cant_move_there: "Can't move there.",
-
-  not_your_turn: "It's not your turn.",
-};
 
 
 export function move_to(from, to) {
@@ -71,6 +60,8 @@ export function area_select(feature) {
       client.ws.request('Game:move', {
         area_id: map_state.selected.getId(),
         to_id: feature.getId()
+      }).then(()=>{
+        play_sfx("my_move");
       });
     } else {
       // 
@@ -165,7 +156,7 @@ function in_ring2(id1, id2) {
 client.ws.on('Game:move', ({err,iso,area_id,to_id,events})=>{
   if (err) {
     // move has failed
-    add_sys_message(MOVE_ERRORS[err]||('unknown error: '+err), iso);
+    add_sys_message(err, iso);
 
     return;
   }

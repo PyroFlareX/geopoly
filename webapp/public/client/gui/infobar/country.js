@@ -1,5 +1,5 @@
 import {template} from "/client/gui/infobar/country.vue.js"
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {client} from '/js/websocket.js';
 
 export let component = Vue.component('infobar-country', {
   template: template,
@@ -28,7 +28,7 @@ export let component = Vue.component('infobar-country', {
 
     onTribute: function() {
 
-      ws_client.request("Game:tribute", {
+      client.ws.request("Game:tribute", {
         iso: this.country.iso,
         amount: this.tribute
       });

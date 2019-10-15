@@ -1,6 +1,7 @@
 import {template} from "/client/gui/infobar/buy-units.vue.js"
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {countries} from '/engine/modules/worlds/world.js';
+
+import {buy_item} from '/client/game/money.js';
 
 
 export let component = Vue.component('infobar-buy-units', {
@@ -36,11 +37,7 @@ export let component = Vue.component('infobar-buy-units', {
           return;
       }
 
-      ws_client.request("Game:buy", {
-        area_id: this.area.id,
-        item_id: item.id,
-        sacrifice: this.sacrifice || undefined
-      });
+      buy_item(this.area, item.id, this.sacrifice || undefined);
 
       this.sacrifice = false;
       this.show = false;

@@ -2,7 +2,7 @@ import {client} from '/client/websocket.js';
 import {areaSource} from '/client/layers/areas.js';
 import {apply_resources} from '/client/game/economy.js'
 import {world, countries} from '/engine/modules/worlds/world.js'
-import {add_sys_message} from '/client/game/chat.js';
+import {add_sys_message, play_sfx} from '/client/game/notifications.js';
 
 const BUILDINGS = new Set(['barr','house','cita']);
 const TILES = new Set(['river','bridge','city']);
@@ -23,28 +23,21 @@ const ITEM_NAMES = {
   'city': 'settlement',
 };
 
-const BUY_ERRORS = {
-  cant_buy_after_move: "You can't buy new items after you have moved in your turn.",
 
-  item_exists: "Item already exists on that area.",
-  bad_conf: "Unexpected item.",
-  not_mine: "It's not your area.",
-
-  not_enough_gold: "You don't have enough money.",
-  not_enough_pop: "You don't have enough population. Buy more buildings.",
-
-  missing_city: "You can only build over a city.",
-  missing_river: "You can only build a bridge over rivers.",
-  missing_: "Rawr XD",
-
-  not_your_turn: "It's not your turn.",
-};
-
+export function buy_item(area, item_id, sacrifice) {
+  ws_client.request("Game:buy", {
+    area_id: area.id,
+    item_id: item_id,
+    sacrifice: sacrifice
+  }).then(()=>{
+    play_sfx("my_buy");
+  });
+}
 
 client.ws.on('Game:buy', ({iso,area_id,item_id,cost,err})=>{
   if (err) {
     // Buy fail
-    add_sys_message(BUY_ERRORS[err]||('unknown error: '+err), iso);
+    add_sys_message(err, iso);
 
     return;
   }
@@ -77,12 +70,9 @@ client.ws.on('Game:buy', ({iso,area_id,item_id,cost,err})=>{
   areaSource.changed();
 
   const c = countries[iso];
-  const item_name = ITEM_NAMES[item_id];
+  const item_name = ITEM_NAMES[item_id].title();
 
-  if (is_sacrifice)
-    add_sys_message((c.username||c.name) + ' has sacrificed sacrificed a shield for a ' + item_name.title() + ' on ' + feature.get('name'), iso);
-  else
-    add_sys_message((c.username||c.name) + ' has bought ' + item_name.title() + ' on ' + feature.get('name'), iso);
+  add_sys_message(is_sacrifice ? 'sacrifice' : 'buy', c.username||c.name, item_name, feature.get('name'));
 });
 
 
@@ -92,6 +82,7 @@ client.ws.on('Game:tribute', ({iso,to_iso,amount})=>{
   countries[to_iso].gold += amount;
 
   const c = countries[iso];
-  add_sys_message((c.username||c.name) + ' has given ' + amount + ' golds to ' + countries[to_iso].name, iso);
+
+  add_sys_message('tribute', iso, c.username||c.name, amount, countries[to_iso].name);
 });
 

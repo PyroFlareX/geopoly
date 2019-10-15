@@ -72,6 +72,46 @@ export const template = `
 
             </div>
 
+            <div class="flex-fill">
+              <strong>Audio</strong>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="muteall" :checked="muteall" type="checkbox" class="custom-control-input" id="muteall">
+                <label class="custom-control-label" for="muteall">Mute all</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="sfx_music" :checked="sfx_music" type="checkbox" class="custom-control-input" id="sfx_music">
+                <label class="custom-control-label" for="sfx_music">Music</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="sfx_my" :checked="sfx_my" type="checkbox" class="custom-control-input" id="sfx_my">
+                <label class="custom-control-label" for="sfx_my">Move, Buy</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="sfx_turns" :checked="sfx_turns" type="checkbox" class="custom-control-input" id="sfx_turns">
+                <label class="custom-control-label" for="sfx_turns">Turn</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="sfx.chat_msg" :checked="sfx.chat_msg" type="checkbox" class="custom-control-input" id="sfx.chat_msg">
+                <label class="custom-control-label" for="sfx.chat_msg">Chat</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="sfx.tribute" :checked="sfx.tribute" type="checkbox" class="custom-control-input" id="sfx.tribute">
+                <label class="custom-control-label" for="sfx.tribute">Tribute</label>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input v-model="sfx.emperor" :checked="sfx.emperor" type="checkbox" class="custom-control-input" id="sfx.emperor">
+                <label class="custom-control-label" for="sfx.emperor">Emperor</label>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>

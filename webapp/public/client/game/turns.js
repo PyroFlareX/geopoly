@@ -1,22 +1,11 @@
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {client} from '/client/websocket.js';
 import {world, countries} from '/engine/modules/worlds/world.js'
 import {user_timeout} from '/engine/modules/turns/timeout.js'
 
 import {reset_game_entities, apply_payday} from '/client/game/economy.js'
-import {add_sys_message} from '/client/game/chat.js';
+import {add_sys_message} from '/client/game/notifications.js';
 
 
-
-function do_turn_notify(txt, country) {
-  if (!country)
-    return;
-
-  const text = txt+": "+(country.username||country.name);
-
-  add_sys_message(text, country.iso);
-
-  // todo: SFX
-}
 
 export function handle_end_round({round,payday,emperor,ex_emperor,eliminated,orders}) {
   world.rounds = round;
@@ -75,7 +64,7 @@ export function end_turn() {
     return;
   }
 
-  ws_client.request("Game:end_turn", {});
+  client.ws.request("Game:end_turn", {});
 }
 
 
@@ -86,7 +75,7 @@ export function leave_world() {
 
 
 
-ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
+client.ws.on("Game:end_turn", ({iso, turn_end, round_end})=>{
   if (len(countries) == 0) {
     console.error("grr >:(");
     // world is not yet loaded
@@ -96,7 +85,8 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
   world.current = turn_end.current;
   world.turns = turn_end.turns;
 
-  const country_curr = countries[world.current];
+  const current_iso = world.current;
+  const c_curr = countries[current_iso];
 
   // update TAB-countries GUI if opened
   if (gui.opened == 'countries') {
@@ -111,7 +101,6 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
   }
 
   // set timeout for user's end turn
-  const current_iso = world.current;
   user_timeout(current_iso, (p, ticks)=>{
     if (p < 1) {
       // update Frontend to show seconds left of my turn
@@ -121,7 +110,7 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
       gui.frame.setTurnTimeout(null);
 
       // at timeout of the turn, the user gets forced out by other players
-      ws_client.request("Game:end_turn", {
+      client.ws.request("Game:end_turn", {
         timeout: current_iso
       });
     }
@@ -136,11 +125,15 @@ ws_client.on("Game:end_turn", ({iso, turn_end, round_end})=>{
       if (world.current != world.me)
         title.update("(New Emperor!) -");
 
-      do_turn_notify("New emperor", countries[round_end.emperor]);
-    } else {
-      do_turn_notify("New round starts with", country_curr);
+      const c_emp = countries[round_end.emperor];
+
+      add_sys_message("emperor", c_emp.iso, c_emp.username||c_emp.name);
+      return;
     }
-  } else {
-    do_turn_notify("Current turn", country_curr);
   }
+
+  if (current_iso == world.me)
+    add_sys_message("my_turn", c_curr.iso, c_curr.username||c_curr.name);
+  else
+    add_sys_message("new_turn", c_curr.iso, c_curr.username||c_curr.name);
 });

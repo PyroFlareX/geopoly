@@ -19,7 +19,7 @@ import {countryLayer} from '/client/layers/countries.js';
 import {client} from '/client/websocket.js';
 import {gui} from '/client/gui/load.js';
 import {maps} from '/client/game/maps.js';
-import {init_chat} from '/client/game/chat.js';
+import {init_chat} from '/client/game/notifications.js';
 
 // @TODO: weird files, shouldn't really be loaded here
 // we load them here, because nothing else makes a reference to them, but they do push events to websocket

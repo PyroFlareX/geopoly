@@ -1,5 +1,4 @@
 import {template} from "/client/gui/dialog/disconnect.vue.js"
-//import {ws_client} from '/engine/modules/websocket/wsclient.js';
 
 
 export let component = Vue.component('dialog-disconnect', {

@@ -1,4 +1,4 @@
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
+import {client} from '/client/websocket.js';
 
 import {template} from "/client/gui/component/list-worlds.vue.js"
 
@@ -15,12 +15,12 @@ export let component = Vue.component('list-worlds', {
     }
   },
   created: function() {
-    if (ws_client.connected)
+    if (client.ws.connected)
       this.open();
   },
   methods: {
     open: function() {
-      ws_client.request("Worlds:list", {}).then(({worlds})=>{
+      client.ws.request("Worlds:list", {}).then(({worlds})=>{
         this.show = true;
 
         this.worlds = worlds;

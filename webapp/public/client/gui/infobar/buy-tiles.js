@@ -1,6 +1,7 @@
 import {template} from "/client/gui/infobar/buy-tiles.vue.js"
-import {ws_client} from '/engine/modules/websocket/wsclient.js';
 import {countries} from '/engine/modules/worlds/world.js';
+
+import {buy_item} from '/client/game/money.js';
 
 
 export let component = Vue.component('infobar-buy-tiles', {
@@ -26,10 +27,7 @@ export let component = Vue.component('infobar-buy-tiles', {
     },
 
     onBuy: function(item) {
-      ws_client.request("Game:buy", {
-        area_id: this.area.id,
-        item_id: item.id,
-      });
+      buy_item(this.area, item.id);
 
       this.show = false;
     }
