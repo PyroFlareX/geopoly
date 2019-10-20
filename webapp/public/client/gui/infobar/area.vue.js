@@ -25,13 +25,13 @@ export const template = `
         </div>
         <div class="flex-fill">
           <p v-if="country"> 
-            <span @click="open_infobar('country', country)" :class="'flag flag-xs flag-box pointer flag-'+country.iso"></span> {{ country.name }}
+            <span @click="open_infobar('country', country)" :class="'flag flag-xs border border-dark rounded pointer flag-'+country.iso"></span> {{ country.name }}
 
             <br />
             <strong v-if="country.username">({{ country.username }})</strong>
           </p>
 
-          <p v-if="area.iso2 && area.iso != area.iso2">Was annexed from <span :class="'flag flag-xs flag-box flag-'+area.iso2"></span></p>
+          <p v-if="area.iso2 && area.iso != area.iso2">Was annexed from <span :class="'flag flag-xs border border-dark rounded flag-'+area.iso2"></span></p>
 
         </div>
       </div>

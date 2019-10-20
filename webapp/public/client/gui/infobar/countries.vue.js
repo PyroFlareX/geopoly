@@ -23,7 +23,7 @@ export const template = `
               <i v-if="world.current == iso" class="ra ra-lg ra-shadow ra-icon-current"></i>
             </td>
             <td>
-              <div :class="'flag flag-xs pointer flag-box flag-'+iso+(country.shields <=0?' flag-unclaimed':'')" v-b-popover.hover.top="country.name" ></div>
+              <div :class="'flag flag-xs pointer border border-dark rounded flag-'+iso+(country.shields <=0?' flag-unclaimed':'')" v-b-popover.hover.top="country.name" ></div>
             </td>
             <td>
               <i v-if="country.emperor" class="ra ra-2x ra-shadow ra-icon-emperor"></i>

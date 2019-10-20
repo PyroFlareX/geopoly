@@ -26,7 +26,7 @@ export const template = `
     <table class="table table-borderless">
       <tr v-for="iso in map.isos">
         <td>
-          <div :class="'flag flag-sm flag-box flag-'+iso"></div>
+          <div :class="'flag flag-sm border border-dark rounded flag-'+iso"></div>
         </td>
         <td v-if="world.players[iso]" >
           <i :class="'ra ra-2x ra-rank-'+world.players[iso].division"></i>

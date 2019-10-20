@@ -3,7 +3,7 @@ export const template = `
 
   <div class="popover fade show bs-popover-top" role="tooltip" x-placement="right">
     <div class="popover-header">
-      <div :class="'flag flag-inline flag-xs flag-box flag-'+country.iso"></div>
+      <div :class="'d-inline-block flag flag-xs border border-dark rounded flag-'+country.iso"></div>
 
       {{country.name}}
 

@@ -22,6 +22,9 @@
   text-align: center;
 }
 
+.range-small {
+  max-width: 150px;
+}
 
 
 /* game frame extension */

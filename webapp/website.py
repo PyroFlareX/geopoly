@@ -9,6 +9,10 @@ class Website(WebsiteApp):
     def __init__(self):
         self.conf = loadConfig('webapp/config.ini')
 
+        if self.conf['website']['devcontrollers'] == 'true':
+            # add extra controllers
+            self.controllers = loadHandlers(self, "DevController", prefix=self.conf['website']['controllers_folder'])
+
         super().__init__(self.conf)
 
         self.jinja_env.globals.update(get_user=login.getUser)

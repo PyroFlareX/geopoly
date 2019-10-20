@@ -32,7 +32,7 @@
     <overlay-country ref="overlay-country"></overlay-country>
   </div>
 
-  <!-- native GUI -->
+  <!-- native GUI templating -->
   <div style="display: none;">
     <div id="app-popup" title="Welcome to OpenLayers"></div>
   </div>
@@ -44,12 +44,20 @@
   </script>
 
   <!-- app init -->
-  <script defer type="text/javascript" src="/js/client.min.js"></script>
-  <script defer type="text/javascript" src="/js/test.js"></script>
-  <script>
-    window.onload = function() {
-      geopoly({{ conf|tojson }}, {{ get_user().to_dict()|tojson }}, '', {{ world.to_dict()|tojson }});
-    }
-  </script>
+  {% if conf['client']['transpiled'] %}
+    <script defer type="text/javascript" src="/js/client.min.js"></script>
+    <script>
+  {% else %}
+    <script defer type="module">
+      import {default as geopoly} from '/client/client.js';
+  {% endif %}
+      window.onload = function() {
+        geopoly({{ conf|tojson }}, {{ get_user().to_dict()|tojson }}, '', {{ world.to_dict()|tojson }} );
+      }
+    </script>
+
+  {% if conf['client']['debug'] %}
+    <script defer type="text/javascript" src="/js/test.js"></script>
+  {% endif %}
 
 {% endblock %}

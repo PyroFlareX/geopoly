@@ -27,39 +27,44 @@ export function add_sys_message(event_id, iso, ...params) {
 }
 
 export function play_sfx(sfx_id) {
-  if (do_sfx[sfx_id])
+  if (sounds[sfx_id].getVolume() > 5)
     sounds[sfx_id].play();
 }
 
-// options for sfx settings. event_ids not in this list do not exist
-export const do_sfx = {
-  // local only sounds (only I hear it!)
-  my_buy: true,
-  my_move: true,
-  my_turn: true,
+export function set_vol(sfx_id, vol) {
+  if (sounds[sfx_id].getVolume() != vol)
+    sounds[sfx_id].setVolume(vol);
+}
 
-  // global LOW
-  new_turn: true,
-  chat_msg: true,
-
-  // global MEDIUM
-  tribute: true,
-  //sacrifice: true,
-  emperor: true,
-
-  // global HIGH
-  surrender: true,
-  victory: true,
-};
 
 const formats = {
   emperor: 'mp3', victory: 'mp3'
 };
 
-const sounds = {};
+const sounds = {
+  // local only sounds (only I hear it!)
+  music: null,
+
+  my_buy: null,
+  my_move: null,
+  my_turn: null,
+
+  // global LOW
+  new_turn: null,
+  chat_msg: null,
+
+  // global MEDIUM
+  tribute: null,
+  //sacrifice: null,
+  emperor: null,
+
+  // global HIGH
+  surrender: null,
+  victory: null,
+};
 
 //load("sounds", function () {
-  for (let sfx of Object.keys(do_sfx)) {
+  for (let sfx of Object.keys(sounds)) {
     let sound = new buzz.sound(`/sounds/${sfx}`, {formats: [formats[sfx]||"wav"]});
 
     sounds[sfx] = sound;
@@ -187,7 +192,7 @@ export function init_chat(chat, conf) {
     // ----- OFFLINE MODE CHEATS -----:
     "okcs": ()=>{
       // forces current player to end turn
-      fetch("dev/force_turn", {})
+      fetch("/admin/force_turn", {})
       .then((resp)=>{ return resp.json() })
       .then(client.ws.onmessage.bind(client.ws));
     },
@@ -195,7 +200,7 @@ export function init_chat(chat, conf) {
       // resets the world
       // in online mode, a reset is offered to the other users
 
-      fetch('dev/reset')
+      fetch('/admin/reset')
       .then((resp)=>{ return resp.json() })
       .then((resp)=>{
         window.location = '/';

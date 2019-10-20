@@ -1,7 +1,7 @@
 import {client} from '/client/websocket.js';
 import {items} from '/engine/modules/building/building.js';
 
-let cli = client.ws;
+//let cli = client.ws;
 
 
 
@@ -18,7 +18,7 @@ export function offline_request(route, params) {
         conquer: false,
         kill: false
       };
-      cli.onmessage(resp);
+      client.ws.onmessage(resp);
     break;
     case 'Game:buy':
       let item = items[params.item_id];
@@ -26,9 +26,9 @@ export function offline_request(route, params) {
         gold: item.cost_gold,
         pop: item.cost_pop
       };
-      cli.onmessage(resp);
+      client.ws.onmessage(resp);
     break;
-    //case 'Game:end_turn': cli.onmessage(resp); break;
+    //case 'Game:end_turn': client.ws.onmessage(resp); break;
 
     default: console.info(route, 'called with', params); break;
 

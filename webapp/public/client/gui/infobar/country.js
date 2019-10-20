@@ -1,5 +1,5 @@
 import {template} from "/client/gui/infobar/country.vue.js"
-import {client} from '/js/websocket.js';
+import {client} from '/client/websocket.js';
 
 export let component = Vue.component('infobar-country', {
   template: template,
